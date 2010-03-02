@@ -6,7 +6,7 @@
 
 %% Saat pdf-tiedoston viittaukset ja linkit kuntoon seuraavalla paketilla.
 %% Paketti toimii erityisen hyvin pdflatexin kanssa. 
-\usepackage[pdfpagemode=None, colorlinks=true, urlcolor=red, linkcolor=blue, citecolor=black, pdfstartview=FitH]{hyperref}
+\usepackage[pdfpagemode=None, colorlinks=true, urlcolor=black, linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 
 
 %% Matematiikan fontteja, symboleja ja muotoiluja lisää, näitä tarvitaan usein 
@@ -195,15 +195,13 @@
 %% Ensimmäisen sivun ylä- ja alatunnisteet tyhjiksi
 \thispagestyle{empty}
 
-Matematiikan sovelluskohteista eräas ensiksi mieleen tulevista on pinta-alojen ja tilavuuksien laskeminen.  Ei siis ole ylläattäaväaä, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, samansuuruisiksi suorakulmioiksi. Tänä päivänä insinöörit arkkitehdeistä tilastotieteilijöihin tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
+Pinta-alojen ja tilavuuksien määrittäminen on askarruttanut matemaatikkoja jo tuhansia vuosia.  Ei siis ole yllättävää, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, samansuuruisiksi suorakulmioiksi. Tänä päivänä insinöörit arkkitehdeistä tilastotieteilijöihin tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
 
-Sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen on numeerinen integrointi. Alalta on aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi. Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
+Numeerinen integrointi on sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen. Alalta on aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi. Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
-Tässä kandidaatintyössä pyritään tarjoamaan selvitys miksi näin on. Lähinnä keskitytään siihen, miksi yhdessä ulottuvuudessa niin erinomaisia tuloksia tuottavat \emph{Gaussiset kvadratuurit} eivät kykene samaan useassa ulottuvuudessa. Lisäksi esitellään täysin toisen tyyppinen, mutta hyvin yleisesti käytetty \emph{Monte-Carlo mentelmä} sekä hyvin pintapuolisesti tällä hetkellä suuren kiinnostuksen kohteena olevat \emph{kvasi Monte-Carlo menetelmät}.
-
-Teoreettisen selvityksen jälkeen vertaillaan mainittuja menetelmiä keskenään soveltamalla niitä esimerkki-integraaleihin useissa eri dimensioissa. Saatujen tulosten ja esitellyn teorian perusteellä tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
-
-Koska käsiteltävä aihe on laaja ja monimutkainen ja kandidaatintyön laajuus on melko rajallinen, ei alan tämän hetkisestä tilanteesta voida antaa kattavaa selvitystä. Kiinnostunutta lukijaa kehotetaan tutustumaan viitteisiin \cite{Cools2009} ja edelleen niissä esiteltyyn kirjallisuuten.
+Tässä kandidaatintyössä pyritään esittämään syitä siihen miksi näin on. Samalla luodaan katsaus niihin ongelmiin joihin törmätään, kun yhdessä ulottuvuudessa niin erinomaisia tuloksia tuottavia \emph{Gaussisia kvadratuureja} yritetään soveltaa useassa ulottuvuudessa.
+ 
+Teoreettisen selvityksen jälkeen vertaillaan eräitä kiinnostavia menetelmiä keskenään soveltamalla niitä esimerkki-integraaleihin useissa eri dimensioissa. Saatujen tulosten ja esitellyn teorian perusteellä tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
 
 \cite{Cools2002,Cools2001,Kuo2010,Cools2009,Cools2006,Krylov1962,Stroud1971,Davis1975,Ueberhuber1997,Cheney2007}
 
@@ -211,25 +209,23 @@ Koska käsiteltävä aihe on laaja ja monimutkainen ja kandidaatintyön laajuus on m
 %% Opinnäytteessä jokainen osa alkaa uudelta sivulta, joten \clearpage
 \clearpage
 
-\section{Integraalin ominaisuuksia}
-\subsection{Määritelmä}
+\section{Integraalifunktio}
 \subsection{Geometrinen tulkinta}
-\subsection{Approksimointi}
-\subsubsection{Interpolointi}
+\subsection{Numeerisia menetelmiä}
+\subsubsection{Eulerin menetelmä}
+\subsubsection{Simpsonin menetelmä}
 
-\section{Ortogonaaliset polynomit}
-\subsection{Ortogonaalisuus}
-\subsection{Polynomikannat}
+\section{Yksiulotteinen kvadratuuri-integrointi}
+\subsection{Ortogonaaliset polynomikannat}
+\subsection{Gaussinen kvadratuuri}
+\subsection{Gauss-Hermite kvadratuuri}
+\subsection{Muita Gaussisia kvadratuureja}
 
-\section{Kvadratuurit}
-\subsection{Gaussiset kvadratuurit}
-
-
-\section{Numeerinen integrointi useassa ulottuvuudessa}
+\section{Moniulotteinen kvadratuuri-integrointi}
 \subsection{Tulosäännöt}
 \subsection{Kubatuurit}
-\subsubsection{Yleistämisen ongelmat}
-\subsection{Monte-Carlo menetelmät}
+\subsubsection{Gauss-Hermite}
+\subsection{Muita menetelmiä}
 
 \section{Koeasetelma}
 
