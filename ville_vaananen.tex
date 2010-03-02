@@ -1,0 +1,249 @@
+
+%% Käytä näitä, jos kirjoitat suomeksi
+\documentclass[finnish,12pt,twoside]{article}
+\usepackage{aaltothesis}
+\usepackage[pdftex]{graphicx} 
+
+%% Saat pdf-tiedoston viittaukset ja linkit kuntoon seuraavalla paketilla.
+%% Paketti toimii erityisen hyvin pdflatexin kanssa. 
+\usepackage[pdfpagemode=None, colorlinks=true, urlcolor=red, linkcolor=blue, citecolor=black, pdfstartview=FitH]{hyperref}
+
+
+%% Matematiikan fontteja, symboleja ja muotoiluja lisää, näitä tarvitaan usein 
+\usepackage{amsfonts,amssymb,amsbsy}  
+%% Viitteet suomeksi
+\usepackage{babelbib}
+
+%% Vaakasuunnan mitat, ÄLÄ KOSKE!
+\setlength{\hoffset}{-1in}
+\setlength{\oddsidemargin}{35mm}
+\setlength{\evensidemargin}{25mm}
+\setlength{\textwidth}{15cm}
+%% Pystysuunnan mitat, ÄLÄ KOSKE!
+\setlength{\voffset}{-1in}
+\setlength{\headsep}{7mm}
+\setlength{\headheight}{1em}
+\setlength{\topmargin}{25mm-\headheight-\headsep}
+\setlength{\textheight}{23cm}
+
+
+%% Kaikki mikä paperille tulostuu, on tämän jälkeen
+\begin{document}
+
+%% Korjaa vastaamaan korkeakouluasia
+\university{aalto university}{aalto-yliopisto}
+\school{school of science and technology}{teknillinen korkeakoulu}
+
+%% Korjaa seuraavat vastaamaan omaa tiedekuntaasi
+\faculty{Faculty of Electronics, Communications and Automation}%
+{Elektroniikan, tietoliikenteen ja automaation tiedekunta}%
+%%
+
+%% Vain kandityölle: Korjaa seuraavat vastaamaan tutkinto-ohjelmaasi 
+\degreeprogram{Bioinformation technology}{Bioinformaatioteknologia}
+%%
+
+%% Vain DI/M.Sc.- ja lisensiaatintyölle
+%\department{Department of Radio Science and Technology}{Radiotieteen ja -tekniikan laitos}
+%\professorship{Circuit theory}{Piiriteoria}
+%\code{S-55}
+%%
+
+%% Valitse yksi näistä kolmesta
+\univdegree{BSc}
+%\univdegree{MSc}
+%\univdegree{Lic}
+
+%% Oma nimi
+\author{Ville Väänänen}
+
+%% Opinnäytteen otsikko tulee vain tähän. Älä tavuta otsikkoa ja
+%% vältä liian pitkää otsikkotekstiä. Jos latex ryhmittelee otsikon
+%% huonosti, voit joutua pakottamaan rivinvaihdon \\ kontrollimerkillä.
+%% Muista että otsikkoja ei tavuteta! 
+%% Jos otsikossa on ja-sana, se ei jää rivin viimeiseksi sanaksi 
+%% vaan aloittaa uuden rivin.
+\thesistitle{Numerical integration: From quadratures to cubatures}{Numeerinen integrointi: kvadratuureista kubatuureihin}
+
+\place{Espoo}
+%% Kandidaatintyön päivämäärä on sen esityspäivämäärä! 
+\date{10.5.2010}
+
+%% Kandidaattiseminaarin vastuuopettaja TAI
+%% Diplomityön valvoja
+\supervisor{Prof. Markus Turunen}{Prof. Markus Turunen}
+
+%% Kandidaatintyön ohjaaja(t) TAI
+%% Diplomityön ohjaaja(t)
+\instructor{D.Sc.(Tech.) Simo Särkkä}{TkT Simo Särkkä}
+%% Aaltologo: syntaksi: \uselogo{red|blue|yellow}{?|!|''}
+%% Logon kieli on sama kuin dokumentin kieli
+\uselogo{red}{''}{tkk}
+
+%% Tehdään kansilehti
+\makecoverpage
+
+
+%% Suomenkielinen tiivistelmä
+%% 
+%% Tiivistelmän avainsanat
+%\keywords{kvadratuuri, kubatuuri, gaussinen kvadratuuri, numeerinen integrointi, polynomiapproksimaatio}
+%% Tiivistelmän tekstiosa
+%\begin{abstractpage}[finnish]
+%  Tiivistelmässä on lyhyt selvitys (noin 100 sanaa)
+%  kirjoituksen tärkeimmästä sisällöstä: mitä ja miten on tutkittu,
+%  sekä mitä tuloksia on saatu. 
+%  Tiivistelmässä on lyhyt selvitys (noin 100 sanaa)
+%  kirjoituksen tärkeimmästä sisällöstä: mitä ja miten on tutkittu,
+%  sekä mitä tuloksia on saatu.
+%\end{abstractpage}
+
+%% Pakotetaan uusi sivu varmuuden vuoksi, jotta 
+%% mahdollinen suomenkielinen ja englanninkielinen tiivistelmä
+%% eivät tule vahingossakaan samalle sivulle
+%\newpage
+%
+%% English abstract, uncomment if you need one. 
+%% 
+%% Abstract keywords
+%\keywords{Resistor, Resistance,\\ Temperature}
+%% Abstract text
+%\begin{abstractpage}[english]
+% Your abstract in English 
+%
+%\end{abstractpage}
+%% Note that 
+%% if you are writting your master's thesis in English place the English
+%% abstract first followed by the possible Finnish abstract
+
+%% Esipuhe
+\mysection{Esipuhe}
+
+\vspace{5cm}
+\dateandplace
+
+\vspace{5mm}
+{\hfill \author \hspace{1cm}}
+
+%% Pakotetaan varmuuden vuoksi esipuheen jälkeinen osa
+%% alkamaan uudelta sivulta
+\newpage
+
+
+%% Sisällysluettelo
+%% addcontentsline tekee pdf-tiedostoon viitteen sisällysluetteloa varten
+\addcontentsline{toc}{section}{Sisällysluettelo}
+%% Tehdään sisällysluettelo
+\tableofcontents
+
+
+%% Symbolit ja lyhenteet
+%%
+%% Symbols and abbreviations
+%\mysection{Symbolit ja lyhenteet}
+%\subsection*{Symbolit}
+
+%\begin{tabular}{ll}
+%$\mathbf{B}$  & magneettivuon tiheys  \\
+%$c$              & valon nopeus tyhjössä $\approx 3\times10^8$ [m/s]\\
+%$\omega_{\mathrm{D}}$    & Debye-taajuus \\
+%$\omega_{\mathrm{latt}}$ & hilan keskimääräinen fononitaajuus \\
+%$\uparrow$       & elektronin spinin suunta ylöspäin\\
+%$\downarrow$     & elektronin spinin suunta alaspäin
+%\end{tabular}
+
+%\subsection*{Operaattorit}
+
+%\begin{tabular}{ll}
+%$\nabla \times \mathbf{A}$              & vektorin $\mathbf{A}$ roottori\\
+%$\displaystyle\frac{\mbox{d}}{\mbox{d} t}$ & derivaatta muuttujan $t$ suhteen\\
+%[3mm]
+%$\displaystyle\frac{\partial}{\partial t}$  & osittaisderivaatta muuttujan $t$ suhteen \\[3mm]
+%$\sum_i $                       & Summa indeksin $i$ yli\\
+%$\mathbf{A} \cdot \mathbf{B}$    & vektorien $\mathbf{A}$ ja $\mathbf{B}$ pistetulo
+%\end{tabular}
+
+%\subsection*{Lyhenteet}
+
+%\begin{tabular}{ll}
+%AC         & vaihtovirta \\
+%APLAC      & an object-oriented analog circuit simulator and design tool \\
+%           & (originally Analysis Program for Linear Active Circuits) \\
+%BCS        & Bardeen-Cooper-Schrieffer \\ %% tavuviiva - nimien välissä 
+%DC         & tasavirta \\
+%TEM        & transverse eletromagnetic
+%\end{tabular}
+
+
+%% Sivulaskurin viilausta opinnäytteen vaatimusten mukaan:
+%% Aloitetaan sivunumerointi arabialaisilla numeroilla (ja jätetään
+%% leipätekstin ensimmäinen sivu tyhjäksi, 
+%% ks. alla \thispagestyle{empty}).
+%% Pakotetaan lisäksi ensimmäinen varsinainen tekstisivu alkamaan 
+%% uudelta sivulta clearpage-komennolla. 
+%% clearpage on melkein samanlainen kuin newpage, mutta 
+%% flushaa myös LaTeX:n floatit 
+\cleardoublepage
+\storeinipagenumber
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+
+%% Leipäteksti alkaa
+\section{Johdanto}
+
+%% Ensimmäisen sivun ylä- ja alatunnisteet tyhjiksi
+\thispagestyle{empty}
+
+Matematiikan sovelluskohteista eräas ensiksi mieleen tulevista on pinta-alojen ja tilavuuksien laskeminen.  Ei siis ole ylläattäaväaä, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, samansuuruisiksi suorakulmioiksi. Tänä päivänä insinöörit arkkitehdeistä tilastotieteilijöihin tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
+
+Sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen on numeerinen integrointi. Alalta on aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi. Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
+
+Tässä kandidaatintyössä pyritään tarjoamaan selvitys miksi näin on. Lähinnä keskitytään siihen, miksi yhdessä ulottuvuudessa niin erinomaisia tuloksia tuottavat \emph{Gaussiset kvadratuurit} eivät kykene samaan useassa ulottuvuudessa. Lisäksi esitellään täysin toisen tyyppinen, mutta hyvin yleisesti käytetty \emph{Monte-Carlo mentelmä} sekä hyvin pintapuolisesti tällä hetkellä suuren kiinnostuksen kohteena olevat \emph{kvasi Monte-Carlo menetelmät}.
+
+Teoreettisen selvityksen jälkeen vertaillaan mainittuja menetelmiä keskenään soveltamalla niitä esimerkki-integraaleihin useissa eri dimensioissa. Saatujen tulosten ja esitellyn teorian perusteellä tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
+
+Koska käsiteltävä aihe on laaja ja monimutkainen ja kandidaatintyön laajuus on melko rajallinen, ei alan tämän hetkisestä tilanteesta voida antaa kattavaa selvitystä. Kiinnostunutta lukijaa kehotetaan tutustumaan viitteisiin \cite{Cools2009} ja edelleen niissä esiteltyyn kirjallisuuten.
+
+\cite{Cools2002,Cools2001,Kuo2010,Cools2009,Cools2006,Krylov1962,Stroud1971,Davis1975,Ueberhuber1997,Cheney2007}
+
+
+%% Opinnäytteessä jokainen osa alkaa uudelta sivulta, joten \clearpage
+\clearpage
+
+\section{Integraalin ominaisuuksia}
+\subsection{Määritelmä}
+\subsection{Geometrinen tulkinta}
+\subsection{Approksimointi}
+\subsubsection{Interpolointi}
+
+\section{Ortogonaaliset polynomit}
+\subsection{Ortogonaalisuus}
+\subsection{Polynomikannat}
+
+\section{Kvadratuurit}
+\subsection{Gaussiset kvadratuurit}
+
+
+\section{Numeerinen integrointi useassa ulottuvuudessa}
+\subsection{Tulosäännöt}
+\subsection{Kubatuurit}
+\subsubsection{Yleistämisen ongelmat}
+\subsection{Monte-Carlo menetelmät}
+
+\section{Koeasetelma}
+
+\section{Tulokset}
+
+\section{Yhteenveto}
+\clearpage{}
+\addcontentsline{toc}{section}{Viitteet}
+\bibliographystyle{abbrv}
+\bibliography{kandi}
+
+
+
+\end{document}
+
+
+
