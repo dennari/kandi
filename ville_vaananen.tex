@@ -10,7 +10,7 @@
 
 
 %% Matematiikan fontteja, symboleja ja muotoiluja lisää, näitä tarvitaan usein 
-\usepackage{amsfonts,amssymb,amsbsy}  
+\usepackage{amsmath,amsfonts,amssymb,amsbsy}  
 %% Viitteet suomeksi
 \usepackage{babelbib}
 
@@ -25,6 +25,19 @@
 \setlength{\headheight}{1em}
 \setlength{\topmargin}{25mm-\headheight-\headsep}
 \setlength{\textheight}{23cm}
+
+
+%%%%%%%% OMAT KOMENNOT %%%%%%%%%%%%
+
+% infinitesimaalinen muutos
+\newcommand{\dd}{\; \mathrm{d}}
+% määrätty integraali
+\newcommand{\defint}[4]{\int_{#1}^{#2}#3(#4)\dd#4}
+% reaaliluvut, kompleksiluvut..
+\newcommand{\field}[1]{\mathbb{#1}}
+\newcommand{\R}{\field{R}}
+\newcommand{\C}{\field{C}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %% Kaikki mikä paperille tulostuu, on tämän jälkeen
@@ -195,7 +208,7 @@
 %% Ensimmäisen sivun ylä- ja alatunnisteet tyhjiksi
 \thispagestyle{empty}
 
-Pinta-alojen ja tilavuuksien määrittäminen on askarruttanut matemaatikkoja jo tuhansia vuosia.  Ei siis ole yllättävää, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, samansuuruisiksi suorakulmioiksi. Tänä päivänä insinöörit arkkitehdeistä tilastotieteilijöihin tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
+Pinta-alojen ja tilavuuksien määrittäminen on tavallinen ongelma matematiikan ja fysiikan sovelluksissa. Ei siis ole yllättävää, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, samansuuruisiksi suorakulmioiksi. Matemaattinen työkalu jolla on läheinen yhteys edellä mainittuun ongelmaan on nimeltään \emph{integraali}· Tänä päivänä tekniikan alan ammattilaiset arkkitehdeistä tilastotieteilijöihin tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
 
 Numeerinen integrointi on sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen. Alalta on aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi. Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
@@ -209,8 +222,24 @@ Teoreettisen selvityksen jälkeen vertaillaan eräitä kiinnostavia menetelmiä kesk
 %% Opinnäytteessä jokainen osa alkaa uudelta sivulta, joten \clearpage
 \clearpage
 
-\section{Integraalifunktio}
+\section{Integraali}
+Integraalille on olemassa useita kehittäjiensä mukaan nimettyjä määritelmiä, joista Riemann-integraali lienee yksinkertaisin ja intuitiivisin. Usein kun puhutaan integraalista tarkoitetaan nimenomaan Riemann-integraalia, mikä pätee myös tähän työhön. Jokainen suljetulla välillä $[a,b]$ jatkuva ja rajoitettu reaaliarvoinen funktio on (Riemann-)integroituva ja integraalia merkitään $\defint{a}{b}{f}{x}\in\R$, jota kutsutaan myös \emph{määrätyksi integraaliksi}. Määrätyllä integraalilla ja \emph{integraalifunktiolla} $F(x)$ (ja sitä kautta derivoinnilla) on läheinen yhteys, joka tunnetaan \emph{analyysin ensimmäisenä peruslauseena}:
+
+\begin{equation}
+\label{fundamental_theorem}
+\defint{a}{b}{f}{x}=\defint{a}{b}{F'}{x}=F(b)-F(a)
+\end{equation}
+Huomionarvoista on se, että määrätyn integraalin \emph{olemassaolo} ei ole millään tavalla riippuvainen integraalifunktion $F(x)$ olemassaolosta.\cite{Cheney2007}
+
 \subsection{Geometrinen tulkinta}
+
+Geometrisesti tarkasteltuna luku $\defint{a}{b}{f}{x}$ tarkoittaa kuvaajan $y=f(x)$, $x$-akselin ja suorien $x=a$ ja $x=b$ rajaamaa pinta-alaa. Tämä on suora seuraus Riemann-integraalin määritelmästä. Olkoon $P=\{a=x_{0},x_{1},\dots,x_{n-1},x_{n}=b\}$ välin $[a,b]$ jako, $m_{i}=\inf\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{n+1}\}$ funktion $f(x)$ suurin alaraja ja $M_{i}=\sup\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{n+1}\}$  vastaavasti pienin yläraja välillä $[x_{i},x_{i+1}]$. Tällöin Riemann-integraali voidaan määritellä \emph{ala}- \[L_{P}(f)=\sum_{i=0}^{n-1}m_{i}(x_{n+1}-x_{n})\] ja \emph{yläsummien} \[U_{P}(f)=\sum_{i=0}^{n-1}m_{i}(x_{n+1}-x_{n})\] avulla \cite{Cheney2007}:
+
+\begin{equation}
+\inf_{P}U_{P}(f)=\sup_{P}L_{P}(f)=S\implies\defint{a}{b}{f}{x}=S 
+\end{equation}
+
+
 \subsection{Numeerisia menetelmiä}
 \subsubsection{Eulerin menetelmä}
 \subsubsection{Simpsonin menetelmä}
