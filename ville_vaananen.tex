@@ -40,6 +40,7 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 \newcommand{\field}[1]{\mathbb{#1}}
 \newcommand{\R}{\field{R}}
 \newcommand{\C}{\field{C}}
+\newcommand{\Deg}{\mathrm{Deg}}
 % kuvat
 \newcommand{\scalefig}[3]{
   \begin{figure}[ht!]
@@ -288,35 +289,80 @@ rajaamaa pinta-alaa.
 \subsection{Numeerisia menetelmiä}
 
 Käyttämällä tasavälistä jakoa, edellä esitellyistä ala- tai yläsummista saadaan suoraan eräs, melkoisen epätarkka, numeerinen 
-integraaliapproksimaatio, nimeltään \emph{suorakulmiosääntö}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
+integraaliapproksimaatio, nimeltään \emph{suorakulmiomenetelmä}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
 saadaan $L_{P_{20}}(e^{-x^2})\approx 1.57$ ja $U_{P_{20}}(e^{-x^2})\approx 1.96$, todellisen arvon 
 ollessa $\defint{-2}{2}{e^{-x^2}}{x}\approx 1.76$. Tulosta voidaan hiukan parantaa valitsemalla suorakulmion $i$
 korkeudeksi $f(\frac{x_i+x_{i+1}}{2})$.
 
-Selkeä parannus saadaan aikaiseksi \emph{puolisuunnikassäännöllä}, jossa myös käytetään tasavälistä jakoa $P_n=\{x_i=a+hi\}$, mutta 
+Selkeä parannus saadaan aikaiseksi \emph{puolisuunnikasmenetelmällä}, jossa myös käytetään tasavälistä jakoa $P_n=\{x_i=a+hi\}$, mutta 
 suorakulmiot on korvattu puolisuunnikkailla:
 
 \begin{equation} 
-	\defint{a}{b}{f(x)}{x} = \sum_{i=0}^{n-1}(x_{i+1}-x_i)\frac{f(x_i)+f(x_{i+1})}{2}=h\left(\frac{f(x_0)+f(x_{n})}{2}+ \sum_{i=0}^{n-1}f(x_i)\right)
+	\defint{a}{b}{f(x)}{x} \approx \sum_{i=0}^{n}\frac{h}{2}\left(f(x_i)+f(x_{i+1})\right)
+	\label{eq_trapezoid}
 \end{equation}
-Puolisuunnikassääntöä on havainnollistettu kuvassa \ref{fig_trapezoid}.
-\scalefig{fig_trapezoid}{0.8}{Puolisuunnikassääntö}
+Puolisuunnikasmenetelmää on havainnollistettu kuvassa \ref{fig_trapezoid}.
+\scalefig{fig_trapezoid}{0.8}{Puolisuunnikasmenetelmä}
 
-Puolisuunnikassääntö voidaan tulkita myös siten, että jokaisella välillä integroitavaa
-funktioita approksimoidaan suoralla, joka kulkee välin päätepisteiden kautta. Alkuperäinen
+Puolisuunnikasmenetelmä voidaan tulkita myös siten, että integroitavaa
+funktioita approksimoidaa jokaisella välillä suoralla, joka kulkee välin päätepisteiden kautta. Alkuperäinen
 integraali on siis $n$:n ensimmäisen asteen polynomin integraalien summa. Tällaisen tulkinnan siivittämänä 
-puolisuunnikassäännölle löytyy ilmeinen parannusehdotus: käytetään approksimointiin korkeamman asteen polynomia.
+puolisuunnikasmenetelmälle löytyy ilmeinen parannusehdotus: käytetään approksimointiin korkeamman asteen polynomia.
 
-\subsubsection{Polynomi-interpolaatio}
+\subsubsection{Polynominen interpolaatio}
 
-Usein olisi edullista kyetä konstruoimaan arbiträärisen monimutkaiselle funktiolle $f$ jokin yksinkertaisempi vastine $g$.
-Mikäli mielivaltainen joukko $f$:n arvoja $f(x_i)$ on tunnettu, on polynomifunktio luonteva valinta $g$:si, sillä algebran peruslauseen 
-nojalla aina on mahdollista konstruoida polynomifunktio, joka kulkee jokaisen pisteen $\left(x_i,f(x_i)\right)$ kautta.   
+Polynomisella interpolaatiolla tarkoitetaan sellaisen polynomin $p$ löytämistä, joka ratkaisee
+seuraavan ongelman: olkoon $i = 0,\dots,n$, $\{x_i\}$ $n+1$ erillistä pistettä ja $\{y_i\}\in\R$ niitä vastaavat 
+mielivaltaiset arvot, etsi polynomi $p$, jolle pätee $p(x_i) = y_i\quad\forall i$. Osoittautuu että, $p$ on aina olemassa, 
+se on ainutkertainen ja sen asteluku on korkeintaan $n$.
+
+Interpoloiva polynomi $p$ voidaan konstruoida \emph{Lagrange} muodossaan Lagrangen \emph{kantapolynomien} $\ell_i$ avulla:
+\begin{align*}
+	&\ell_i(x)=\prod_{\substack{j\neq i\\j=0}}^{n}\left(\frac{x-x_j}{x_i-x_j}\right)\implies\\
+	&\ell_i(x_j)=\delta_{ij}=
+	\begin{cases}
+    	0 & i \neq j \\
+    	1 & i = j
+    \end{cases}.
+\end{align*}
+Nyt jos $p$ määritellään $\ell_i$:n lineaarikombinaationa 
+\[
+	p(x)=\sum_{i=0}^{n}\ell_i(x)y_i,
+\]
+niin selvästi pätee 
+\[
+	p(x_i)=\ell_i(x_i)y_i=y_i.
+\]
+ja koska $\text{Deg}(\ell_i)=n$, niin myös $\text{Deg}(p)=n$.
+
+\subsubsection{Newton-Cotes menetelmät}
+
+Jos nyt käytetään $f$:n tilalla edellä määriteltyä interpoloivaa polynomia $p$,
+saadaan
+
+\begin{align} 
+	\defint{a}{b}{f(x)}{x} \approx 
+	\defint{a}{b}{p(x)}{x} =& 
+	\defint{a}{b}{\sum_{i=0}^{n}\ell_i(x)f(x_i)}{x} \nonumber \\ 
+	=&\sum_{i=0}^{n}\left(f(x_i)\underbrace{\defint{a}{b}{\ell_i(x)}{x}}_{w_i}\right). \label{eq_newton_cotes}  
+\end{align}
+Käyttämällä kaavaa \ref{eq_newton_cotes} jokaisella tasavälisen jaon välillä, saadaan ryhmä
+numeerisen integroinnin menetelmiä jotka tunnetaan nimellä \emph{Newton-Cotes} menetelmät ja jotka
+poikkeavat toisistaan siinä, kuinka monta pistettä jokaisella välillä interpolointiin käytetään ja ovatko
+välin päätepisteet mukana (suljettu menetelmä) vai eivät (avoin menetelmä).
+
+Havaitaan, että mikäli jokaiselta väliltä valitaan välin päätepisteet, saadaan edellä esitelty puolisuunnikasmenetelmä (\ref{eq_trapezoid})
+ja mikäli valitaan päätepisteiden lisäksi välin keskipiste $\frac{x_i+x_{i+1}}{2}$ saadaan laajalti käytetty 
+\emph{Simpsonin} menetelmä:
+
+\begin{equation} 
+	\defint{a}{b}{f(x)}{x} \approx 
+	\sum_{i=0}^{n}\frac{h}{6}\left(f(x_i)+4f(\frac{x_i+x_{i+1}}{2})+f(x_{i+1})\right)
+	\label{eq_simpson}
+\end{equation}
+ 
 
 
-
-\subsubsection{Eulerin menetelmä}
-\subsubsection{Simpsonin menetelmä}
 
 \section{Yksiulotteinen kvadratuuri-integrointi}
 \subsection{Ortogonaaliset polynomikannat}
