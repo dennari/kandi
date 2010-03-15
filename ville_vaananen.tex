@@ -274,14 +274,10 @@ funktion $f(x)$ suurin alaraja ja $M_{i}=\sup\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{i+1
 yläraja välillä $[x_{i},x_{i+1}]$. Jakoa $P_i$ kutsutaan $P_j$:n \emph{tihentymäksi} mikäli $P_i \subset P_j$ ja 
 merkitään $\vert P_i \vert$ jaon $P_i$ pisintä jakoväliä.  
 Tällöin Riemann-integraali voidaan määritellä \emph{ala}- \[L_{P_n}(f)=\sum_{i=0}^{n}m_{i}(x_{i+1}-x_{i})\] 
-ja \emph{yläsummien} \[U_{P_n}(f)=\sum_{i=0}^{n}M_{i}(x_{i+1}-x_{i})\] avulla \cite{Cheney2007}:
-
-\begin{equation}
-	\begin{array}{cl}
-		\lim_{n\to\infty}\vert P_n \vert = 0& \implies \\
-		\liminf_{n\to\infty}U_{P_n}(f) = \limsup_{n\to\infty}L_{P_n}(f)=S& \implies\\ 
-		\defint{a}{b}{f(x)}{x} = S
-	\end{array}. 
+ja \emph{yläsummien} \[U_{P_n}(f)=\sum_{i=0}^{n}M_{i}(x_{i+1}-x_{i})\] avulla \cite{Cheney2007}: 
+jos pätee $\lim_{n\to\infty}\vert P_n \vert = 0$, niin
+\begin{equation}		
+		\liminf_{n\to\infty}U_{P_n}(f) = \limsup_{n\to\infty}L_{P_n}(f)=S \implies \defint{a}{b}{f(x)}{x} = S		
 \end{equation}
 Ala- ja yläsummia on havainnollistettu kuvassa \ref{fig_lusums} (jaon ei välttämättä tarvitse olla tasavälinen), josta on helppo nähdä, että jaon 
 tihentyessä ala- ja ylässumat suppenevat samaan arvoon, joka vastaa kuvaajan $y=f(x)$ ja $x$-akselin 
@@ -311,12 +307,11 @@ funktioita approksimoidaan suoralla, joka kulkee välin päätepisteiden kautta. Al
 integraali on siis $n$:n ensimmäisen asteen polynomin integraalien summa. Tällaisen tulkinnan siivittämänä 
 puolisuunnikassäännölle löytyy ilmeinen parannusehdotus: käytetään approksimointiin korkeamman asteen polynomia.
 
-\subsubsection{Polynomiinterpolaatio}
+\subsubsection{Polynomi-interpolaatio}
 
 Usein olisi edullista kyetä konstruoimaan arbiträärisen monimutkaiselle funktiolle $f$ jokin yksinkertaisempi vastine $g$.
 Mikäli mielivaltainen joukko $f$:n arvoja $f(x_i)$ on tunnettu, on polynomifunktio luonteva valinta $g$:si, sillä algebran peruslauseen 
 nojalla aina on mahdollista konstruoida polynomifunktio, joka kulkee jokaisen pisteen $\left(x_i,f(x_i)\right)$ kautta.   
-
 
 
 
