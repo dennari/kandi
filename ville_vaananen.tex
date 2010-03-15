@@ -6,7 +6,8 @@
 
 %% Saat pdf-tiedoston viittaukset ja linkit kuntoon seuraavalla paketilla.
 %% Paketti toimii erityisen hyvin pdflatexin kanssa. 
-\usepackage[pdfpagemode=None, colorlinks=true, urlcolor=black, linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
+\usepackage[pdfpagemode=UseNone, colorlinks=true, urlcolor=black,
+linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 
 
 %% Matematiikan fontteja, symboleja ja muotoiluja lisää, näitä tarvitaan usein 
@@ -32,11 +33,26 @@
 % infinitesimaalinen muutos
 \newcommand{\dd}{\; \mathrm{d}}
 % määrätty integraali
-\newcommand{\defint}[4]{\int_{#1}^{#2}#3(#4)\dd#4}
+\newcommand{\defint}[4]{
+\int_{#1}^{#2}#3\dd#4
+}
 % reaaliluvut, kompleksiluvut..
 \newcommand{\field}[1]{\mathbb{#1}}
 \newcommand{\R}{\field{R}}
 \newcommand{\C}{\field{C}}
+% kuvat
+\newcommand{\scalefig}[3]{
+  \begin{figure}[ht!]
+    % Requires \usepackage{graphicx}
+    \centering
+    \includegraphics[width=#2\columnwidth]{#1}
+    %%% I think \captionwidth (see above) can go away as long as
+    %%% \centering is above
+    %\captionwidth{#2\columnwidth}%
+    \caption{#3}
+    \label{#1}
+  \end{figure}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -208,13 +224,25 @@
 %% Ensimmäisen sivun ylä- ja alatunnisteet tyhjiksi
 \thispagestyle{empty}
 
-Pinta-alojen ja tilavuuksien määrittäminen on tavallinen ongelma matematiikan ja fysiikan sovelluksissa. Ei siis ole yllättävää, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, samansuuruisiksi suorakulmioiksi. Matemaattinen työkalu jolla on läheinen yhteys edellä mainittuun ongelmaan on nimeltään \emph{integraali}· Tänä päivänä tekniikan alan ammattilaiset arkkitehdeistä tilastotieteilijöihin tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
+Pinta-alojen ja tilavuuksien määrittäminen on tavallinen ongelma matematiikan ja fysiikan sovelluksissa. 
+Ei siis ole yllättävää, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, 
+samansuuruisiksi suorakulmioiksi. Matemaattinen työkalu jolla on läheinen yhteys edellä mainittuun ongelmaan 
+on nimeltään \emph{integraali}· Tänä päivänä tekniikan alan ammattilaiset arkkitehdeistä tilastotieteilijöihin 
+tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
 
-Numeerinen integrointi on sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen. Alalta on aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi. Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
+Numeerinen integrointi on sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen. Alalta on 
+aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä 
+esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi. 
+Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. 
+Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
-Tässä kandidaatintyössä pyritään esittämään syitä siihen miksi näin on. Samalla luodaan katsaus niihin ongelmiin joihin törmätään, kun yhdessä ulottuvuudessa niin erinomaisia tuloksia tuottavia \emph{Gaussisia kvadratuureja} yritetään soveltaa useassa ulottuvuudessa.
+Tässä kandidaatintyössä pyritään esittämään syitä siihen miksi näin on. Samalla luodaan katsaus niihin 
+ongelmiin joihin törmätään, kun yhdessä ulottuvuudessa niin erinomaisia tuloksia tuottavia 
+\emph{Gaussisia kvadratuureja} yritetään soveltaa useassa ulottuvuudessa.
  
-Teoreettisen selvityksen jälkeen vertaillaan eräitä kiinnostavia menetelmiä keskenään soveltamalla niitä esimerkki-integraaleihin useissa eri dimensioissa. Saatujen tulosten ja esitellyn teorian perusteellä tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
+Teoreettisen selvityksen jälkeen vertaillaan eräitä kiinnostavia menetelmiä keskenään soveltamalla niitä 
+esimerkki-integraaleihin useissa eri dimensioissa. Saatujen tulosten ja esitellyn teorian perusteellä 
+tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
 
 \cite{Cools2002,Cools2001,Kuo2010,Cools2009,Cools2006,Krylov1962,Stroud1971,Davis1975,Ueberhuber1997,Cheney2007}
 
@@ -223,24 +251,75 @@ Teoreettisen selvityksen jälkeen vertaillaan eräitä kiinnostavia menetelmiä kesk
 \clearpage
 
 \section{Integraali}
-Integraalille on olemassa useita kehittäjiensä mukaan nimettyjä määritelmiä, joista Riemann-integraali lienee yksinkertaisin ja intuitiivisin. Usein kun puhutaan integraalista tarkoitetaan nimenomaan Riemann-integraalia, mikä pätee myös tähän työhön. Jokainen suljetulla välillä $[a,b]$ jatkuva ja rajoitettu reaaliarvoinen funktio on (Riemann-)integroituva ja integraalia merkitään $\defint{a}{b}{f}{x}\in\R$, jota kutsutaan myös \emph{määrätyksi integraaliksi}. Määrätyllä integraalilla ja \emph{integraalifunktiolla} $F(x)$ (ja sitä kautta derivoinnilla) on läheinen yhteys, joka tunnetaan \emph{analyysin ensimmäisenä peruslauseena}:
+Integraalille on olemassa useita kehittäjiensä mukaan nimettyjä määritelmiä, joista Riemann-integraali 
+lienee yksinkertaisin ja intuitiivisin. Usein kun puhutaan integraalista tarkoitetaan nimenomaan 
+Riemann-integraalia, mikä pätee myös tähän työhön. Jokainen suljetulla välillä $[a,b]$ jatkuva ja 
+rajoitettu reaaliarvoinen funktio on (Riemann-)integroituva ja integraalia merkitään $\defint{a}{b}{f(x)}{x}\in\R$, 
+jota kutsutaan myös \emph{määrätyksi integraaliksi}. Määrätyllä integraalilla ja \emph{integraalifunktiolla} $F(x)$ 
+(ja sitä kautta derivoinnilla) on läheinen yhteys, joka tunnetaan \emph{analyysin ensimmäisenä peruslauseena}:
 
 \begin{equation}
-\label{fundamental_theorem}
-\defint{a}{b}{f}{x}=\defint{a}{b}{F'}{x}=F(b)-F(a)
+	\label{fundamental_theorem}
+	\defint{a}{b}{f(x)}{x}=\defint{a}{b}{F'(x)}{x}=F(b)-F(a)
 \end{equation}
-Huomionarvoista on se, että määrätyn integraalin \emph{olemassaolo} ei ole millään tavalla riippuvainen integraalifunktion $F(x)$ olemassaolosta.\cite{Cheney2007}
+Huomionarvoista on se, että määrätyn integraalin \emph{olemassaolo} ei ole millään tavalla riippuvainen 
+integraalifunktion $F(x)$ olemassaolosta.\cite{Cheney2007}
 
 \subsection{Geometrinen tulkinta}
 
-Geometrisesti tarkasteltuna luku $\defint{a}{b}{f}{x}$ tarkoittaa kuvaajan $y=f(x)$, $x$-akselin ja suorien $x=a$ ja $x=b$ rajaamaa pinta-alaa. Tämä on suora seuraus Riemann-integraalin määritelmästä. Olkoon $P=\{a=x_{0},x_{1},\dots,x_{n-1},x_{n}=b\}$ välin $[a,b]$ jako, $m_{i}=\inf\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{n+1}\}$ funktion $f(x)$ suurin alaraja ja $M_{i}=\sup\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{n+1}\}$  vastaavasti pienin yläraja välillä $[x_{i},x_{i+1}]$. Tällöin Riemann-integraali voidaan määritellä \emph{ala}- \[L_{P}(f)=\sum_{i=0}^{n-1}m_{i}(x_{n+1}-x_{n})\] ja \emph{yläsummien} \[U_{P}(f)=\sum_{i=0}^{n-1}m_{i}(x_{n+1}-x_{n})\] avulla \cite{Cheney2007}:
+Geometrisesti tarkasteltuna luku $\defint{a}{b}{f(x)}{x}$ tarkoittaa kuvaajan $y=f(x)$, $x$-akselin ja 
+suorien $x=a$ ja $x=b$ rajaamaa pinta-alaa. Tämä on suora seuraus Riemann-integraalin määritelmästä. 
+Olkoon $P_n=\{a=x_{0}<x_{1}<\dots{}<x_{n-1}<x_{n}=b\}$ välin $[a,b]$ $n$-välinen jako, $m_{i}=\inf\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{i+1}\}$ 
+funktion $f(x)$ suurin alaraja ja $M_{i}=\sup\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{i+1}\}$  vastaavasti pienin 
+yläraja välillä $[x_{i},x_{i+1}]$. Jakoa $P_i$ kutsutaan $P_j$:n \emph{tihentymäksi} mikäli $P_i \subset P_j$ ja 
+merkitään $\vert P_i \vert$ jaon $P_i$ pisintä jakoväliä.  
+Tällöin Riemann-integraali voidaan määritellä \emph{ala}- \[L_{P_n}(f)=\sum_{i=0}^{n}m_{i}(x_{i+1}-x_{i})\] 
+ja \emph{yläsummien} \[U_{P_n}(f)=\sum_{i=0}^{n}M_{i}(x_{i+1}-x_{i})\] avulla \cite{Cheney2007}:
 
 \begin{equation}
-\inf_{P}U_{P}(f)=\sup_{P}L_{P}(f)=S\implies\defint{a}{b}{f}{x}=S 
+	\begin{array}{cl}
+		\lim_{n\to\infty}\vert P_n \vert = 0& \implies \\
+		\liminf_{n\to\infty}U_{P_n}(f) = \limsup_{n\to\infty}L_{P_n}(f)=S& \implies\\ 
+		\defint{a}{b}{f(x)}{x} = S
+	\end{array}. 
 \end{equation}
+Ala- ja yläsummia on havainnollistettu kuvassa \ref{fig_lusums} (jaon ei välttämättä tarvitse olla tasavälinen), josta on helppo nähdä, että jaon 
+tihentyessä ala- ja ylässumat suppenevat samaan arvoon, joka vastaa kuvaajan $y=f(x)$ ja $x$-akselin 
+rajaamaa pinta-alaa.
 
+\scalefig{fig_lusums}{0.8}{Ala- ja yläsummat $20$-välisellä jaolla}
 
 \subsection{Numeerisia menetelmiä}
+
+Käyttämällä tasavälistä jakoa, edellä esitellyistä ala- tai yläsummista saadaan suoraan eräs, melkoisen epätarkka, numeerinen 
+integraaliapproksimaatio, nimeltään \emph{suorakulmiosääntö}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
+saadaan $L_{P_{20}}(e^{-x^2})\approx 1.57$ ja $U_{P_{20}}(e^{-x^2})\approx 1.96$, todellisen arvon 
+ollessa $\defint{-2}{2}{e^{-x^2}}{x}\approx 1.76$. Tulosta voidaan hiukan parantaa valitsemalla suorakulmion $i$
+korkeudeksi $f(\frac{x_i+x_{i+1}}{2})$.
+
+Selkeä parannus saadaan aikaiseksi \emph{puolisuunnikassäännöllä}, jossa myös käytetään tasavälistä jakoa $P_n=\{x_i=a+hi\}$, mutta 
+suorakulmiot on korvattu puolisuunnikkailla:
+
+\begin{equation} 
+	\defint{a}{b}{f(x)}{x} = \sum_{i=0}^{n-1}(x_{i+1}-x_i)\frac{f(x_i)+f(x_{i+1})}{2}=h\left(\frac{f(x_0)+f(x_{n})}{2}+ \sum_{i=0}^{n-1}f(x_i)\right)
+\end{equation}
+Puolisuunnikassääntöä on havainnollistettu kuvassa \ref{fig_trapezoid}.
+\scalefig{fig_trapezoid}{0.8}{Puolisuunnikassääntö}
+
+Puolisuunnikassääntö voidaan tulkita myös siten, että jokaisella välillä integroitavaa
+funktioita approksimoidaan suoralla, joka kulkee välin päätepisteiden kautta. Alkuperäinen
+integraali on siis $n$:n ensimmäisen asteen polynomin integraalien summa. Tällaisen tulkinnan siivittämänä 
+puolisuunnikassäännölle löytyy ilmeinen parannusehdotus: käytetään approksimointiin korkeamman asteen polynomia.
+
+\subsubsection{Polynomiinterpolaatio}
+
+Usein olisi edullista kyetä konstruoimaan arbiträärisen monimutkaiselle funktiolle $f$ jokin yksinkertaisempi vastine $g$.
+Mikäli mielivaltainen joukko $f$:n arvoja $f(x_i)$ on tunnettu, on polynomifunktio luonteva valinta $g$:si, sillä algebran peruslauseen 
+nojalla aina on mahdollista konstruoida polynomifunktio, joka kulkee jokaisen pisteen $\left(x_i,f(x_i)\right)$ kautta.   
+
+
+
+
 \subsubsection{Eulerin menetelmä}
 \subsubsection{Simpsonin menetelmä}
 
