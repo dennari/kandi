@@ -225,22 +225,28 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 %% Ensimmäisen sivun ylä- ja alatunnisteet tyhjiksi
 \thispagestyle{empty}
 
-Pinta-alojen ja tilavuuksien määrittäminen on tavallinen ongelma matematiikan ja fysiikan sovelluksissa. 
+Pinta-alojen ja tilavuuksien määrittäminen on yleisesti kohdattu ongelma matematiikan ja fysiikan sovelluksissa. 
 Ei siis ole yllättävää, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, 
-samansuuruisiksi suorakulmioiksi. Matemaattinen työkalu jolla on läheinen yhteys edellä mainittuun ongelmaan 
-on nimeltään \emph{integraali}· Tänä päivänä tekniikan alan ammattilaiset arkkitehdeistä tilastotieteilijöihin 
+samansuuruisiksi suorakulmioiksi. Matemaattinen konstruktio, jolla on läheinen yhteys tähän ongelmaan 
+on \emph{integraali}· Tänä päivänä tekniikan alan ammattilaiset arkkitehdeistä tilastotieteilijöihin 
 tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
 
 Numeerinen integrointi on sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen. Alalta on 
 aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä 
-esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi. 
+esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi \cite{Ueberhuber1997}. 
 Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. 
 Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
 Tässä kandidaatintyössä pyritään esittämään syitä siihen miksi näin on. Samalla luodaan katsaus niihin 
 ongelmiin joihin törmätään, kun yhdessä ulottuvuudessa niin erinomaisia tuloksia tuottavia 
-\emph{Gaussisia kvadratuureja} yritetään soveltaa useassa ulottuvuudessa.
+\emph{Gaussisia kvadratuureja} sovelletaan useassa ulottuvuudessa. Gaussisten kvadratuurien erinomaisuudesta seuraa
+luonnollisesti kysymys siitä, voidaanko sen periaatteita soveltaa usean ulottuvuuden integraalilaskusääntöjen, 
+\emph{kubatuurien}, muodostamisessa ja jos voidaan, kykenevätkö ne yhtä hyvään suoritukseen. 
  
+Tässä työssä käydään ensin  läpi tarvittavat esitiedot (kuten Riemann integraali ja polynominen approksimaatio), 
+jotta voidaan esittää Gaussisten kvadratuurien, siis yhden ulottuvuuden numeeristen integrointisääntöjen, idea.
+Tämän jälkeen luodaan katsaus usean ulottuvuuden numeeriseen integrointiin, keskittyen Gaussisten kvadratuurien
+yleistämiseen kubatuureiksi (on myös muita usean ulottuvuuden numeerisia integrointimenelmiä, kuten Monte-Carlo menetelmät). 
 Teoreettisen selvityksen jälkeen vertaillaan eräitä kiinnostavia menetelmiä keskenään soveltamalla niitä 
 esimerkki-integraaleihin useissa eri dimensioissa. Saatujen tulosten ja esitellyn teorian perusteellä 
 tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
@@ -251,7 +257,7 @@ tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
 %% Opinnäytteessä jokainen osa alkaa uudelta sivulta, joten \clearpage
 \clearpage
 
-\section{Integraali}
+\section{Riemann integraali}
 Integraalille on olemassa useita kehittäjiensä mukaan nimettyjä määritelmiä, joista Riemann-integraali 
 lienee yksinkertaisin ja intuitiivisin. Usein kun puhutaan integraalista tarkoitetaan nimenomaan 
 Riemann-integraalia, mikä pätee myös tähän työhön. Jokainen suljetulla välillä $[a,b]$ jatkuva ja 
@@ -275,46 +281,46 @@ funktion $f(x)$ suurin alaraja ja $M_{i}=\sup\{f(x)\;:\;x_{i}\leq{}x\leq{}x_{i+1
 yläraja välillä $[x_{i},x_{i+1}]$. Jakoa $P_i$ kutsutaan $P_j$:n \emph{tihentymäksi} mikäli $P_i \subset P_j$ ja 
 merkitään $\vert P_i \vert$ jaon $P_i$ pisintä jakoväliä.  
 Tällöin Riemann-integraali voidaan määritellä \emph{ala}- \[L_{P_n}(f)=\sum_{i=0}^{n}m_{i}(x_{i+1}-x_{i})\] 
-ja \emph{yläsummien} \[U_{P_n}(f)=\sum_{i=0}^{n}M_{i}(x_{i+1}-x_{i})\] avulla \cite{Cheney2007}: 
+ja \emph{yläsummien} \[U_{P_n}(f)=\sum_{i=0}^{n}M_{i}(x_{i+1}-x_{i})\] avulla: 
 jos pätee $\lim_{n\to\infty}\vert P_n \vert = 0$, niin
 \begin{equation}		
 		\liminf_{n\to\infty}U_{P_n}(f) = \limsup_{n\to\infty}L_{P_n}(f)=S \implies \defint{a}{b}{f(x)}{x} = S		
 \end{equation}
 Ala- ja yläsummia on havainnollistettu kuvassa \ref{fig_lusums} (jaon ei välttämättä tarvitse olla tasavälinen), josta on helppo nähdä, että jaon 
 tihentyessä ala- ja ylässumat suppenevat samaan arvoon, joka vastaa kuvaajan $y=f(x)$ ja $x$-akselin 
-rajaamaa pinta-alaa.
+rajaamaa pinta-alaa.\cite{Cheney2007}
 
 \scalefig{fig_lusums}{0.8}{Ala- ja yläsummat $20$-välisellä jaolla}
 
 \subsection{Numeerisia menetelmiä}
 
 Käyttämällä tasavälistä jakoa, edellä esitellyistä ala- tai yläsummista saadaan suoraan eräs, melkoisen epätarkka, numeerinen 
-integraaliapproksimaatio, nimeltään \emph{suorakulmiomenetelmä}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
+integraaliapproksimaatio, \emph{suorakulmiomenetelmä} \cite{Ueberhuber1997}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
 saadaan $L_{P_{20}}(e^{-x^2})\approx 1.57$ ja $U_{P_{20}}(e^{-x^2})\approx 1.96$, todellisen arvon 
 ollessa $\defint{-2}{2}{e^{-x^2}}{x}\approx 1.76$. Tulosta voidaan hiukan parantaa valitsemalla suorakulmion $i$
 korkeudeksi $f(\frac{x_i+x_{i+1}}{2})$.
 
-Selkeä parannus saadaan aikaiseksi \emph{puolisuunnikasmenetelmällä}, jossa myös käytetään tasavälistä jakoa $P_n=\{x_i=a+hi\}$, mutta 
+Selkeä parannus saadaan aikaiseksi \emph{puolisuunnikasmenetelmällä}, jossa myös käytetään tasavälistä jakoa $P_n=\{x_i\;\vert\;x_i=a+hi\}$, mutta 
 suorakulmiot on korvattu puolisuunnikkailla:
 
 \begin{equation} 
 	\defint{a}{b}{f(x)}{x} \approx \sum_{i=0}^{n}\frac{h}{2}\left(f(x_i)+f(x_{i+1})\right)
 	\label{eq_trapezoid}
 \end{equation}
-Puolisuunnikasmenetelmää on havainnollistettu kuvassa \ref{fig_trapezoid}.
+Puolisuunnikasmenetelmää on havainnollistettu kuvassa \ref{fig_trapezoid}.\cite{Gautschi1997}
 \scalefig{fig_trapezoid}{0.8}{Puolisuunnikasmenetelmä}
 
 Puolisuunnikasmenetelmä voidaan tulkita myös siten, että integroitavaa
 funktioita approksimoidaa jokaisella välillä suoralla, joka kulkee välin päätepisteiden kautta. Alkuperäinen
 integraali on siis $n$:n ensimmäisen asteen polynomin integraalien summa. Tällaisen tulkinnan siivittämänä 
-puolisuunnikasmenetelmälle löytyy ilmeinen parannusehdotus: käytetään approksimointiin korkeamman asteen polynomia.
+puolisuunnikasmenetelmälle löytyy ilmeinen parannusehdotus: käytetään approksimointiin korkeamman asteen polynomia.\cite{Gautschi1997}
 
 \subsubsection{Polynominen interpolaatio}
 
 Polynomisella interpolaatiolla tarkoitetaan sellaisen polynomin $p$ löytämistä, joka ratkaisee
-seuraavan ongelman: olkoon $i = 0,\dots,n$, $\{x_i\}$ $n+1$ erillistä pistettä ja $\{y_i\}\in\R$ niitä vastaavat 
-mielivaltaiset arvot, etsi polynomi $p$, jolle pätee $p(x_i) = y_i\quad\forall i$. Osoittautuu että, $p$ on aina olemassa, 
-se on ainutkertainen ja sen asteluku on korkeintaan $n$.
+seuraavan ongelman: etsi polynomi $p$, jolle pätee $p(x_i) = y_i\quad\forall i$, kun $\{x_i\}$ on $n+1$ 
+erillistä pistettä ja $\{y_i\}\in\R$ niitä vastaavat mielivaltaiset arvot. Osoittautuu että, $p$ on aina olemassa, 
+se on ainutkertainen ja sen asteluku on korkeintaan $n$.\cite{Cheney2007}
 
 Interpoloiva polynomi $p$ voidaan konstruoida \emph{Lagrange} muodossaan Lagrangen \emph{kantapolynomien} $\ell_i$ avulla:
 \begin{align*}
@@ -348,21 +354,18 @@ saadaan
 \end{align}
 Käyttämällä kaavaa \ref{eq_newton_cotes} jokaisella tasavälisen jaon välillä, saadaan ryhmä
 numeerisen integroinnin menetelmiä jotka tunnetaan nimellä \emph{Newton-Cotes} menetelmät ja jotka
-poikkeavat toisistaan siinä, kuinka monta pistettä jokaisella välillä interpolointiin käytetään ja ovatko
-välin päätepisteet mukana (suljettu menetelmä) vai eivät (avoin menetelmä).
+poikkeavat toisistaan siinä, montako pistettä interpolointiin käytetään ja ovatko
+välin päätepisteet mukana (suljettu menetelmä) vai eivät (avoin menetelmä).\cite{Gautschi1997}
 
 Havaitaan, että mikäli jokaiselta väliltä valitaan välin päätepisteet, saadaan edellä esitelty puolisuunnikasmenetelmä (\ref{eq_trapezoid})
 ja mikäli valitaan päätepisteiden lisäksi välin keskipiste $\frac{x_i+x_{i+1}}{2}$ saadaan laajalti käytetty 
-\emph{Simpsonin} menetelmä:
+\emph{Simpsonin} menetelmä: \cite{Gautschi1997}
 
 \begin{equation} 
 	\defint{a}{b}{f(x)}{x} \approx 
 	\sum_{i=0}^{n}\frac{h}{6}\left(f(x_i)+4f(\frac{x_i+x_{i+1}}{2})+f(x_{i+1})\right)
 	\label{eq_simpson}
 \end{equation}
- 
-
-
 
 \section{Yksiulotteinen kvadratuuri-integrointi}
 \subsection{Ortogonaaliset polynomikannat}
