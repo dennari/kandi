@@ -41,6 +41,10 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 \newcommand{\R}{\field{R}}
 \newcommand{\C}{\field{C}}
 \newcommand{\Deg}{\mathrm{Deg}}
+\newcommand{\iprod}[2]{\langle{}#1,#2\rangle}
+\renewcommand{\v}[1]{\mathbf{#1}} % vektorit ja matriisit
+
+
 % kuvat
 \newcommand{\scalefig}[3]{
   \begin{figure}[ht!]
@@ -235,24 +239,45 @@ Numeerinen integrointi on sovelletun matematiikan alalaji, joka pyrkii vastaamaa
 aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä 
 esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi \cite{Ueberhuber1997}. 
 Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. 
-Jos kuitenkin dimensioita on enemmän, on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
+Jos kuitenkin dimensioita on enemmän kuin yksi, jolloin puhutuaan \emph{kubatuureista}, 
+on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
-Tässä kandidaatintyössä pyritään esittämään syitä siihen miksi näin on. Samalla luodaan katsaus niihin 
-ongelmiin joihin törmätään, kun yhdessä ulottuvuudessa niin erinomaisia tuloksia tuottavia 
-\emph{Gaussisia kvadratuureja} sovelletaan useassa ulottuvuudessa. Gaussisten kvadratuurien erinomaisuudesta seuraa
-luonnollisesti kysymys siitä, voidaanko sen periaatteita soveltaa usean ulottuvuuden integraalilaskusääntöjen, 
-\emph{kubatuurien}, muodostamisessa ja jos voidaan, kykenevätkö ne yhtä hyvään suoritukseen. 
- 
-Tässä työssä käydään ensin  läpi tarvittavat esitiedot (kuten Riemann integraali ja polynominen approksimaatio), 
-jotta voidaan esittää Gaussisten kvadratuurien, siis yhden ulottuvuuden numeeristen integrointisääntöjen, idea.
-Tämän jälkeen luodaan katsaus usean ulottuvuuden numeeriseen integrointiin, keskittyen Gaussisten kvadratuurien
-yleistämiseen kubatuureiksi (on myös muita usean ulottuvuuden numeerisia integrointimenelmiä, kuten Monte-Carlo menetelmät). 
-Teoreettisen selvityksen jälkeen vertaillaan eräitä kiinnostavia menetelmiä keskenään soveltamalla niitä 
-esimerkki-integraaleihin useissa eri dimensioissa. Saatujen tulosten ja esitellyn teorian perusteellä 
-tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
+Numeerisen integroinnin menetelmät, joihin tässä työssä keskitytään, ovat muotoa
+\begin{equation}
+	I[f]:=\defint{\Omega}{}{f(\v{x})w(\v{x})}{\v{x}}\approx Q[f]:=\sum_{i=1}^Nw_if(\v{x}_i),
+	\label{eq_cubature} 
+\end{equation}
+jossa $f$ on \emph{integrandi}, $\Omega\subset\R^n$ on integroimisalue (yhdessä ulottuvuudessa integroimisväli),
+$w(\v{x})$ on \emph{painofunktio}, pisteet $\{\v{x}_i\}\in\R^n$ ovat \emph{solmut} tai \emph{tukipisteet} ja 
+$\{w_i\}\in\R$ ovat \emph{painot}. Vuonna 1814 saksalainen matemaatikko Carl Friedrich Gauss julkaisi merkittävän
+muotoa \ref{eq_cubature} olevan tuloksensa (tapaukselle $n=1$ ja $w(x):=1$), joka tunnetaan hänen mukaansa 
+nimellä \emph{Gaussin kvadratuuri} \cite{Gautschi1997}. Kyseessä on hyvin elegantti tulos, jossa hyödynnetään \emph{ortogonaalisia
+polynomeja} ja saavutetaan suuri tarkkuus pienellä funktio-evaluaatioiden määrällä. Tästä vaikuttuneena kirjoitti aikalaisensa
+Friedrich Bessel, myöskin tunnustettu matemaatikko, hänelle seuraavasti:
+\begin{quote} 
+``Nyt kun olen saanut haltuuni numeerista integrointia käsittelevän paperinne, en enää voinut pidättäytyä kiittämästä teitä siitä mielihyvästä, jonka olette minulle suoneet''\cite{Ueberhuber1997}
+\end{quote}
 
-\cite{Cools2002,Cools2001,Kuo2010,Cools2009,Cools2006,Krylov1962,Stroud1971,Davis1975,Ueberhuber1997,Cheney2007}
+Valitettavasti Gaussin tulos ei ole suoraan yleistettävissä useampaan ulottuvuuteen. Kuitenkin  
+Vuonna 1877 James Clerk Maxwell esitteli 27-pisteisen, muotoa \ref{eq_cubature} olevan kubatuuri-säännön
+ja tätä pidetään ensimmäisenä varsinaisena esimerkkinä kubatuurista sellaisena kuin se tänä päivänä ymmärretään \cite{Cools1997}.
+Useampiulotteisten integraalien likimääräiseen ratkaisemiseen on täysin eri tyyppisiäkin menetelmiä,
+joista tärkeimpänä mainittakoon erilaiset \emph{Monte-Carlo} menetelmät. Näissä integrandin arvo lasketaan 
+suuressa määrässä satunnaisia pisteitä, jolloin integraalia voidaan approksimoida näiden arvojen
+keskiarvona. Etuna on, että päästään tyystin irti niin sanotusta \emph{dimensionaalisuuden kirouksesta},
+jonka mukaan tarvittavien funktio-evaluaatioiden määrä riippuu eksponentiaalisesti dimensioiden määrästä.
+Kuitenkin hyväksyttävään tarkkuuteen pääseminen vaatii suurta määrää satunnaispisteitä ja funktio-evaluaatioita
+jo yhdestä dimensiosta lähtien, mutta jos dimensioiden määrä lähestyy useita satoja, ovat Monte-Carlo
+menetelmät silti usein ainoa vaihtoehto. Jatkossa keskitytään ainoastaan kaavan \ref{eq_cubature} mukaisiin sääntöihin.
 
+Tässä työssä käydään ensin  läpi tarvittavat esitiedot, kuten Riemann integraali ja polynominen approksimaatio, 
+jotta voidaan esittää Gaussin kvadratuurien idea. Tämän jälkeen keskitytään integrointiin useammassa kuin yhdessä
+dimensiossa ja käydään läpi erilaisia keinoja kubatuuri-sääntöjen muodostamiseksi. Teoreettisen selvityksen jälkeen vertaillaan 
+eräitä kiinnostavia menetelmiä keskenään soveltamalla niitä esimerkki-integraaleihin kahdessa dimensioissa. 
+Saatujen tulosten ja esitellyn teorian perusteellä tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
+
+\cite{Cools2002,Cools2001,Cools2009,Cools2006,Krylov1962,Stroud1971,Davis1975,Ueberhuber1997,Cheney2007}
+\cite{Arasaratnam2009,Hinrichs2007,Omelyan2006,Novak1999}
 
 %% Opinnäytteessä jokainen osa alkaa uudelta sivulta, joten \clearpage
 \clearpage
@@ -292,7 +317,7 @@ rajaamaa pinta-alaa.\cite{Cheney2007}
 
 \scalefig{fig_lusums}{0.8}{Ala- ja yläsummat $20$-välisellä jaolla}
 
-\subsection{Numeerisia menetelmiä}
+\section{Numeerisia menetelmiä}
 
 Käyttämällä tasavälistä jakoa, edellä esitellyistä ala- tai yläsummista saadaan suoraan eräs, melkoisen epätarkka, numeerinen 
 integraaliapproksimaatio, \emph{suorakulmiomenetelmä} \cite{Ueberhuber1997}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
@@ -303,29 +328,60 @@ korkeudeksi $f(\frac{x_i+x_{i+1}}{2})$.
 Selkeä parannus saadaan aikaiseksi \emph{puolisuunnikasmenetelmällä}, jossa myös käytetään tasavälistä jakoa $P_n=\{x_i\;\vert\;x_i=a+hi\}$, mutta 
 suorakulmiot on korvattu puolisuunnikkailla:
 
-\begin{equation} 
-	\defint{a}{b}{f(x)}{x} \approx \sum_{i=0}^{n}\frac{h}{2}\left(f(x_i)+f(x_{i+1})\right)
+\begin{align} 
+	\defint{x_{k}}{x_{k+1}}{f(x)}{x} \approx \frac{h}{2}\left(f(x_k)+f(x_{k+1})\right)	
 	\label{eq_trapezoid}
-\end{equation}
+\end{align}
 Puolisuunnikasmenetelmää on havainnollistettu kuvassa \ref{fig_trapezoid}.\cite{Gautschi1997}
 \scalefig{fig_trapezoid}{0.8}{Puolisuunnikasmenetelmä}
 
-Puolisuunnikasmenetelmä voidaan tulkita myös siten, että integroitavaa
-funktioita approksimoidaa jokaisella välillä suoralla, joka kulkee välin päätepisteiden kautta. Alkuperäinen
-integraali on siis $n$:n ensimmäisen asteen polynomin integraalien summa. Tällaisen tulkinnan siivittämänä 
-puolisuunnikasmenetelmälle löytyy ilmeinen parannusehdotus: käytetään approksimointiin korkeamman asteen polynomia.\cite{Gautschi1997}
+Sekä suorakulmiomenetelmä, että puolisuunnikasmenetelmä voidaan tulkita siten, että integrandia 
+approksimoidaan jokaisella välillä vakiofunktiolla (0:nnen asteen polynomi) tai vastaavasti
+ensimmäisen asteen polynomilla. Alkuperäinen integraali on siis $n$:n polynomintegraalin summa. 
+Tällaisen tulkinnan siivittämänä näille menetelmille löytyy ilmeinen parannusehdotus: käytetään 
+approksimointiin korkeamman asteen polynomia.\cite{Gautschi1997}
 
-\subsubsection{Polynominen interpolaatio}
+\subsection{Polynomiapproksimaatio}
 
-Polynomisella interpolaatiolla tarkoitetaan sellaisen polynomin $p$ löytämistä, joka ratkaisee
-seuraavan ongelman: etsi polynomi $p$, jolle pätee $p(x_i) = y_i\quad\forall i$, kun $\{x_i\}$ on $n+1$ 
-erillistä pistettä ja $\{y_i\}\in\R$ niitä vastaavat mielivaltaiset arvot. Osoittautuu että, $p$ on aina olemassa, 
-se on ainutkertainen ja sen asteluku on korkeintaan $n$.\cite{Cheney2007}
+Yleinen \emph{approksimaatio-ongelma} voidaan muotoilla seuraavasti: olkoon $f$ approksimoitava
+funktio ja $\|\cdot\|$ normi joka on määritelty funktioavaruuden $\Phi$
+funktioille $\varphi$. Etsi $\hat{\varphi}\in\Phi$ siten että
+\begin{equation}
+	 \|f-\hat\varphi\|\leq\|f-\varphi\|\quad\forall\varphi\in\Phi .\cite{Gautschi1997}
+\end{equation}
+
+Tässä työssä esiintyville funktioille on määritelty sisätulo $\iprod{\cdot}{\cdot}:\Phi\times\Phi\to\R$ 
+jatkuvassa tapauksessa alueessa $[a,b]$ painofunktion $w$ suhteen
+\begin{equation}
+	\iprod{f}{g}_w=\defint{a}{b}{f(x)g(x)w(x)}{x}
+\end{equation}
+ja diskreettinä pisteissä ${x_i:i=1,\dots,N}$ painokertoimien ${w_i:i=1,\dots,N}$ suhteen 
+\begin{equation}
+	\iprod{f}{g}_w=\sum_{a}^{b}f(x_i)g(x_i)w_i.
+\end{equation}
+Tällöin sisätulon indusoima normi on
+\begin{equation}
+	\|f\|=\sqrt{\iprod{f}{f}}. 
+\end{equation}
+Jos approksimaatioalue on diskreetti ja parhaalle approksimaatiolle $\hat\varphi$ pätee $\|f-\hat\varphi\|$,
+niin silloin $\hat\varphi(t_i)=f(t_i)\quad\forall i = 1,\dots,N$ ja sanotaan että $\hat\varphi$ \emph{interpoloi} funktiota $f$
+pisteissä $t_i$.\cite{Gautschi1997} 
+
+Polynomit ovat yleisimmin käytettyjä approksimointifunktioita ja ylivoimaisesti suurin osa numeerisista integroimismenetelmistä
+perustuu integrandin approksimointiin polynomilla \cite{Davis1975}. Tämä johtuu muun muassa siitä, että polynomien 
+käyttäytyminen tunnetaan hyvin perinpohjaisesti sekä \emph{Weierstrassin teoreemasta}, jonka mukaan mitä tahansa jatkuvaa
+funktiota voidaan approksimoida äärellisellä välillä mielivaltaisen tarkasti tarpeeksi korkea-asteisella 
+polynomilla \cite{Davis1975}\cite{Gautschi1997}.  
+
+Polynomisessa interpolaatiossa $\Phi=\mathbb{P}_m$, eli vektoriavaruus, johon kuuluvat kaikki polynomit joiden asteluku $\Deg(p)\leq m$.
+Halutaan siis löytää sellainen polynomi $p$, jolle pätee $p(x_i) = f(x_i)\quad\forall i$, kun $\{x_i\}$ on $n+1$ 
+erillistä pistettä ja $\{f(x_i)\}\in\R$ niitä vastaavat mielivaltaiset arvot. Osoittautuu että, $p$ on aina olemassa, 
+se on ainutkertainen ja $m\leq n$.\cite{Cheney2007}
 
 Interpoloiva polynomi $p$ voidaan konstruoida \emph{Lagrange} muodossaan Lagrangen \emph{kantapolynomien} $\ell_i$ avulla:
 \begin{align*}
-	&\ell_i(x)=\prod_{\substack{j\neq i\\j=0}}^{n}\left(\frac{x-x_j}{x_i-x_j}\right)\implies\\
-	&\ell_i(x_j)=\delta_{ij}=
+	&\ell_i(x)=\prod_{\substack{j\neq i\\j=0}}^{n}\left(\frac{x-x_j}{x_i-x_j}\right)\\
+	\implies & \ell_i(x_j)=\delta_{ij}=
 	\begin{cases}
     	0 & i \neq j \\
     	1 & i = j
@@ -341,54 +397,184 @@ niin selvästi pätee
 \]
 ja koska $\text{Deg}(\ell_i)=n$, niin myös $\text{Deg}(p)=n$.
 
-\subsubsection{Newton-Cotes menetelmät}
+\subsection{Newton-Cotes menetelmät}
 
-Jos nyt käytetään $f$:n tilalla edellä määriteltyä interpoloivaa polynomia $p$,
-saadaan
-
+Aiemmin esitellyssä puolisuunnikasmenetelmässä 
+integrointiväli oli jaettu osaväleihin ja integrandia approksimoitiin 
+ensimmäisen asteen polynomilla jokaisella osavälillä. 
+Menetelmää, jossa samaa sääntöä käytetään toistuvasti usealla 
+osavälillä, kutsutaan \emph{yhdistelmämenetelmäksi} (eng. \emph{compound} tai \emph{composite}) 
+\cite{Davis1975}. Jos integointiväli on jaettu osaväleihin, seuraavassa 
+tarkastelussa keskitytään ainoastaan yhteen osaväliin (joka sisältää $n+1$ pistettä).
+ 
+Jos nyt tasavälisellä jaolla $\{a=x_0,x_1=a+h,\dots,x_{n-1}=a+(n-1)h,x_n=a+nh=b\}$ käytetään $f$:n 
+tilalla edellä määriteltyä interpoloivaa polynomia $p$, saadaan
 \begin{align} 
-	\defint{a}{b}{f(x)}{x} \approx 
-	\defint{a}{b}{p(x)}{x} =& 
-	\defint{a}{b}{\sum_{i=0}^{n}\ell_i(x)f(x_i)}{x} \nonumber \\ 
-	=&\sum_{i=0}^{n}\left(f(x_i)\underbrace{\defint{a}{b}{\ell_i(x)}{x}}_{w_i}\right). \label{eq_newton_cotes}  
+	\defint{a}{b}{f(x)}{x} = \defint{a}{b}{p(x)}{x} 
+	=&\defint{a}{b}{\sum_{i=0}^{n}\ell_{i}(x)f(x_{i})}{x}+E_n(p) \nonumber \\ 
+	=&\sum_{i=0}^{n}\left(f(x_{i})\defint{a}{b}{\ell_{i}(x)}{x}\right)+E_n(p) \nonumber \\  
+	=&\sum_{i=0}^{n}f(x_{k+i})w_i+E_n(p) \label{eq_newton_cotes} \\
+	w_i=&\defint{a}{b}{\prod_{\substack{j\neq i\\j=0}}^{n}\left(\frac{x-x_j}{x_i-x_j}\right)}{x}. \label{eq_weights}  
 \end{align}
-Käyttämällä kaavaa \ref{eq_newton_cotes} jokaisella tasavälisen jaon välillä, saadaan ryhmä
-numeerisen integroinnin menetelmiä jotka tunnetaan nimellä \emph{Newton-Cotes} menetelmät ja jotka
-poikkeavat toisistaan siinä, montako pistettä interpolointiin käytetään ja ovatko
-välin päätepisteet mukana (suljettu menetelmä) vai eivät (avoin menetelmä).\cite{Gautschi1997}
+Tällä tavalla muodostetut menetelmät tunnetaan nimellä \emph{Newton-Cotes} menetelmät ja ne poikkeavat toisistaan interpolaatiopisteiden
+lukumäärässä. Jos välin päätepisteet kuuluvat interpolaatiopisteiden joukkoon, menetelmää kutsutaan suljetuksi 
+ja jos eivät, niin avoimeksi. Kaavassa \ref{eq_newton_cotes} pisteitä $x_i$ kutsutaan \emph{solmuiksi} tai \emph{tukipisteiksi}
+ja kertoimia $w_i$ \emph{painoiksi}.\cite{Gautschi1997}
 
-Havaitaan, että mikäli jokaiselta väliltä valitaan välin päätepisteet, saadaan edellä esitelty puolisuunnikasmenetelmä (\ref{eq_trapezoid})
-ja mikäli valitaan päätepisteiden lisäksi välin keskipiste $\frac{x_i+x_{i+1}}{2}$ saadaan laajalti käytetty 
+Havaitaan, että mikäli kaavassa \ref{eq_newton_cotes} valitaan $n=1$, ja sovelletaan sitä toistuvasti usealla osavälillä,
+saadaan edellä esitelty puolisuunnikasmenetelmä (\ref{eq_trapezoid}).
+Jos taas valitaan $n=2$, eli interpolaatioon käytetään kolmea pistettä, saadaan laajalti käytetty 
 \emph{Simpsonin} menetelmä: \cite{Gautschi1997}
+\begin{align*} 
+	&\defint{x_{k}}{x_{k+2}}{f(x)}{x} \approx \frac{h}{3}\left(f(x_k)+4f(x_{k+1})+f(x_{k+2})\right) \\
+	\implies & \defint{a}{b}{f(x)}{x} \approx \frac{h}{3}\left(f(a)+4f(x_{1})+2f(x_{2})+4f(x_{3})+2f(x_{4})+\dots+4f(x_{n-1})+f(b)\right)
+\end{align*}
 
-\begin{equation} 
-	\defint{a}{b}{f(x)}{x} \approx 
-	\sum_{i=0}^{n}\frac{h}{6}\left(f(x_i)+4f(\frac{x_i+x_{i+1}}{2})+f(x_{i+1})\right)
-	\label{eq_simpson}
+Virheen $E_n(p)$ pienentämiseksi voidaan nähdä kaksi eri lähestymistapaa: joko käytetään pienen tarkkuusasteen Newton-Cotes kaavaa aina vain lyhyemmillä osaväleillä tai käytetään pidempiä osavälejä mutta suurta tarkkuusastetta. Ensimmäisessä tapauksessa evaluointipisteiden määrä kasvaa nopeasti epäkäytännöllisen suureksi. Kuitenkin sekä puolisuunnikasmenetelmä että Simpsonin menetelmä ovat erittäin laajalti käytettyjä ja voidaan näyttää, että kun osavälien määrä $N\to\infty$ niin $E_n(p)\to\infty$ kaikille integrointivälillä jatkuville funktioille. Toisessa tapauksessa $n:än$ kasvaessa suureksi, voivat painot $w_i$ olla joko positiivisia tai negatiivisiä ja absoluuttiselta arvoltaan milivaltaisen suuria, jolloin nämä menetelmät eivät enää ole numeerisessa mielessä stabiileja. Tämän vuoksi korkean tarkkuusasteen Newton-Cotes
+menetelmiä ei juurikaan käytetä.\cite{Krylov1962}
+
+Sanotaan että muotoa \ref{eq_newton_cotes} olevan kvadratuurin \emph{tarkkuusaste} on $d$, jos se antaa tarkan tuloksen kaikille polynomeille, jotka ovat 
+korkeintaan astetta $d$, eli $E_n(p)=0$, jos $\Deg(p)\leq d$, mutta ei yhdellekään polynomille jonka $\Deg(p)> d$. Koska Newton-Cotes menetelmissä integrandia interpoloidaan $n+1$:ssä pisteessä astetta $n$ olevalla polynomilla, niin $d_{NC}=n-1$ ja Newton-Cotes kaavoja kutsutaan \emph{interpolatorisiksi}.
+Tästä seuraa luonnollisesti kysymys, onko tarkkuuastetta mahdollista parantaa interpolatorista paremmaksi? Mikäli solmupisteet $x_i$ ovat ennalta määrätyt, on interpolatorinen tarkkuusaste paras mahdollinen, mutta jos solmupisteet voidaan valita vapaasti, voidaan tarkkuusatetta parantaa.
+
+\subsection{Gaussin kvadratuuri}
+
+Jatkossa keskitytään muotoa
+\begin{equation}
+	\defint{a}{b}{f(x)w(x)}{x}=\sum_{i=1}^nf(x_i)w_i+E_n(f)
+	\label{eq_weighted_quadrature}
 \end{equation}
+oleviin kvadratuureihin, missä $w$ on ei-negatiivinen painofunktio. 
+Väli $(a,b)$ voi olla ääretön, mikäli painofunktion kaikki
+momentit $\mu_s$
 
-\section{Yksiulotteinen kvadratuuri-integrointi}
-\subsection{Ortogonaaliset polynomikannat}
-\subsection{Gaussinen kvadratuuri}
-\subsection{Gauss-Hermite kvadratuuri}
-\subsection{Muita Gaussisia kvadratuureja}
+\begin{equation}
+	\mu_s=\defint{a}{b}{t^s}{w(t)},\forall s\in\field{N} 
+\end{equation}
+ovat määritellyt. Newton-Cotes kaavojen perusteella tiedetään, että mikäli on 
+annetut mitkä tahansa $n$ pistettä, niin voidaan
+määrittää kaava \ref{eq_weighted_quadrature}, jonka tarkkuusaste on $d=n-1$. Voidaan kuitenkin
+osoittaa, että muotoa \ref{eq_weighted_quadrature} olevan kvadratuurin maksimaalinen tarkkuusaste
+on $d=2n-1$, mikäli jokainen $n$:stä solmusta saadaan valita vapaasti.
 
-\section{Moniulotteinen kvadratuuri-integrointi}
+Kuinka solmut ${x_i}$ tulisi sitten valita? Tämän osoittamiseksi määritellään ensin \emph{solmupolynomi}
+\begin{equation}
+	\omega_n(x)=\prod_{i=1}^n(x-x_i).
+	\label{eq_knot_polynomial} 
+\end{equation}
+Nyt jos ja vain jos solmupolynomille pätee
+\begin{equation}
+	\defint{a}{b}{\omega_n(x)p_{n-1}(x)w(x)}{x}=0\:,\quad\forall p_{n-1}\in\field{P}_{n-1}
+	\label{eq_orthogonal_polynomials} 
+\end{equation}
+niin kaavan \ref{eq_weighted_quadrature} mukaisen kvadratuurin tarkkuusaste
+on $d=2n-1$. Tämän todistamiseksi osoitetaan ensin ehdon \ref{eq_orthogonal_polynomials} 
+välttämättömyys, eli oletetaan että $d=2n-1$. 
+Selvästi $\omega_np_{n-1}\in\field{P}_{2n-1}\quad\forall p\in\field{P}_{n-1}$ ,
+jolloin
+\begin{equation}
+	 \defint{a}{b}{\omega_n(x)p_{n-1}(x)w(x)}{x}=\sum_{i=1}^np_{n-1}(x_i)w_i=0.
+\end{equation} 
+Toisaalta jos otetaan mikä tahansa $p\in\field{P}_{2n-1}$ ja oletetaan ehto \ref{eq_orthogonal_polynomials}, 
+niin tällöin
+$p/\omega_n=q+r/\omega_n$ niin että $q,r\in\field{P}_{n-1}$ ja
+\begin{equation}
+	\defint{a}{b}{p(x)w(x)}{x}=\defint{a}{b}{q(x)\omega_n(x)w(x)}{x}+\defint{a}{b}{r(x)w(x)}{x}. 
+\end{equation}
+Koska $q\in\field{P}_{n-1}$ niin ehdon \ref{eq_orthogonal_polynomials} nojalla
+\begin{equation}
+	 \defint{a}{b}{q(x)\omega_n(x)w(x)}{x}=0,
+\end{equation}
+kun taas 
+\begin{align*}
+	 &\defint{a}{b}{r(x)w(x)}{x}=\sum_{i=1}^{n}w_ir(x_i)\\
+	 =&\sum_{i=1}^{n}w_i\left(p(x_i)-q(x_i)\omega_n(x_i)\right)=\sum_{i=1}^{n}w_ip(x_i),
+\end{align*}
+joten
+\begin{align*}
+	 &\defint{a}{b}{p(x)w(x)}{x}=\sum_{i=1}^{n}w_ip(x_i)\\
+	 \implies&E_n(p)=0.
+\end{align*}
+Eli sääntö on tarkka polynomeille, jotka ovat korkeintaan astetta $d=2n-1$. Toisaalta jos tarkastellaan
+esimerkiksi polynomia $\omega_n^2(x)\in\field{P}_{2n}$ niin selvästi
+niin \[ \defint{a}{b}{\omega_n^2(x)w(x)}{x} > 0, \] mutta \[ \sum_{i=0}^nw_i\omega_n^2(x_i)=0, \] 
+joten sääntö ei ole tarkka polynomeille astetta $2n$ \cite{Krylov1962}.
+
+Keskitytään nyt tarkastelemaan ehtoa \ref{eq_orthogonal_polynomials}. Sanotaan että $f$ ja $g$ ovat 
+\emph{ortogonaaliset} $w$:n suhteen, jos
+\begin{equation}
+	\iprod{f}{g}_w=0. 
+\end{equation} Kaavasta \ref{eq_knot_polynomial} havaitaan, että mikäli solmupolynomin määritelmä tunnettaisiin, saataisiin
+solmut $x_i$ laskettua sen nollakohdista. Sisätulon ja ortogonaalisuuden määritelmien perusteella ehto \ref{eq_orthogonal_polynomials}
+tarkoittaa solmupolynomin olevan sellainen polynomi $\omega_n\in\field{P}_n$, joka on ortogonaalinen $w$:n suhteen 
+kaikkia polynomeja $p_{n-1}\in\field{P}_{n-1}$ kohtaan. Koska sisätulo on lineaarinen operaattori ja jos 
+$\{e_0,\dots,e_{n-1}\}$ on jokin $\field{P}_{n-1}$ \emph{kanta}, riittää että $\omega_n$ on ortogonaalinen
+kaikkia kantapolynomeja $e_i$ kohtaan. Yleisesti käytettyjä kantapolynomeja ovat \emph{monomit} $x^i$, joiden avulla
+eräs $\field{P}_{n-1}$:n kanta on  $\{1,x,\dots,x^{n-1}\}$.
+
+Näiden tietojen perusteella voimme esimerkinomaisesti laskea kolmipisteisen Gaussin kvadratuurin 
+vakiopainofunktiolle $w(x)=1$ ja välille $[-1,1]$:
+\begin{align*}
+	\defint{-1}{1}{f(x)}{x}\approx &w_0f(x_0)+w_1f(x_1)+w_2f(x_2)\\
+	\omega_3=&(x-x_0)(x-x_1)(x-x_2)=x^3+a_2x^2+a_1x+a_0. 
+\end{align*}  
+Nyt siis $\omega_3$:n täytyy olla ortogonaalinen monomeja ${1,x,x^2}$ vastaan, joten saadaan yhtälöryhmä
+\begin{equation*} 
+	\begin{cases}
+		0=&\defint{-1}{1}{x^3+a_2x^2+a_1x+a_0}{x}\\
+		0=&\defint{-1}{1}{x(x^3+a_2x^2+a_1x+a_0)}{x}\\
+		0=&\defint{-1}{1}{x^2(x^3+a_2x^2+a_1x+a_0)}{x} 
+	\end{cases},
+\end{equation*}
+jonka ratkaisu on $a_0=a_2=0$ ja $a_1=-\frac{3}{5}$, jolloin $x_0=-\sqrt{\frac{3}{5}},x_1=0,x_2=\sqrt{\frac{3}{5}}$.
+Painot $w_i$ voitaisiin laskea kaavasta \ref{eq_weights}, mutta ne saadaan helpommin käyttämällä hyväksi tietoa, että 
+etsimämme kvadratuuri on tarkka mm. monomeille ${1,x,x^2}$. Näin saadaan toinen yhtälöryhmä painoille $w_i$:
+\begin{equation*} 
+	\begin{cases}
+		\defint{-1}{1}{}{x}=2&=w_0+w_1+w_2\\
+		\defint{-1}{1}{x}{x}=0&=-\sqrt{\frac{3}{5}}w_0+\sqrt{\frac{3}{5}}w_2\\
+		\defint{-1}{1}{x^2}{x}=\frac{2}{3}&=\frac{3}{5}w_0+\frac{3}{5}w_2 
+	\end{cases},
+\end{equation*}
+jonka ratkaisu on $w_0=w_2=\frac{5}{9}$ ja $w_1=\frac{8}{9}$. Etsimämme kvadratuuri on siis
+\begin{equation*}
+	 \defint{-1}{1}{f(x)}{x}\approx G_3(f(x))=\frac{5}{9}f\left(-\sqrt{\frac{3}{5}}\right)+\frac{8}{9}f(0)+\frac{5}{9}f\left(\sqrt{\frac{3}{5}}\right)\\
+\end{equation*}.
+Transformaation $t=x+1$ avulla voidaan edellä laskettua kvadratuuria käyttää välillä $[0,2]$, jolloin soveltamalla 
+sitä jo aiemmin tutkimaamme esimerkki-integrandiin $f(x)=e^{-x^2}$ ja hyödyntällä integrandin symmetrisyyttä $y$-akselin suhteen, 
+saadaan tulokseksi
+\begin{align*}
+	 \defint{-2}{2}{e^{-x^2}}{x}=2\defint{0}{2}{e^{-x^2}}{x}\approx 2G_3(e^{-(x+1)^2})\approx& 1.7577\\
+	 2E_{G_3}(e^{-(x+1)^2})\approx& 0.0064.
+\end{align*}
+Vastaavasti käyttämällä Simpsonin menetelmää samassa tilanteessa saadaan virheeksi
+\begin{align*}
+	 2E_S(e^{-x^2})\approx& 0.1043,
+\end{align*}
+joka on yli $16$ kertaa suurempi kuin Gaussin kvadratuurin virhe.
+
+\subsubsection{Ortogonaalisista polynomeista}
+
+Ortogonaalisia polynomeja on tutkittu paljon ja tätä tietoutta voidaan käyttää
+hyväksi solmupolynomin $\omega_n$ muodostamisessa ja sitä kautta solmujen $x_i$ laskennassa. 
+<Esittele tunnetuimmat ortogonaalisten polynomien luokat>
+
+
+\section{Kubatuurit}
 \subsection{Tulosäännöt}
-\subsection{Kubatuurit}
+\subsection{Integroimisalueet}
+\subsection{Kubatuurisääntöjä}
 \subsubsection{Gauss-Hermite}
-\subsection{Muita menetelmiä}
-
 \section{Koeasetelma}
 
 \section{Tulokset}
 
 \section{Yhteenveto}
 \clearpage{}
+
 \addcontentsline{toc}{section}{Viitteet}
 \bibliographystyle{abbrv}
 \bibliography{kandi}
-
 
 
 \end{document}
