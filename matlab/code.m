@@ -4,7 +4,7 @@ f=@(x) exp(-x.^2);
 a=0;
 b=2;
 sum_s = quad(f,a,b); % oikea arvo (Simpsonin säännöllä)
-
+multiplier = 2; % used in symmetrical cases 
 
 
 
@@ -92,7 +92,8 @@ for i=1:n
     sum_simpson = sum_simpson + (w/3)*(f(p(i))+4*f(p(i+1))+f(p(i+2)));  
 end
 
-
+disp(sprintf('simpson: %.7f',multiplier*sum_simpson));
+disp(sprintf('error: %.7f',abs(multiplier*(sum_simpson-sum_s))));
 
 %% print figure in pdf
 figLength = 6;
@@ -112,7 +113,6 @@ print(gcf, '-dpdf', '../fig_trapezoid.pdf');
 Q3=@(f) 0.5*(b-a)*((5/9)*f(0.5*(b-a)*-sqrt(0.6)+0.5*(b+a))...
         +(8/9)*f(0.5*(b+a))...
         +(5/9)*f(0.5*(b-a)*sqrt(0.6)+0.5*(b+a)));
-disp(sprintf('quadrature: %.7f',Q3(f)));
-disp(sprintf('correct: %.7f',sqrt(pi)*erf(b)));
-disp(sprintf('error: %.7f',abs(sqrt(pi)*erf(b)-Q3(f))));
+disp(sprintf('quadrature: %.7f',multiplier*Q3(f)));
+disp(sprintf('error: %.7f',abs(multiplier*(Q3(f)-sum_s))));
 
