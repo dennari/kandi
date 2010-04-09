@@ -31,11 +31,14 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 %%%%%%%% OMAT KOMENNOT %%%%%%%%%%%%
 
 % infinitesimaalinen muutos
-\newcommand{\dd}{\; \mathrm{d}}
+\newcommand{\ds}{\mathrm{d}}
+\newcommand{\measure}[2]{\ds#1(#2)}
+\newcommand{\dd}{\;\ds}
 % määrätty integraali
 \newcommand{\defint}[4]{
 \int_{#1}^{#2}#3\dd#4
 }
+
 % reaaliluvut, kompleksiluvut..
 \newcommand{\field}[1]{\mathbb{#1}}
 \newcommand{\R}{\field{R}}
@@ -231,14 +234,23 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 
 Pinta-alojen ja tilavuuksien määrittäminen on yleisesti kohdattu ongelma matematiikan ja fysiikan sovelluksissa. 
 Ei siis ole yllättävää, että jo kauan on tiedetty keinoja muuntaa pinta-aloja \emph{kvadratuureiksi}, 
-samansuuruisiksi suorakulmioiksi. Matemaattinen konstruktio, jolla on läheinen yhteys tähän ongelmaan 
-on \emph{integraali}· Tänä päivänä tekniikan alan ammattilaiset arkkitehdeistä tilastotieteilijöihin 
-tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen.
+samansuuruisiksi suorakulmioiksi. \emph{Integraali} on matemaattinen konstruktio, jolla on läheinen yhteys tähän ongelmaan· 
+Tänä päivänä tekniikan alan ammattilaiset arkkitehdeistä tilastotieteilijöihin 
+tarvitsevat työssään tarkkoja ja tehokkaita keinoja integraalien määrittämiseen, sillä niitä
+joudutaan laskemaan esimerkiksi paljon käytetyssä elementtimenetelmässä sekä Bayes-mallinnuksen yhteydessä \cite{Zienkiewicz2005,Arasaratnam2009}. 
 
-Numeerinen integrointi on sovelletun matematiikan alalaji, joka pyrkii vastaamaan tähän tarpeeseen. Alalta on 
+Joillekin yksinkertaisille \emph{integrandeille} $f(x)$ voidaan määrittää integraalifunktio
+$F(x)$ ($F'(x)=f(x)$) suljetussa muodossa, niin että se on ilmaistu algebrallisina lauseina sekä tunnettujen 
+transkendenttisten funktioiden avulla \cite{Stoer1993}. Tällaista integraalien määrittämistä kutsutaan myös symboliseksi
+integroinniksi ja sitä opetetaan esimerkiksi lukiossa, minkä vuoksi integraalifunktion määrittämistä saatetaan
+myös kutsua pelkästään integroinniksi.
+
+Numeerinen integrointi on sovelletun matematiikan alalaji ja nimensä mukaisesti se tarjoaa työkaluja, joiden avulla integraaleille
+voidaan määrittää numeerisia likiarvoja. Alalta on 
 aikojen saatossa julkaistu suunnaton määrä tutkimustuloksia ja kirjallisuutta, joten minkä tahansa käytännössä 
 esiintyvän integraalin ratkaisemiseen voisi olettaa löytyvän laskennallisesti tehokas ratkaisualgoritmi \cite{Ueberhuber1997}. 
-Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa. 
+Näin todennäköisesti onkin mikäli ongelmallinen integraali on määritelty ainoastaan yhdessä ulottuvuudessa, jolloin usein myös
+on mahdollista saavuttaa miltein mikä tahansa haluttu tarkkuus. 
 Jos kuitenkin dimensioita on enemmän kuin yksi, jolloin puhutuaan \emph{kubatuureista}, 
 on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
@@ -250,8 +262,8 @@ Numeerisen integroinnin menetelmät, joihin tässä työssä keskitytään, ovat muotoa
 jossa $f$ on \emph{integrandi}, $\Omega\subset\R^n$ on integroimisalue (yhdessä ulottuvuudessa integroimisväli),
 $w(\v{x})$ on \emph{painofunktio}, pisteet $\{\v{x}_i\}\in\R^n$ ovat \emph{solmut} tai \emph{tukipisteet} ja 
 $\{w_i\}\in\R$ ovat \emph{painot}. Vuonna 1814 saksalainen matemaatikko Carl Friedrich Gauss julkaisi merkittävän
-muotoa \ref{eq_cubature} olevan tuloksensa (tapaukselle $n=1$ ja $w(x):=1$), joka tunnetaan hänen mukaansa 
-nimellä \emph{Gaussin kvadratuuri} \cite{Gautschi1997}. Kyseessä on hyvin elegantti tulos, jossa hyödynnetään \emph{ortogonaalisia
+kaavan \eqref{eq_cubature} mukaisen tuloksensa (tapaukselle $n=1$ ja $w(x):=1$), joka tunnetaan hänen mukaansa 
+nimellä \emph{Gaussin kvadratuuri} \cite{Gautschi1997}. Kyseessä on elegantti kvadratuuri, jossa hyödynnetään \emph{ortogonaalisia
 polynomeja} ja saavutetaan suuri tarkkuus pienellä funktio-evaluaatioiden määrällä. Tästä vaikuttuneena kirjoitti aikalaisensa
 Friedrich Bessel, myöskin tunnustettu matemaatikko, hänelle seuraavasti:
 \begin{quote} 
@@ -262,13 +274,13 @@ Valitettavasti Gaussin tulos ei ole suoraan yleistettävissä useampaan ulottuvuut
 Vuonna 1877 James Clerk Maxwell esitteli 27-pisteisen, muotoa \ref{eq_cubature} olevan kubatuuri-säännön
 ja tätä pidetään ensimmäisenä varsinaisena esimerkkinä kubatuurista sellaisena kuin se tänä päivänä ymmärretään \cite{Cools1997}.
 Useampiulotteisten integraalien likimääräiseen ratkaisemiseen on täysin eri tyyppisiäkin menetelmiä,
-joista tärkeimpänä mainittakoon erilaiset \emph{Monte-Carlo} menetelmät. Näissä integrandin arvo lasketaan 
+joista tärkeimpänä mainittakoon erilaiset \emph{Monte Carlo} -menetelmät. Näissä integrandin arvo lasketaan 
 suuressa määrässä satunnaisia pisteitä, jolloin integraalia voidaan approksimoida näiden arvojen
-keskiarvona. Etuna on, että päästään tyystin irti niin sanotusta \emph{dimensionaalisuuden kirouksesta},
-jonka mukaan tarvittavien funktio-evaluaatioiden määrä riippuu eksponentiaalisesti dimensioiden määrästä.
-Kuitenkin hyväksyttävään tarkkuuteen pääseminen vaatii suurta määrää satunnaispisteitä ja funktio-evaluaatioita
-jo yhdestä dimensiosta lähtien, mutta jos dimensioiden määrä lähestyy useita satoja, ovat Monte-Carlo
-menetelmät silti usein ainoa vaihtoehto. Jatkossa keskitytään ainoastaan kaavan \ref{eq_cubature} mukaisiin sääntöihin.
+keskiarvona. Etuna on, että päästään tyystin eroon niin sanotusta \emph{dimensionaalisuuden kirouksesta},
+jonka vuoksi useissa muissa integroimismenetelmissä tarvittavien funktio-evaluaatioiden määrä riippuu 
+eksponentiaalisesti dimensioiden määrästä. Hyväksyttävään tarkkuuteen pääseminen vaatii suurta määrää satunnaispisteitä ja funktio-evaluaatioita
+jo yhdessä dimensiossa. Kuitenkin dimensioiden määrän lähestyessä useita satoja, mikä on mahdollista esimerkikisi joissain finanssimatematiikan sovelluksissa, 
+ovat Monte Carlo -menetelmät usein ainoa vaihtoehto. Jatkossa keskitytään ainoastaan kaavan \eqref{eq_cubature} mukaisiin sääntöihin.
 
 Tässä työssä käydään ensin  läpi tarvittavat esitiedot, kuten Riemann integraali ja polynominen approksimaatio, 
 jotta voidaan esittää Gaussin kvadratuurien idea. Tämän jälkeen keskitytään integrointiin useammassa kuin yhdessä
@@ -276,8 +288,6 @@ dimensiossa ja käydään läpi erilaisia keinoja kubatuuri-sääntöjen muodostamiseks
 eräitä kiinnostavia menetelmiä keskenään soveltamalla niitä esimerkki-integraaleihin kahdessa dimensioissa. 
 Saatujen tulosten ja esitellyn teorian perusteellä tehdään päätelmiä menetelmien soveltuvuudesta erilaisiin tilanteisiin.
 
-\cite{Cools2002,Cools2001,Cools2009,Cools2006,Krylov1962,Stroud1971,Davis1975,Ueberhuber1997,Cheney2007}
-\cite{Arasaratnam2009,Hinrichs2007,Omelyan2006,Novak1999}
 
 %% Opinnäytteessä jokainen osa alkaa uudelta sivulta, joten \clearpage
 \clearpage
@@ -285,8 +295,8 @@ Saatujen tulosten ja esitellyn teorian perusteellä tehdään päätelmiä menetelmien
 \section{Riemann integraali}
 Integraalille on olemassa useita kehittäjiensä mukaan nimettyjä määritelmiä, joista Riemann-integraali 
 lienee yksinkertaisin ja intuitiivisin. Usein kun puhutaan integraalista tarkoitetaan nimenomaan 
-Riemann-integraalia, mikä pätee myös tähän työhön. Jokainen suljetulla välillä $[a,b]$ jatkuva ja 
-rajoitettu reaaliarvoinen funktio on (Riemann-)integroituva ja integraalia merkitään $\defint{a}{b}{f(x)}{x}\in\R$, 
+Riemann-integraalia, mikä pätee myös tähän työhön. Riemann-integraali on määritelty kaikille suljetulla 
+välillä $[a,b]$ melkein kaikkialla jatkuville ja rajoitetui reaaliarvoinen funktio on (Riemann-)integroituva ja integraalia merkitään $\defint{a}{b}{f(x)}{x}\in\R$, 
 jota kutsutaan myös \emph{määrätyksi integraaliksi}. Määrätyllä integraalilla ja \emph{integraalifunktiolla} $F(x)$ 
 (ja sitä kautta derivoinnilla) on läheinen yhteys, joka tunnetaan \emph{analyysin ensimmäisenä peruslauseena}:
 
@@ -344,13 +354,36 @@ approksimointiin korkeamman asteen polynomia.\cite{Gautschi1997}
 \subsection{Polynomiapproksimaatio}
 
 Yleinen \emph{approksimaatio-ongelma} voidaan muotoilla seuraavasti: olkoon $f$ approksimoitava
-funktio ja $\|\cdot\|$ normi joka on määritelty funktioavaruuden $\Phi$
+funktio ja $\|\cdot\|$ normi, joka on määritelty halutunlaisia funktioita sisältävän vektorivaruuden $\Phi$
 funktioille $\varphi$. Etsi $\hat{\varphi}\in\Phi$ siten että
 \begin{equation}
 	 \|f-\hat\varphi\|\leq\|f-\varphi\|\quad\forall\varphi\in\Phi .\cite{Gautschi1997}
 \end{equation}
 
-Tässä työssä esiintyville funktioille on määritelty sisätulo $\iprod{\cdot}{\cdot}:\Phi\times\Phi\to\R$ 
+Jotta voitaisiin käsitellä sekä jatkuva että diskreetti tapaus samanaikaisesti, määritellään ensin jatkuva \emph{mitta} $\measure{\lambda}{t}$
+seuravaasti:
+\begin{equation} 
+	\lambda(t)=
+	\label{integrator}
+	\begin{cases}
+    	0 &  t < a \\
+    	\defint{a}{t}{w(\tau)}{\tau} & a \leq t \leq b \\
+    	\defint{a}{b}{w(\tau)}{\tau} &  t > b  
+    \end{cases},
+\end{equation}
+jolloin $\measure{\lambda}{t} = w(t)\ds t$ jos $t\in[a,b]$ ja $\measure{\lambda}{t} = 0 $ jos $t\notin[a,b]$.
+Nyt voidaan jatkuvalle funktiolle $u$ kirjoittaa
+\begin{equation}
+	\defint{-\infty}{\infty}{u(t)}{\lambda(t)} = \defint{\R}{}{u(t)}{\lambda(t)} = \defint{a}{b}{u(t)w(t)}{t}.
+	\label{stieltjes-riemann} 
+\end{equation} Kaavan \eqref{stieltjes-riemann} vasenta puolta kutsutaan yleisemmin \emph{Riemann-Stieltjes}-integraaliksi ja kaava
+\eqref{stieltjes-riemann} siis kertoo sen yhteyden Riemann-integraaliin mikäli $\lambda(t)$ (jota ei ole pakko määritellä kuten kaavassa \eqref{integrator}) on kaikkialla jatkuvasti derivoituva. Funktiota $w(t)$ kutsutaan \emph{painofunktioksi} (voi olla $w(t)\equiv 1$) ja sen tulee olla määritelty siten, että $\lambda(t)$ on määritelty.
+Tämä tarkoittaa myös, että väli $[a,b]$, eli $\ds\lambda$:n \emph{kantaja}, voi olla ääretön, jos $w$:n integraali on määritelty tällä välillä. Jotta $\ds\lambda$ olisi mitta, vaaditaan myös että $w(t)\geq 0$ ja yhtäsuuruus sallitaan vain yksittäisissä pisteissä.
+ 
+Diskreetti mitta saa nollasta poikkeavia arvoja $w_i$ vain $N$:ssä pisteessä $t_i$, jolloin voidaan kirjoittaa vastaavasti
+$\defint{\R}{}{u(t)}{\lambda(t)} = \sum_{i=1}^{N}w_iu(t_i)$. 
+
+Riemann-integroituville funktioille voidaan määritellä sisätulo $\iprod{\cdot}{\cdot}:\Phi\times\Phi\to\R$ 
 jatkuvassa tapauksessa alueessa $[a,b]$ painofunktion $w$ suhteen
 \begin{equation}
 	\iprod{f}{g}_w=\defint{a}{b}{f(x)g(x)w(x)}{x}
