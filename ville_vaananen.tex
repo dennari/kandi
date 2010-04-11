@@ -45,7 +45,7 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 \newcommand{\C}{\field{C}}
 \newcommand{\Deg}{\mathrm{Deg}}
 \newcommand{\iprod}[2]{\langle{}#1,#2\rangle}
-\renewcommand{\v}[1]{\mathbf{#1}} % vektorit ja matriisit
+\renewcommand{\v}[1]{\boldsymbol{#1}} % vektorit ja matriisit
 
 
 % kuvat
@@ -255,11 +255,13 @@ Jos kuitenkin dimensioita on enemmän kuin yksi, jolloin puhutuaan \emph{kubatuur
 on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
 Numeerisen integroinnin menetelmät, joihin tässä työssä keskitytään, ovat muotoa
-\begin{equation}
-	\defint{\Omega}{}{f(\v{x})w(\v{x})}{\Omega} = \sum_{i=1}^Nw_if(\v{x}_i)+E,
+\begin{align}
+	&I[f]:=\defint{\Omega}{}{f(\v{x})w(\v{x})}{\Omega} \approx Q[f]:=\sum_{i=1}^Nw_if(\v{x}_i)\\
+	&E[f]=I[f]-Q[f] \nonumber
 	\label{eq_cubature} 
-\end{equation}
-jossa $f$ on \emph{integrandi}, $\Omega\subset\R^n$ on integroimisalue (yhdessä ulottuvuudessa integroimisväli),
+\end{align}
+jossa $I[f]$ on integraali (lineaarinen funktionaali), $f$ on \emph{integrandi}, $\Omega\subset\R^n$ on integroimisalue (yhdessä ulottuvuudessa integroimisväli),
+$Q[f]$ on kvadratuuri jos $n=1$ ja kubatuuri jos $n\geq 2$,
 $w(\v{x})$ on \emph{painofunktio}, pisteet $\{\v{x}_i\}\in\R^n$ ovat \emph{solmut} tai \emph{tukipisteet}, 
 $\{w_i\}\in\R$ ovat \emph{painot} ja $E$ on integrointimenetelmän virhe. Vuonna 1814 saksalainen matemaatikko Carl Friedrich Gauss julkaisi merkittävän
 kaavan \eqref{eq_cubature} mukaisen tuloksensa (tapaukselle $n=1$ ja $w(x):=1$), joka tunnetaan hänen mukaansa 
@@ -280,7 +282,7 @@ keskiarvona. Etuna on, että päästään tyystin eroon niin sanotusta \emph{dimensio
 jonka vuoksi useissa muissa integroimismenetelmissä tarvittavien funktio-evaluaatioiden määrä riippuu 
 eksponentiaalisesti dimensioiden määrästä. Hyväksyttävään tarkkuuteen pääseminen vaatii suurta määrää satunnaispisteitä ja funktio-evaluaatioita
 jo yhdessä dimensiossa. Kuitenkin dimensioiden määrän lähestyessä useita satoja, mikä on mahdollista esimerkikisi joissain finanssimatematiikan sovelluksissa, 
-ovat Monte Carlo -menetelmät usein ainoa vaihtoehto. Jatkossa keskitytään ainoastaan kaavan \eqref{eq_cubature} mukaisiin sääntöihin.
+ovat Monte Carlo -menetelmät usein ainoa vaihtoehto \cite{Kuo2005}. Jatkossa keskitytään ainoastaan kaavan \eqref{eq_cubature} mukaisiin sääntöihin.
 
 Tässä työssä käydään ensin  läpi tarvittavat esitiedot, kuten Riemann integraali ja polynominen approksimaatio, 
 jotta voidaan esittää Gaussin kvadratuurien idea. Tämän jälkeen keskitytään integrointiin useammassa kuin yhdessä
@@ -341,7 +343,7 @@ jakaumaksi ja $\defint{a}{b}{f(x)w(x)}{x}$ on tällöin painotettu keskiarvo.
 \section{Numeerisia menetelmiä}
 
 Käyttämällä tasavälistä jakoa, edellä esitellyistä ala- tai yläsummista saadaan suoraan eräs, melkoisen epätarkka, numeerinen 
-integraaliapproksimaatio, \emph{suorakulmiomenetelmä} \cite{Ueberhuber1997}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
+integraaliapproksimaatio, \emph{suorakaidemenetelmä} \cite{Ueberhuber1997}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
 saadaan $L_{P_{20}}(e^{-x^2})\approx 1.57$ ja $U_{P_{20}}(e^{-x^2})\approx 1.96$, todellisen arvon 
 ollessa $\defint{-2}{2}{e^{-x^2}}{x}\approx 1.76$. Tulosta voidaan hiukan parantaa valitsemalla suorakulmion $i$
 korkeudeksi $f(\frac{x_i+x_{i+1}}{2})$.
@@ -425,8 +427,8 @@ Aiemmin esitellyssä puolisuunnikasmenetelmässä
 integrointiväli oli jaettu osaväleihin ja integrandia approksimoitiin 
 ensimmäisen asteen polynomilla jokaisella osavälillä. 
 Menetelmää, jossa samaa sääntöä käytetään toistuvasti usealla 
-osavälillä, kutsutaan \emph{yhdistelmämenetelmäksi} (eng. \emph{compound} tai \emph{composite}) 
-\cite{Davis1975}. Jos integointiväli on jaettu osaväleihin, seuraavassa 
+osavälillä, kutsutaan \emph{paloittaiseksi} (eng. \emph{compound} tai \emph{composite}) 
+\cite{Davis1975}. Jos integrointiväli on jaettu osaväleihin, seuraavassa 
 tarkastelussa keskitytään ainoastaan yhteen osaväliin (joka sisältää $n+1$ pistettä).
  
 Jos nyt tasavälisellä jaolla $\{a=x_0,x_1=a+h,\dots,x_{n-1}=a+(n-1)h,x_n=a+nh=b\}$ käytetään $f$:n 
@@ -451,10 +453,10 @@ Jos taas valitaan $n=2$, eli interpolaatioon käytetään kolmea pistettä, saadaan 
 	\implies & \defint{a}{b}{f(x)}{x} \approx \frac{h}{3}\left(f(a)+4f(x_{1})+2f(x_{2})+4f(x_{3})+2f(x_{4})+\dots+4f(x_{n-1})+f(b)\right)
 \end{align*}
 
-Virheen $E_n(p)$ pienentämiseksi voidaan nähdä kaksi eri lähestymistapaa: joko käytetään pienen tarkkuusasteen Newton-Cotes kaavaa aina vain lyhyemmillä osaväleillä tai käytetään pidempiä osavälejä mutta suurta tarkkuusastetta. Ensimmäisessä tapauksessa evaluointipisteiden määrä kasvaa nopeasti epäkäytännöllisen suureksi. Kuitenkin sekä puolisuunnikasmenetelmä että Simpsonin menetelmä ovat erittäin laajalti käytettyjä ja voidaan näyttää, että kun osavälien määrä $N\to\infty$ niin $E_n(p)\to 0$ kaikille integrointivälillä jatkuville funktioille. Toisessa tapauksessa $n:än$ kasvaessa suureksi, voivat painot $w_i$ olla joko positiivisia tai negatiivisiä ja absoluuttiselta arvoltaan milivaltaisen suuria, jolloin nämä menetelmät eivät enää ole numeerisessa mielessä stabiileja. Tämän vuoksi korkean tarkkuusasteen Newton-Cotes
+Virheen $E_n(p)$ pienentämiseksi voidaan nähdä kaksi eri lähestymistapaa: joko käytetään pienen $n$:n Newton-Cotes kaavaa aina vain lyhyemmillä osaväleillä tai käytetään pidempiä osavälejä mutta suurta $n$:ää. Ensimmäisessä tapauksessa evaluointipisteiden määrä kasvaa nopeasti epäkäytännöllisen suureksi. Kuitenkin sekä puolisuunnikasmenetelmä että Simpsonin menetelmä ovat erittäin laajalti käytettyjä ja voidaan näyttää, että kun osavälien määrä $N\to\infty$ niin $E_n(p)\to 0$ kaikille integrointivälillä jatkuville funktioille. Toisessa tapauksessa $n:än$ kasvaessa suureksi, voivat painot $w_i$ olla joko positiivisia tai negatiivisiä ja absoluuttiselta arvoltaan milivaltaisen suuria, jolloin nämä menetelmät eivät enää ole numeerisessa mielessä stabiileja. Tämän vuoksi korkean tarkkuusasteen Newton-Cotes
 menetelmiä ei juurikaan käytetä.\cite{Krylov1962}
 
-Sanotaan että kvadratuurisäännön (algebrallinen) \emph{tarkkuusaste} on $d$, jos se antaa tarkan tuloksen kaikille polynomeille, jotka ovat 
+Sanotaan että kvadratuurisäännön (polynominen) \emph{tarkkuusaste} on $d$, jos se antaa tarkan tuloksen kaikille polynomeille, jotka ovat 
 korkeintaan astetta $d$, eli $E_n(p)=0$, jos $\Deg(p)\leq d$, mutta ei yhdellekään polynomille jonka $\Deg(p)\geq d+1$. Koska Newton-Cotes menetelmissä integrandia interpoloidaan $n+1$:ssä pisteessä astetta $n$ olevalla polynomilla, niin $d_{NC}=n-1$ ja Newton-Cotes kaavoja kutsutaan \emph{interpolatorisiksi}.
 Tästä seuraa luonnollisesti kysymys, onko tarkkuuastetta mahdollista parantaa interpolatorista paremmaksi? Mikäli solmupisteet $x_i$ ovat ennalta määrätyt, on interpolatorinen tarkkuusaste paras mahdollinen, mutta jos solmupisteet voidaan valita vapaasti, voidaan tarkkuusatetta parantaa.
 
@@ -522,8 +524,8 @@ joten
 	 \implies&E_n(p)=0.
 \end{align*}
 Eli sääntö on tarkka polynomeille, jotka ovat korkeintaan astetta $d=2n-1$. Toisaalta jos tarkastellaan
-esimerkiksi polynomia $\omega_n^2(x)\in\field{P}_{2n}$ niin selvästi
-niin \[ \defint{a}{b}{\omega_n^2(x)w(x)}{x} > 0, \] mutta \[ \sum_{i=0}^nw_i\omega_n^2(x_i)=0, \] 
+esimerkiksi polynomia $\omega_n^2(x)\in\field{P}_{2n}$ niin selvästi (muistetaan että $w(x)\geq 0$)
+\[ \defint{a}{b}{\omega_n^2(x)w(x)}{x} > 0, \] mutta \[ \sum_{i=0}^nw_i\omega_n^2(x_i)=0, \] 
 joten sääntö ei ole tarkka polynomeille astetta $2n$ \cite{Krylov1962}.
 
 \subsubsection{Ortogonaaliset polynomit}
@@ -599,8 +601,9 @@ ominaisuuksia, kuten
  supistuu integraalin tarkkaan arvoon, kun $n\to\infty$.
 \end{enumerate}
 
-On tavallista että Gaussin kvadratuurisääntö on annettu jollekin integrointivälille $[c,d]$ (usein $[-1,1]$), mutta sitä halutaan soveltaa välillä $[a,b]$. 
-Olkoon annettu sääntö $\sum_{i=0}^nw_if(t_i)$, joka on määritelty välillä $[c,d]$. Käyttämällä lineaarista muuttujanvaihdosta \[ x=\left(\frac{b-a}{d-c}\right)t+\left(\frac{ad-bc}{d-c}\right), \] saadaan uusi sääntö \[\left(\frac{b-a}{d-c}\right)\sum_{i=0}^nw_if\left(\left(\frac{b-a}{d-c}\right)t+\left(\frac{ad-bc}{d-c}\right)\right),\] joka on määritelty välillä $[a,b]$. Toisin sanoen, on riittävää määritellä Gaussin kvadratuurisääntö mille tahansa vapaavalintaiselle välille. 
+On tavallista että Gaussin kvadratuurisääntö on annettu jollekin äärelliselle integrointivälille $[c,d]$ (usein $[-1,1]$), 
+mutta sitä halutaan soveltaa toisella äärellisellä välillä $[a,b]$. 
+Olkoon annettu sääntö $\sum_{i=0}^nw_if(t_i)$, joka on määritelty välillä $[c,d]$. Käyttämällä muuttujanvaihdosta (affiinimuunnos) \[ x=\left(\frac{b-a}{d-c}\right)t+\left(\frac{ad-bc}{d-c}\right), \] saadaan uusi sääntö \[\left(\frac{b-a}{d-c}\right)\sum_{i=0}^nw_if\left(\left(\frac{b-a}{d-c}\right)t+\left(\frac{ad-bc}{d-c}\right)\right),\] joka on määritelty välillä $[a,b]$. Toisin sanoen, on riittävää määritellä Gaussin kvadratuurisääntö mille tahansa vapaavalintaiselle välille. 
 Tavallisesti valitaan väli $[-1,1]$. \cite[s.231]{Cheney2007}
 
 
@@ -635,7 +638,7 @@ jonka ratkaisu on $w_0=w_2=\frac{5}{9}$ ja $w_1=\frac{8}{9}$. Etsimämme kvadratu
 \begin{equation*}
 	 \defint{-1}{1}{f(x)}{x}\approx G_3(f(x))=\frac{5}{9}f\left(-\sqrt{\frac{3}{5}}\right)+\frac{8}{9}f(0)+\frac{5}{9}f\left(\sqrt{\frac{3}{5}}\right)\\
 \end{equation*}.
-Transformaation $t=x+1$ avulla voidaan edellä laskettua kvadratuuria käyttää välillä $[0,2]$, jolloin soveltamalla 
+Muuttujanvaihdoksen $t=x+1$ avulla voidaan edellä laskettua kvadratuuria käyttää välillä $[0,2]$, jolloin soveltamalla 
 sitä jo aiemmin tutkimaamme esimerkki-integrandiin $f(x)=e^{-x^2}$ ja hyödyntällä integrandin symmetrisyyttä $y$-akselin suhteen, 
 saadaan tulokseksi
 \begin{align*}
@@ -648,9 +651,35 @@ Vastaavasti käyttämällä Simpsonin menetelmää samassa tilanteessa saadaan virheek
 \end{align*}
 joka on yli $16$ kertaa suurempi kuin Gaussin kvadratuurin virhe.
 
-
-
 \section{Kubatuurit}
+
+Kaiken kaikkiaan tähän mennessä on havaittu, että numeerinen integrointi yhdessä ulottuvuudessa on
+hyvin tunnettu ongelma, johon on tarjolla tehokkaita ratkaisuja. Ulottuvuuksissa $d \geq 2$ tilanne
+muuttuu ratkaisevasti. Ensinnäkin, yhdessä ulottuvuudessa on integrointisääntöjen kannalta
+vain yksi rajoitettu integroimisalue, koska kaikki viivasegmentit ovat yhteneviä affiinimuunnokella. 
+Useammassa ulottuvuudessa erilaisia
+integroimisalueita (joita ei voi muuntaa toisikseen affiinimuunnoksella) on ääretön määrä. 
+Toiseksi, yhdessä ulottuvuudessa ortogonaalipolynomien teoria on hyvin tunnettu ja siitä
+on huomattavaa apua kvadratuurien määrittämisessä. Toisin kuin usean muuttujan tapauksessa, 
+jossa ortogonaalipolynomien teoria on huomattavasti monimutkaisempi 
+ja heikommin tunnettu, eikä sen avulla ole onnistuttu muodostamaan kubatuurisääntöjä kuin
+harvoissa tapauksissa. \cite[s.6-7]{Stroud1971}
+
+Olkoon $\v{\alpha}=(\alpha_1,\dots,\alpha_n)\in\field{N}^n$ ja $\v{x^\alpha}=\prod_{i=1}^nx_i^{\alpha_i}$. 
+Monen muuttujan polynomi $p(\v{x})$ on monomien $\v{x^\alpha}$ äärellinen lineaarikombinaatio
+\begin{equation} 
+	p(\v(x))=\sum_{\v{\alpha}\in\field{N}^n}a_{\v{\alpha}}\v{x^\alpha}
+\end{equation}
+ja sen \emph{algebrallinen asteluku} (myöhemmin pelkkä aste) on $d$, jos
+\begin{equation}
+	d=\max\left\{ \sum_{i=1}^n \vert \alpha_i \vert \; \Big\vert \; a_{\v{\alpha}}\neq 0 \right\}.  
+\end{equation} 
+
+%\begin{equation} 
+		
+%\end{equation} 
+
+
 
 \subsection{Tulosäännöt}
 \subsection{Integroimisalueet}
