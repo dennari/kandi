@@ -340,7 +340,7 @@ jakaumaksi ja $\defint{a}{b}{f(x)w(x)}{x}$ on tällöin painotettu keskiarvo.
 
 \scalefig{fig_lusums}{0.8}{Ala- ja yläsummat $20$-välisellä jaolla}
 
-\section{Numeerisia menetelmiä}
+\section{Kvadratuurit}
 
 Käyttämällä tasavälistä jakoa, edellä esitellyistä ala- tai yläsummista saadaan suoraan eräs, melkoisen epätarkka, numeerinen 
 integraaliapproksimaatio, \emph{suorakaidemenetelmä} \cite{Ueberhuber1997}. Kuvan \ref{fig_lusums} esittämässä tapauksessa 
@@ -457,8 +457,10 @@ Virheen $E_n(p)$ pienentämiseksi voidaan nähdä kaksi eri lähestymistapaa: joko k
 menetelmiä ei juurikaan käytetä.\cite{Krylov1962}
 
 Sanotaan että kvadratuurisäännön (polynominen) \emph{tarkkuusaste} on $d$, jos se antaa tarkan tuloksen kaikille polynomeille, jotka ovat 
-korkeintaan astetta $d$, eli $E_n(p)=0$, jos $\Deg(p)\leq d$, mutta ei yhdellekään polynomille jonka $\Deg(p)\geq d+1$. Koska Newton-Cotes menetelmissä integrandia interpoloidaan $n+1$:ssä pisteessä astetta $n$ olevalla polynomilla, niin $d_{NC}=n-1$ ja Newton-Cotes kaavoja kutsutaan \emph{interpolatorisiksi}.
-Tästä seuraa luonnollisesti kysymys, onko tarkkuuastetta mahdollista parantaa interpolatorista paremmaksi? Mikäli solmupisteet $x_i$ ovat ennalta määrätyt, on interpolatorinen tarkkuusaste paras mahdollinen, mutta jos solmupisteet voidaan valita vapaasti, voidaan tarkkuusatetta parantaa.
+korkeintaan astetta $d$, eli $E_n(p)=0$, jos $\Deg(p)\leq d$, mutta ei yhdellekään polynomille jonka $\Deg(p)\geq d+1$. Koska Newton-Cotes 
+menetelmissä integrandia interpoloidaan $n+1$:ssä pisteessä astetta $n$ olevalla polynomilla, niin $d_{NC}=n-1$ ja Newton-Cotes kaavoja kutsutaan \emph{interpolatorisiksi}.
+Tästä seuraa luonnollisesti kysymys, onko tarkkuuastetta mahdollista parantaa interpolatorista paremmaksi? Mikäli solmupisteet $x_i$ ovat ennalta määrätyt, 
+on interpolatorinen tarkkuusaste paras mahdollinen, mutta jos solmupisteet voidaan valita vapaasti, voidaan tarkkuusatetta parantaa.
 
 \subsection{Gaussin kvadratuuri}
 
@@ -611,12 +613,14 @@ Tavallisesti valitaan väli $[-1,1]$. \cite[s.231]{Cheney2007}
 \subsubsection{Laskeminen}
 
 Näiden tietojen perusteella voimme esimerkinomaisesti laskea kolmipisteisen Gaussin kvadratuurin 
-vakiopainofunktiolle $w(x)=P_n=1$ ja välille $[-1,1]$:
+vakiopainofunktiolle $w(x)=1$ ja välille $[-1,1]$:
 \begin{align*}
 	\defint{-1}{1}{f(x)}{x}\approx &w_0f(x_0)+w_1f(x_1)+w_2f(x_2)\\
 	\omega_3=&(x-x_0)(x-x_1)(x-x_2)=x^3+a_2x^2+a_1x+a_0. 
 \end{align*}  
-Nyt siis $\omega_3$:n täytyy olla ortogonaalinen polynomien $p(x)\in\field{P}_2$, eli kannan $\{1,x,x^2\}$ jokaisen monomin kanssa, joten saadaan yhtälöryhmä
+Nyt siis $\omega_3\in\field{P}_3$:n täytyy olla ortogonaalinen kaikkien polynomien $p(x)\in\field{P}_2$. 
+Sisätulon \eqref{eq_inner_product} lineaarisuudesta johtuen näin on, mikäli $\omega_3$ on ortogonaalinen 
+kannan $\{1,x,x^2\}$ jokaisen monomin kanssa, joten saadaan yhtälöryhmä
 \begin{equation*} 
 	\begin{cases}
 		0=&\defint{-1}{1}{x^3+a_2x^2+a_1x+a_0}{x}\\
@@ -625,6 +629,23 @@ Nyt siis $\omega_3$:n täytyy olla ortogonaalinen polynomien $p(x)\in\field{P}_2$
 	\end{cases},
 \end{equation*}
 jonka ratkaisu on $a_0=a_2=0$ ja $a_1=-\frac{3}{5}$, jolloin $x_0=-\sqrt{\frac{3}{5}},x_1=0,x_2=\sqrt{\frac{3}{5}}$.
+
+Vaihtoehtoisesti olisimme voineet käyttää hyväksi tietoa, että $\omega_3=\frac{1}{l_3}P_3$, missä $P_3$ on kolmas
+Legendren polynomi ja $l_3$ on $P_3$:n kolmannen asteen termin kerroin. Kaavasta \eqref{eq_orthogonal_polynomials}
+nähdään, että jos $\iprod{f}{g}=0$ ja $c\in\R$, niin myös $\iprod{cf}{g}=0$, eli ortogonaalinen polynomi on määrätty
+skalaarikerrointa vaille. Legendren polynomit on standardoitu siten että $P_n(1)=1$, kun taas solmupolynomin
+korkeimman asteen termin kerroin on aina $1$. Tästä johtuen on $\omega_n=\frac{1}{l_n}P_n$. Legendren polynomien rekursiokaava on
+\begin{equation}
+	(n+1)P_{n+1}=(2n+1)xP_n-nP_{n-1},\quad P_0=1,\;P_1=x, 
+\end{equation}
+josta saadaan
+\begin{align*}
+	P_2=&\frac{3}{2}x^2-\frac{3}{2} \\
+	P_3=&\frac{5}{3}xP_2-\frac{2}{3}P_1=\frac{5}{2}x^3-\frac{3}{2}x \\
+	\frac{2}{5}P_3=&x^3-\frac{3}{5}x=\omega_3,  
+\end{align*}
+kuten pitikin \cite[s.27]{Davis1975}.
+
 Painot $w_i$ voitaisiin laskea kaavasta \eqref{eq_weights}, mutta ne saadaan helpommin käyttämällä hyväksi tietoa, että 
 etsimämme kvadratuuri on tarkka monomeille ${1,x,x^2}$. Näin saadaan toinen yhtälöryhmä painoille $w_i$:
 \begin{equation*} 
@@ -666,25 +687,109 @@ ja heikommin tunnettu, eikä sen avulla ole onnistuttu muodostamaan kubatuurisään
 harvoissa tapauksissa. \cite[s.6-7]{Stroud1971}
 
 Olkoon $\v{\alpha}=(\alpha_1,\dots,\alpha_n)\in\field{N}^n$ ja $\v{x^\alpha}=\prod_{i=1}^nx_i^{\alpha_i}$. 
-Monen muuttujan polynomi $p(\v{x})$ on monomien $\v{x^\alpha}$ äärellinen lineaarikombinaatio
+Monen $n$:n muuttujan polynomi $p(\v{x})\in\field{P}_d^n$ on monomien $\v{x^\alpha}$ äärellinen lineaarikombinaatio
 \begin{equation} 
-	p(\v(x))=\sum_{\v{\alpha}\in\field{N}^n}a_{\v{\alpha}}\v{x^\alpha}
+	p(\v{x})=\sum_{\v{\alpha}\in\field{N}^n}a_{\v{\alpha}}\v{x^\alpha}
 \end{equation}
 ja sen \emph{algebrallinen asteluku} (myöhemmin pelkkä aste) on $d$, jos
 \begin{equation}
-	d=\max\left\{ \sum_{i=1}^n \vert \alpha_i \vert \; \Big\vert \; a_{\v{\alpha}}\neq 0 \right\}.  
-\end{equation} 
+	\Deg[p]=d=\max\left\{ \sum_{i=1}^n \vert \alpha_i \vert \; \Big\vert \; a_{\v{\alpha}}\neq 0 \right\}.  
+\end{equation}
+Kuten aiemminkin, sanotaan että kubatuurisäännön tarkkuusaste on $d$ jos se on tarkka
+kaikille polynomeille astetta $d$, mutta ei ainakaan yhdelle astetta $d+1$. Määritellään lisäksi polynomin $p$ \emph{yleinen asteluku}
+\begin{equation}
+	\hat{\Deg[p]}=\max\left\{\max\left\{\vert \alpha_i \vert \; \Big\vert \; i=1,\dots,n \right\} \; \Big\vert \; a_{\v{\alpha}}\neq 0 \right\}  
+\end{equation}
+ja sanotaan että kubatuurisäännön yleinen tarkkuusaste on $b$ jos se on tarkka
+kaikille polynomeille yleistä astetta $b$, mutta ei ainakaan yhdelle yleistä astetta $b+1$
 
-%\begin{equation} 
-		
-%\end{equation} 
+\subsection{Integroimisalueet}
 
-
+Kubatuurisäännöt on määritelty koskemaan tiettyä pintaa tai tilavuutta $\Omega\subset\R^n$. Yleisimmin
+käytetyille alueille on omat merkintänsä \cite[s.219]{Stroud1971} ja alueet joita tässä
+työssä käsitellään esitelty taulukossa \ref{table_regions}. Äärettömän suurille alueille
+myös painofunktion ajatellaan olevan osa alueen määritelmää, joten näissä 
+tapauksissa taulukossa \ref{table_regions} on ilmoitettu myös painofunktio.
+\begin{table}[h!t]
+	\topcaption{Yleisimmät integroimisalueet}
+	\centering
+	\begin{tabular}{cccc}
+		Merkintä & Nimi & Määritelmä & $w(\v{x})$ \\ \hline
+		$C_n$ & $n$-kuutio & $-1 \leq x_i \leq 1$ & \\
+		%$C_n^{\text{shell}}$ & $n$-kuution pinta $-K_1 \leq x_i \leq K_2\;0<K_1<K_2<\infty$ & \\
+		$S_n$ & $n$-pallo & $\v{x}^T\v{x} \leq 1$ & \\
+		$U_n$ & $n$-pallon pinta & $\v{x}^T\v{x} = 1$ & \\
+		$T_n$ & $n$-simpleksi & $x_1+\dots+x_n \leq 1$ & \\
+		$E_n^{r^2}$ & koko n-avaruus & $-\infty < x_i < \infty$ & $e^{-\v{x}^T\v{x}}$ \\
+		$E_n^{r}$ & koko n-avaruus & $-\infty < x_i < \infty$ & $e^{-\sqrt{\v{x}^T\v{x}}}$
+	\end{tabular}	
+	\label{table_regions}
+\end{table} Mielivaltaiselle integroimisalueelle joudutaan joko kehittämään täysin oma kubatuurinsa tai
+se voidaan yrittää ositella ali-alueisiin, joille kubatuurisäännöt tunnetaan, jonka jälkeen
+alkuperäistä integraalia voidaan approksimoida ali-alueiden integraalien summana \cite[s.14]{Stroud1971}.
 
 \subsection{Tulosäännöt}
-\subsection{Integroimisalueet}
-\subsection{Kubatuurisääntöjä}
-\subsubsection{Gauss-Hermite}
+
+Tulosäännöissä ideana on muodostaa kubatuurisääntö ulottuvuudessa $n=r+s$ $r$-ulotteisen
+ja $s$-ulotteisen kubatuurisäännön tulona. Oletetaan, että integroimisalue $\Omega_r\times\Omega_s\subset\R^n$
+on integroimisalueiden $\Omega_r\subset\R^r$ ja $\Omega_s\subset\R^s$ \emph{karteesinen tulo}, eli
+\[ \Omega_r \times \Omega_s=\{(x_1,\dots,x_n) \mid (x_1,\dots,x_r) \in \Omega_r,\: (x_{r+1},\dots,x_n) \in \Omega_s\}. \]
+Olkoot $\v{x}_r=(x_1,\dots,x_r)$, $\v{x}_s=(x_{r+1},\dots,x_n)$ ja $\v{x}_n=(x_1,\dots,x_n)$. Oletetaan lisäksi, 
+että $w(\v{x}_r,\v{x}_s)=w_r(\v{x}_r)w_s(\v{x}_s)$ ja olkoot annettuna
+kubatuurisäännöt 
+\begin{equation*} 
+	\defint{\Omega_r}{}{w_r(\v{x}_r)f(\v{x}_r)}{\v{x}_r} \approx \sum_{i=1}^{N_r}w_{r,i}f(\v{x}_{r,i}),  
+\end{equation*} 
+jonka tarkkuusaste on $d_r$ sekä
+\begin{equation*} 
+	\defint{\Omega_s}{}{w_s(\v{x}_s)f(\v{x}_s)}{\v{x}_s} \approx \sum_{j=1}^{N_s}w_{s,j}f(\v{x}_{s,j}),  
+\end{equation*} 
+jonka tarkkuusaste on $d_s$.
+Näiden avulla voidaan muodostaa $N_rN_s$ pisteinen tulosääntö
+\begin{equation}
+	\iint _{\Omega_r\times\Omega_s}w(\v{x}_r,\v{x}_s)f(\v{x}_r,\v{x}_s) \dd\v{x}_r\ds\v{x}_s
+	\approx \sum_{\substack{i=1\\j=1}}^{\substack{N_r\\N_s}}w_{s,j}w_{r,i}f(\v{x}_{r,i},\v{x}_{s,j})
+\end{equation}
+ja sen yleiselle tarkkuusasteelle $d$ pätee $\min\left\{d_r,d_s\right\} < d < \max\left\{d_r,d_s\right\}$ \cite{Cools1997}.
+
+
+Tulosääntöjä voidaan muodostaa tarpeeksi säännöllisille integroimisalueille, kuten $C_n$ tai $T_n$,
+ja painofunktioille. Mikäli tulosääntö on mahdollista muodostaa, on sen löytäminen helppoa ja virhearviokin
+on saatavilla. Kuitenkin, jos tarkastellaan esimerkiksi $p$-pisteistä
+kvadratuuria välillä $[0,1]$, jonka avulla muodostetaan tulosääntö $n$-kuutiolle, saadaan
+pisteiden määräksi $p^n$, joka kasvaa äkkiä epäkäytännöllisen suureksi. Tarvitaan siis parempia ratkaisuja.
+
+\subsection{Interpolatoriset kubatuurit}
+
+Interpolatoriset kvadratuurisäännöt, kuten Newton--Cotes kvadratuurit, voitiin muodostaa
+helposti integroimalla interpolaatiopolynomia. Interpolaatiopolynomille ei valitettavasti
+ole olemassa yleistystä useammassa ulottuvuudessa, toisin sanoen, jos on annettu mielivaltaiset
+pisteet $\{\v{x}_i\mid i=1,\dots,N\;\v{x}_i\in\R^n\}$ ja niitä vastaavat arvot
+$\{y_i\mid i=1,\dots,N\;y_i\in\R\}$, ei välttämättä voida muodostaa polynomia $p(\v{x})$
+jolle pätisi $p(\v{x}_i)=y_i\;\forall i$ \cite[s.275]{Davis1975}. 
+
+Aina voidaan kuitenkin vaatia, että kubatuurin on oltava tarkka kaikille  $p(\v{x})\in\field{P}_n^d$,
+mikä tarkoittaa että sen oltava tarkka jollekin $\field{P}_n^d$:n kannalle. Tällöin
+\begin{equation}
+	Q[f_i]=I[f_i],\quad i=1,\dots,\dim[\field{P}_d^n]=\binom{n+d}{d}=\frac{(n+d)!}{n!d!}
+	\label{eq_nonlinear_equations} 
+\end{equation}
+on epälineaarinen yhtälöryhmä, missä $f_i$:t muodostavat $P_n^d$:n kannan ja muuttujina
+ovat tukipisteet ${\v{x_i}}$ ja painot ${w_i}$. Yhtälöryhmän \eqref{eq_nonlinear_equations}
+ratkaisemiseksi voidaan nähdä kaksi eri lähestymistapaa, joista kumpikin johtaa
+omanlaiseensa teoriaan kubatuurisääntöjen muodostamiseksi:
+\begin{enumerate}
+  \item Yritetään ratkaista yhtälöryhmä suoraan
+  \item Yritetään löytää (ortogonaalisia)polynomeja, jotka häviävät kubatuurin tukipisteissä 
+\end{enumerate}
+
+\subsubsection{Invarianttiteoria}
+
+\subsubsection{Ideaaliteoria}
+
+
+\subsection{Kolmipisteinen Gauss-Hermite kubatuuri}
+
 \section{Koeasetelma}
 
 \section{Tulokset}
