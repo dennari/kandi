@@ -14,7 +14,7 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 \usepackage{amsmath,amsfonts,amssymb,amsbsy}  
 %% Viitteet suomeksi
 \usepackage[fixlanguage]{babelbib}
-
+\usepackage{booktabs} % paremman näköiset taulukot
 
 %% Vaakasuunnan mitat, ÄLÄ KOSKE!
 \setlength{\hoffset}{-1in}
@@ -576,14 +576,16 @@ voidaan laskea tehokkaasti, mikäli $\alpha_k$ ja $\beta_k$ tunnetaan.\cite{Trefe
 	\centering
 	\topcaption{Klassiset ortogonaaliset polynomit}
 	\begin{tabular}{cccc}
-		$w(t)$ & $[a,b]$ & Nimi & Merkintä \\ \hline
-		$1$ & $[-1,1]$ & Legendre & $P_n$ \\
-		$(1-t^2)^{-\frac{1}{2}}$ & $[-1,1]$ & Tsebysev 1 & $T_n$ \\
-		$(1-t^2)^{\frac{1}{2}}$ & $[-1,1]$ & Tsebysev 2 & $U_n$ \\
-		$(1-t)^\alpha(1+t)^\beta$ & $[-1,1]$ & Jaakob & $P_n^{(\alpha,\beta)}$ \\
-		$t^\alpha e^{-t}$ & $[0,\infty]$ & Laguerre & $L_n^{(\alpha)}$ \\
-		$e^{-t^2}$ & $[-\infty,\infty]$ & Hermite & $H_n$ \\
-		$1$ & $[-1,1]$ & Legendre & $P_n$ \\
+		\toprule
+		Merkintä & Nimi & $w(t)$ & $[a,b]$ \\
+		\midrule
+		$P_n$ & Legendre &$1$ & $[-1,1]$ \\
+		$P_n^{(\alpha,\beta)}$ & Jaakob & $(1-t)^\alpha(1+t)^\beta$ & $[-1,1]$ \\
+		$T_n$ & Tsebysev 1 & $(1-t^2)^{-\frac{1}{2}}$ & $[-1,1]$ \\
+		$U_n$ & Tsebysev 2 & $(1-t^2)^{\frac{1}{2}}$ & $[-1,1]$ \\		
+		$L_n^{(\alpha)}$ & Laguerre & $t^\alpha e^{-t}$ & $[0,\infty]$  \\
+		$H_n$ & Hermite & $e^{-t^2}$ & $[-\infty,\infty]$ \\
+		\bottomrule
 	\end{tabular}	
 	\label{table_classical_orthogonal_polynomials}
 \end{table}
@@ -715,14 +717,17 @@ tapauksissa taulukossa \ref{table_regions} on ilmoitettu myös painofunktio.
 	\topcaption{Yleisimmät integroimisalueet}
 	\centering
 	\begin{tabular}{cccc}
-		Merkintä & Nimi & Määritelmä & $w(\v{x})$ \\ \hline
+		\toprule
+		Merkintä & Nimi & Määritelmä & $w(\v{x})$ \\
+		\midrule
 		$C_n$ & $n$-kuutio & $-1 \leq x_i \leq 1$ & \\
 		%$C_n^{\text{shell}}$ & $n$-kuution pinta $-K_1 \leq x_i \leq K_2\;0<K_1<K_2<\infty$ & \\
 		$S_n$ & $n$-pallo & $\v{x}^T\v{x} \leq 1$ & \\
 		$U_n$ & $n$-pallon pinta & $\v{x}^T\v{x} = 1$ & \\
 		$T_n$ & $n$-simpleksi & $x_1+\dots+x_n \leq 1$ & \\
-		$E_n^{r^2}$ & koko n-avaruus & $-\infty < x_i < \infty$ & $e^{-\v{x}^T\v{x}}$ \\
-		$E_n^{r}$ & koko n-avaruus & $-\infty < x_i < \infty$ & $e^{-\sqrt{\v{x}^T\v{x}}}$
+		$E_n^{r^2}$ & n-avaruus & $-\infty < x_i < \infty$ & $e^{-\v{x}^T\v{x}}$ \\
+		$E_n^{r}$ & n-avaruus & $-\infty < x_i < \infty$ & $e^{-\sqrt{\v{x}^T\v{x}}}$ \\
+		\bottomrule
 	\end{tabular}	
 	\label{table_regions}
 \end{table} Mielivaltaiselle integroimisalueelle joudutaan joko kehittämään täysin oma kubatuurinsa tai
@@ -754,29 +759,72 @@ Näiden avulla voidaan muodostaa $N_rN_s$ pisteinen tulosääntö
 ja sen yleiselle tarkkuusasteelle $d$ pätee $\min\left\{d_r,d_s\right\} < d < \max\left\{d_r,d_s\right\}$ \cite{Cools1997}.
 
 
-Tulosääntöjä voidaan muodostaa tarpeeksi säännöllisille integroimisalueille, kuten $C_n$ tai $T_n$,
-ja painofunktioille. Mikäli tulosääntö on mahdollista muodostaa, on sen löytäminen helppoa ja virhearviokin
+Tulosääntöjä voidaan muodostaa tarpeeksi säännöllisille integroimisalueille, kuten $C_n$ tai $T_n$.
+Lisäksi painofunktion on oltava jaettavissa tekijöihinsä kuten edellä esitettiin. Mikäli tulosääntö on mahdollista muodostaa, on sen löytäminen helppoa ja virhearviokin
 on saatavilla. Kuitenkin, jos tarkastellaan esimerkiksi $p$-pisteistä
 kvadratuuria välillä $[0,1]$, jonka avulla muodostetaan tulosääntö $n$-kuutiolle, saadaan
 pisteiden määräksi $p^n$, joka kasvaa äkkiä epäkäytännöllisen suureksi. Tarvitaan siis parempia ratkaisuja.
 
 \subsection{Interpolatoriset kubatuurit}
 
-Interpolatoriset kvadratuurisäännöt, kuten Newton--Cotes kvadratuurit, voitiin muodostaa
-helposti integroimalla interpolaatiopolynomia. Interpolaatiopolynomille ei valitettavasti
+Interpolatoriset kvadratuurisäännöt, eli Newton--Cotes kvadratuurit, voitiin muodostaa
+helposti integroimalla interpolaatiopolynomia, joka on aina olemassa. Interpolaatiopolynomille ei valitettavasti
 ole olemassa yleistystä useammassa ulottuvuudessa, toisin sanoen, jos on annettu mielivaltaiset
 pisteet $\{\v{x}_i\mid i=1,\dots,N\;\v{x}_i\in\R^n\}$ ja niitä vastaavat arvot
 $\{y_i\mid i=1,\dots,N\;y_i\in\R\}$, ei välttämättä voida muodostaa polynomia $p(\v{x})$
-jolle pätisi $p(\v{x}_i)=y_i\;\forall i$ \cite[s.275]{Davis1975}. 
+jolle pätisi $p(\v{x}_i)=y_i\;\forall i$ \cite[s.275]{Davis1975}. Yleistys on mahdollinen,
+mikäli annetut pisteet $\v{x_i}$ muodostavat tulomuotoisen hilan. Näin voidaan muodostaa
+integrointikaavojakin, mutta koska vaadittavien pisteiden määrä kasvaa jälleen eksponentiaalisesti
+dimension suhteen, ne eivät ole kovin hyödyllisiä \cite[s.276]{Davis1975}.
 
-Aina voidaan kuitenkin vaatia, että kubatuurin on oltava tarkka kaikille  $p(\v{x})\in\field{P}_n^d$,
-mikä tarkoittaa että sen oltava tarkka jollekin $\field{P}_n^d$:n kannalle. Tällöin
+Yksiulotteisessa tapauksessa huomasimme, että kvadratuuri, joka muodostetaan
+integroimalla interpoloivaa polynomia, on sama kuin se, joka saadaan jos
+vaaditaan että integraalin on oltava tarkka valitun polynomiavaruuden $\field{P}_d^1$ kannalle. 
+Tämä idea voidaan yleistää myös moniulotteiseen tapaukseen. Vaaditaan siis nyt,
+että kubatuurin on oltava tarkka kaikille  $\{f_i\},\;span\{f_i\}=\field{P}_d^n$. 
+Saadaan epälineaarinen yhtälöryhmä
 \begin{equation}
-	Q[f_i]=I[f_i],\quad i=1,\dots,\dim[\field{P}_d^n]=\binom{n+d}{d}=\frac{(n+d)!}{n!d!}
+	\sum_{k=1}^Nw_kf(\v{x}_k)_i=\defint{\Omega}{}{f(\v{x})_iw(\v{x})}{\Omega},\quad i=1,\dots,\dim[\field{P}_d^n]=\binom{n+d}{d},
 	\label{eq_nonlinear_equations} 
 \end{equation}
-on epälineaarinen yhtälöryhmä, missä $f_i$:t muodostavat $P_n^d$:n kannan ja muuttujina
-ovat tukipisteet ${\v{x_i}}$ ja painot ${w_i}$. Yhtälöryhmän \eqref{eq_nonlinear_equations}
+jossa $f_i$:t muodostavat $\field{P}_n^d$:n kannan, ja jos pisteet $x_i$ on annettu (tai päätetty), 
+muuttujina ovat $N=\binom{n+d}{d}$ painoa $w_k$. 
+Nyt jos painot $w_k$ määräytyvät yksiselitteisesti pisteiden $x_i$ perusteella,
+kutsutaan näin saatua kubatuuria \emph{interpolatoriseksi}.
+Jos $f_i$:t ovat monomeja, voidaan yhtälöiden \eqref{eq_nonlinear_equations}
+oikealle puolelle laskea numeroarvot (painofunkion kaikkien momenttien tuli olla määritelty).
+Tarkastellaan esimerkkiä, jossa halutaan muodostaa kubatuuri, joka on tarkka kaikille
+$p(x,y)\in\field{P}_2^2$ alueessa $C_2$. Tällöin monomikanta on $\{1,x,y,xy,x^2,y^2\}$ ja kaavan \eqref{eq_nonlinear_equations} mukaiseksi
+systeemiksi saadaan
+
+\begin{equation}
+	 \begin{array}{ll}
+	 	w_1+\dots+w_6&=4 \\
+	 	w_1x_1+\dots+w_6x_6&=0 \\
+	 	w_1y_1+\dots+w_6y_6&=0 \\
+	 	w_1x_1y_1+\dots+w_6x_6y_6&=0 \\
+	 	w_1x_1^2+\dots+w_6x_6^2&=\frac{4}{3} \\
+	 	w_1y_1^2+\dots+w_6y_6^2&=\frac{4}{3}.
+	 \end{array}
+\end{equation} Yhtälöryhmälle on aina olemassa ratkaisu,
+mikäli pisteet $\v{x}_i$ eivät sijaitse samalla $d$-asteisella ``käyrällä'' \cite{Cools2001}. 
+
+Seuraa tuttu kysymys: kuinka pisteet $x_i$ tulisi sitten valita? Yksiulotteisessa interpolatorisessa 
+tapauksessa $N=m+1$ ja havaittiin, että pisteet on mahdollista valita siten, että
+osa painoista häviää. Päästiin myös selkeään lopputulokseen: säilyttääkseen tarkkuusasteen
+$m$, kvadratuurin painoista voitiin ``hävittää'' maksimissaan puolet ja saatiin Gaussin kvadratuuri.
+
+Kaikkien mahdollisuuksien käyttämiseksi, annetaan myös kaikkien pisteiden olla muuttujia.
+Yleisesti ottaen, jokainen piste $\v{x}_k$ tuo yhtälöryhmään $n+1$ muuttujaa:
+koordinaatit $x_{1,k},\dots,x_{n,k}$ ja painon $w_k$, joten $N$-pisteisen
+kubatuurin yhtälöryhmässä on $N(n+1)$ muuttujaa. Jotta yhtälöryhmälle voitaisiin kuvitella
+olevan ratkaisu, olisi lupaavaa jos muuttujia olisi vähintään yhtä paljon kuin
+yhtälöitä $N(n+1)\geq\binom{n+d}{d}$, josta saadaan pisteiden määrälle alaraja $N\geq\frac{(n+d)!}{(n+1)!d!}$.
+Näin ollen esimerkiksi $n=20$ dimensioisen ja $d=3$ tarkkuusasteisen kubaatuurin selvittäminen
+vaatisi $\frac{23!}{20!3!}=1771$ yhtälöisen systeemin ratkaisua ja siinä tulisi olla vähintään  
+$N\geq\frac{23!}{21!3!}=85$ pistettä.
+
+Yhtälöryhmän \eqref{eq_nonlinear_equations}
 ratkaisemiseksi voidaan nähdä kaksi eri lähestymistapaa, joista kumpikin johtaa
 omanlaiseensa teoriaan kubatuurisääntöjen muodostamiseksi:
 \begin{enumerate}
