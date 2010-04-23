@@ -2,7 +2,7 @@
 
 f=@(x) exp(-x.^2);
 a=0;
-b=2;
+b=1;
 sum_s = quad(f,a,b); % oikea arvo (Simpsonin säännöllä)
 multiplier = 2; % used in symmetrical cases 
 
@@ -21,30 +21,30 @@ sum_l = 0;
 hold on;
 
 for i=1:n
-    if(p(i+1) <= 0)
-        h_r = area([p(i) p(i+1)],[f(p(i+1)) f(p(i+1))]); % right
-        h_l = area([p(i) p(i+1)],[f(p(i)) f(p(i))]); % left        
-        sum_u = sum_u+w*f(p(i+1));
-        sum_l = sum_l+w*f(p(i));
-        set(h_l,'FaceColor',[0.9 0.9 1]);
-        set(h_l,'EdgeColor',[0 0 1]);
-        set(h_r,'FaceColor',[0.8 0.8 1]);
-        set(h_r,'EdgeColor',[0 0 1]);
+
+    if(f(p(i)) < f(p(i+1)))
+       l = f(p(i));
+       u = f(p(i+1));
     else
-        h_l = area([p(i) p(i+1)],[f(p(i)) f(p(i))]); % left
-        h_r = area([p(i) p(i+1)],[f(p(i+1)) f(p(i+1))]); % right                
-        sum_u = sum_u+w*f(p(i));
-        sum_l = sum_l+w*f(p(i+1));
-        set(h_l,'FaceColor',[0.8 0.8 1]);
-        set(h_l,'EdgeColor',[0 0 1]);
-        set(h_r,'FaceColor',[0.9 0.9 1]);
-        set(h_r,'EdgeColor',[0 0 1]);
-    end    
+       l = f(p(i+1));
+       u = f(p(i));
+    end
+    
+    h_u = fill([p(i) p(i) p(i+1) p(i+1)]',[0 u u 0]',[1 0 0],...
+            'FaceAlpha',0.25,'EdgeColor',[0 0 1],'EdgeAlpha',0.0); % upper
+    h_l = fill([p(i) p(i) p(i+1) p(i+1)]',[0 l l 0]',[0 0 1],...
+            'FaceAlpha',0.3,'EdgeColor',[0 0 1],'EdgeAlpha',0.1); % lower
+    
+    sum_u = sum_u+w*f(p(i));
+    sum_l = sum_l+w*f(p(i+1));
+    %get(h_l);
+
+  
 end;
-h = plot(x,f(x),'b','LineWidth',2);
+h = plot(x,f(x),'k','LineWidth',2);
 
 hold off;
-legend([h h_l h_r],'e^{-x^2}','yläsumma','alasumma');
+legend([h h_u h_l],'e^{-x^2}','yläsumma','alasumma');
 
 
 %% print figure in pdf
@@ -115,4 +115,48 @@ Q3=@(f) 0.5*(b-a)*((5/9)*f(0.5*(b-a)*-sqrt(0.6)+0.5*(b+a))...
         +(5/9)*f(0.5*(b-a)*sqrt(0.6)+0.5*(b+a)));
 disp(sprintf('quadrature: %.7f',multiplier*Q3(f)));
 disp(sprintf('error: %.7f',abs(multiplier*(Q3(f)-sum_s))));
+
+
+%% Koeasetelma
+
+a = -1;
+b = 1;
+step = 0.1;
+c = 0.7;
+f2=@(x,y,c) exp(-1*(2*(1-c^2))^-1*(x.^2+y.^2-2*c*x.*y));
+
+[cdf,cErr] = mvncdf([a a],[b b],[],[1 c; c 1],statset('TolFun',1e-14));
+correct = cdf*2*pi*sqrt(1-c^2);
+
+[X,Y] = meshgrid(a*2:step:b*2);
+
+surf(X,Y,f2(X,Y,c));
+
+%% 9-pisteinen tulosääntö
+
+prodRule = Q33(@(x,y)f2(x,y,c),a,b);
+fprintf('Q33: %.8f, err: %.8f\n',prodRule,abs(correct-prodRule));
+
+
+prodRule2 = gauss2D(@(x,y)f2(x,y,c),9);
+fprintf('gauss2D: %.14f, err: %.14f\n',prodRule2,abs(correct-prodRule2));
+
+
+%% radon 7-pisteinen
+
+radRule = radonSquare(@(x,y)f2(x,y,c));
+fprintf('radon: %.5f, err: %.5f\n',radRule,abs(correct-radRule));
+
+%% minimaalinen d=19,N=68,S_2
+minim = minimal19(@(x,y)f2(x,y,c));
+fprintf('minimal19: %.12f, err: %.12f\n',minim,abs(correct-minim));
+
+
+
+
+
+
+
+
+
 

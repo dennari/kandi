@@ -256,11 +256,13 @@ Jos kuitenkin dimensioita on enemmän kuin yksi, jolloin puhutuaan \emph{kubatuur
 on ongelma, ehkä hieman yllättäen, kaikkea muuta kuin ratkaistu.
 
 Numeerisen integroinnin menetelmät, joihin tässä työssä keskitytään, ovat muotoa
-\begin{align}
-	&I[f]:=\defint{\Omega}{}{f(\v{x})w(\v{x})}{\Omega} \approx Q[f]:=\sum_{i=1}^Nw_if(\v{x}_i)\\
-	&E[f]=I[f]-Q[f] \nonumber
+\begin{equation}
+	\begin{array}{rll}
+	I[f]&:=&\defint{\Omega}{}{f(\v{x})w(\v{x})}{\Omega} \approx Q[f]:=\sum_{i=1}^Nw_if(\v{x}_i)\\
+	E[f]&:=&I[f]-Q[f]	
+	\end{array}
 	\label{eq_cubature} 
-\end{align}
+\end{equation}
 jossa $I[f]$ on integraali (lineaarinen funktionaali), $f$ on \emph{integrandi}, $\Omega\subset\R^n$ on integroimisalue (yhdessä ulottuvuudessa integroimisväli),
 $Q[f]$ on kvadratuuri jos $n=1$ ja kubatuuri jos $n\geq 2$,
 $w(\v{x})$ on \emph{painofunktio}, pisteet $\{\v{x}_i\}\in\R^n$ ovat \emph{solmut} tai \emph{tukipisteet}, 
@@ -275,7 +277,11 @@ Friedrich Bessel, myöskin tunnustettu matemaatikko, hänelle seuraavasti:
 
 Valitettavasti Gaussin tulos ei ole suoraan yleistettävissä useampaan ulottuvuuteen. Kuitenkin  
 Vuonna 1877 James Clerk Maxwell esitteli 27-pisteisen, muotoa \ref{eq_cubature} olevan kubatuuri-säännön
-ja tätä pidetään ensimmäisenä varsinaisena esimerkkinä kubatuurista sellaisena kuin se tänä päivänä ymmärretään \cite{Cools1997}.
+ja tätä pidetään ensimmäisenä varsinaisena esimerkkinä kubatuurista sellaisena kuin se tässä työssä ymmärretään \cite{Cools1997}.
+Tämän jälkeen kubatuureista ei ole juurikaan merkintöjä ennen vuotta 1948, jolloin Radon julkaisi
+kuohuntaa aiheuttaneen väitöskirjansa \cite{Radon1948}.
+
+
 Useampiulotteisten integraalien likimääräiseen ratkaisemiseen on täysin eri tyyppisiäkin menetelmiä,
 joista tärkeimpänä mainittakoon erilaiset \emph{Monte Carlo} -menetelmät. Näissä integrandin arvo lasketaan 
 suuressa määrässä satunnaisia pisteitä, jolloin integraalia voidaan approksimoida näiden arvojen
@@ -284,6 +290,9 @@ jonka vuoksi useissa muissa integroimismenetelmissä tarvittavien funktio-evaluaa
 eksponentiaalisesti dimensioiden määrästä. Hyväksyttävään tarkkuuteen pääseminen vaatii suurta määrää satunnaispisteitä ja funktio-evaluaatioita
 jo yhdessä dimensiossa. Kuitenkin dimensioiden määrän lähestyessä useita satoja, mikä on mahdollista esimerkikisi joissain finanssimatematiikan sovelluksissa, 
 ovat Monte Carlo -menetelmät usein ainoa vaihtoehto \cite{Kuo2005}. Jatkossa keskitytään ainoastaan kaavan \eqref{eq_cubature} mukaisiin sääntöihin.
+
+
+
 
 Tässä työssä käydään ensin  läpi tarvittavat esitiedot, kuten Riemann integraali ja polynominen approksimaatio, 
 jotta voidaan esittää Gaussin kvadratuurien idea. Tämän jälkeen keskitytään integrointiin useammassa kuin yhdessä
@@ -382,7 +391,7 @@ joiden neliö on integroituva), normi
 \end{equation}
 jolloin puhutaan \emph{pienimmän neliösumman} menetelmästä. Diskreetissä tapauksessa 
 \begin{equation}
-	\label{eq_l2norm}
+	\label{eq_l2norm_discrete}
 	\|f(t)\|_{2,w}=\sqrt{\sum_{i=1}{N}w_i\vert f(t_i) \vert^2}. 
 \end{equation}
 
@@ -704,7 +713,9 @@ kaikille polynomeille astetta $d$, mutta ei ainakaan yhdelle astetta $d+1$. Määr
 	\hat{\Deg[p]}=\max\left\{\max\left\{\vert \alpha_i \vert \; \Big\vert \; i=1,\dots,n \right\} \; \Big\vert \; a_{\v{\alpha}}\neq 0 \right\}  
 \end{equation}
 ja sanotaan että kubatuurisäännön yleinen tarkkuusaste on $b$ jos se on tarkka
-kaikille polynomeille yleistä astetta $b$, mutta ei ainakaan yhdelle yleistä astetta $b+1$
+kaikille polynomeille yleistä astetta $b$, mutta ei ainakaan yhdelle yleistä astetta $b+1$.
+Esimerkiksi polynomille $p(x,y)=x^3y^4+y^5$ pätee $\Deg[p(x,y)]=\max\{3+4,5+0\}=7$ ja $\hat{\Deg}[p(x,y)]=\max\{\max\{3,4\},\max\{5,0\}\}=\max\{4,5\}=5$.   
+Tämä tarkoittaa myös, että jos $\field{P}_1=\{p \mid \Deg[p]\leq d\}$ ja $\field{P}_2=\{p \mid \hat{\Deg[p]}\leq d\}$, niin $\field{P}_1\subset\field{P}_2$. 
 
 \subsection{Integroimisalueet}
 
@@ -756,7 +767,7 @@ Näiden avulla voidaan muodostaa $N_rN_s$ pisteinen tulosääntö
 	\iint _{\Omega_r\times\Omega_s}w(\v{x}_r,\v{x}_s)f(\v{x}_r,\v{x}_s) \dd\v{x}_r\ds\v{x}_s
 	\approx \sum_{\substack{i=1\\j=1}}^{\substack{N_r\\N_s}}w_{s,j}w_{r,i}f(\v{x}_{r,i},\v{x}_{s,j})
 \end{equation}
-ja sen yleiselle tarkkuusasteelle $d$ pätee $\min\left\{d_r,d_s\right\} < d < \max\left\{d_r,d_s\right\}$ \cite{Cools1997}.
+ja sen \emph{yleinen} tarkkuusaste $d$ on $\min\left\{d_r,d_s\right\}$ \cite{Davis1975}.
 
 
 Tulosääntöjä voidaan muodostaa tarpeeksi säännöllisille integroimisalueille, kuten $C_n$ tai $T_n$.
@@ -806,38 +817,303 @@ systeemiksi saadaan
 	 	w_1x_1^2+\dots+w_6x_6^2&=\frac{4}{3} \\
 	 	w_1y_1^2+\dots+w_6y_6^2&=\frac{4}{3}.
 	 \end{array}
-\end{equation} Yhtälöryhmälle on aina olemassa ratkaisu,
-mikäli pisteet $\v{x}_i$ eivät sijaitse samalla $d$-asteisella ``käyrällä'' \cite{Cools2001}. 
+\end{equation} Jos pisteet $(x_i,y_i),\;i=1,\dots,6$ tiedetään, \eqref{eq_nonlinear_equations}
+on lineaarinen kuuden yhtälön yhtälöryhmä, jossa muuttujina ovat painot $\{w_1,\dots,w_6\}$.
+Jos myös pisteitä pidetään muuttujina, on kyseessä epälineaarinen yhtälöryhmä kahdeksantoista
+muuttujan $\{x_1,\dots,x_6,y_1,\dots,y_6,w_1,\dots,w_6\}$ suhteen. 
 
-Seuraa tuttu kysymys: kuinka pisteet $x_i$ tulisi sitten valita? Yksiulotteisessa interpolatorisessa 
-tapauksessa $N=m+1$ ja havaittiin, että pisteet on mahdollista valita siten, että
-osa painoista häviää. Päästiin myös selkeään lopputulokseen: säilyttääkseen tarkkuusasteen
-$m$, kvadratuurin painoista voitiin ``hävittää'' maksimissaan puolet ja saatiin Gaussin kvadratuuri.
-
-Kaikkien mahdollisuuksien käyttämiseksi, annetaan myös kaikkien pisteiden olla muuttujia.
-Yleisesti ottaen, jokainen piste $\v{x}_k$ tuo yhtälöryhmään $n+1$ muuttujaa:
+Yleisesti ottaen, 
+jokainen piste $\v{x}_k$ tuo yhtälöryhmään $n+1$ muuttujaa:
 koordinaatit $x_{1,k},\dots,x_{n,k}$ ja painon $w_k$, joten $N$-pisteisen
-kubatuurin yhtälöryhmässä on $N(n+1)$ muuttujaa. Jotta yhtälöryhmälle voitaisiin kuvitella
-olevan ratkaisu, olisi lupaavaa jos muuttujia olisi vähintään yhtä paljon kuin
-yhtälöitä $N(n+1)\geq\binom{n+d}{d}$, josta saadaan pisteiden määrälle alaraja $N\geq\frac{(n+d)!}{(n+1)!d!}$.
-Näin ollen esimerkiksi $n=20$ dimensioisen ja $d=3$ tarkkuusasteisen kubaatuurin selvittäminen
-vaatisi $\frac{23!}{20!3!}=1771$ yhtälöisen systeemin ratkaisua ja siinä tulisi olla vähintään  
-$N\geq\frac{23!}{21!3!}=85$ pistettä.
+kubatuurin yhtälöryhmässä on $N(n+1)$ muuttujaa.
 
-Yhtälöryhmän \eqref{eq_nonlinear_equations}
-ratkaisemiseksi voidaan nähdä kaksi eri lähestymistapaa, joista kumpikin johtaa
-omanlaiseensa teoriaan kubatuurisääntöjen muodostamiseksi:
-\begin{enumerate}
-  \item Yritetään ratkaista yhtälöryhmä suoraan
-  \item Yritetään löytää (ortogonaalisia)polynomeja, jotka häviävät kubatuurin tukipisteissä 
-\end{enumerate}
+Kubatuurisääntöjen
+olemassaolosta voidaan osoittaa muun muassa seuraavaa: aina voidaan valita $N=\dim[\field{P}_d^n]$
+pistettä $\v{x}_i$ siten, että yhtälöryhmä \eqref{eq_nonlinear_equations}, ja sitä kautta painot $w_i$,
+on ratkaistavissa \cite[s. 54]{Stroud1971}. Nämä säännöt ovat analogisia yhden 
+ulottuvuuden Newton-Cotes säännöille \cite[s. 54]{Stroud1971}. 
+Voidaan itse asiassa osoittaa vielä paljon enemmänkin.
+Niin sanotun Tchakaloffin teoreeman mukaan jos $N\leq \dim[\field{P}_d^n]$ ja $w(\v{x}) > 0 \; \forall \v{x}\in\Omega$,
+niin yhtälöryhmä \eqref{eq_nonlinear_equations} ei ole ainoastaan ratkaistavissa,
+vaan vieläpä siten että kaikki painot ovat positiivisia ja kaikki pisteet ovat
+integrointialueen $\Omega$ sisällä \cite[s. 26]{Cools1997}. Tchakaloffin
+teoreeman ylärajan $N= \dim[\field{P}_d^n]$ voidaan osoittaa olevan
+pienin yleispätevä yläraja, sillä on mahdollista konstruoida $n$
+-ulotteinen integroimisalue, jolle ei ole olemassa kubatuurisääntöä
+jossa olisi tätä vähemmän pisteitä \cite[s. 26]{Cools1997}. 
 
-\subsubsection{Invarianttiteoria}
+Yksiulotteisessa interpolatorisessa tapauksessa havaittiin, että valitsemalla
+pisteet tiettyjen ortogonaalisten polynomien nollakohdiksi, voitiin vaadittavien pisteiden määrää pienentää. 
+Päästiin myös selkeään lopputulokseen: säilyttääkseen tarkkuusasteen
+$m$, kvadratuurin painoista voitiin ``hävittää'' maksimissaan puolet ja saatiin Gaussin kvadratuuri.
+Kuinka siis pisteet $\v{x}_1,\dots,\v{x}_N$ tulisi valita, jotta
+$N$ olisi pienempi kuin $\dim[\field{P}_d^n]$? Tästä päästään monen muuttujan ortogonaalisiin polynomeihin.
 
-\subsubsection{Ideaaliteoria}
+\subsubsection{Moniulotteiset ortogonaaliset polynomit}
+
+Ensinnäkin, jokaista astelukua $d$ kohti on olemassa useampia
+moniulotteisia polynomeja. Yleensä ne normalisoidaan siten,
+että asteluvultaan $d$ olevia termejä on vain yksi ja sen
+kerroin on $1$. Gaussin kvadratuurien
+yleistystä koskee seuraava Mysovskikhin teoreema: välttämätön
+ehto sellaisen $N= \dim[\field{P}_k^n]$ pisteisen kubatuurisäännön
+olemassaololle, jonka tarkkkuusaste on $d=2k+1$, on se että normalisoiduilla
+$n$-ulotteisilla ja $k+1$ asteisilla ortogonaalisilla polynomeilla on $N$
+\emph{yhteistä} nollakohtaa. Valitettavasti tiedetään, että tämä ehto
+ei täyty esimerkiksi silloin, kun integroimisalueena on neliö tai kolmio
+ja painofunktio on vakio.\cite[s. 5]{Cools2002}. 
+
+% Joka tapauksessa, jos
+% tiedetään joukko normalisoituja ortogonaalisia polynomeja ja niiden yhteiset
+% nollakohdat, pelkästään tutkimalla näitä polynomeja ja nollakohtia on 
+% aina mahdollista selvittää voidaanko niitä käyttää kubatuurisäännön pisteinä.
+% Vastaavasti jokaiseen kubatuurisääntöön, jolle $N< \dim[\field{P}_d^n]$,
+% voidaan yhdistää ortogonaalisten polynomien joukko, jonka yhteiset nollakohdat
+% ovat kyseisen kubatuurisäännön pisteet \cite{Stroud1971}.
+
+Tarkastellaan kaikkien sellaisten ortogonaalisten polynomien joukkoa, jotka ``häviävät''
+(eli joilla on yhteiset nollakohdat) annetussa pistejoukossa. Selvästikin
+tällaisten polynomien joukko on enemmän kuin pelkästään vektoriavaruus. Sitä kutsutaankin
+\emph{polynomiseksi ideaaliksi}. Ideaaliteorian avulla voidaan todistaa useita
+kubatuureja koskevia teoreemoja, kuten esimerkiksi aiemmin mainittu Tchakaloffin teoreema
+sekä edellä mainittu Mysovskikhin teoreema \cite{Cools1997}. 
+Polynomisten ideaalien ja kubatuurien välinen yhteys voidaan muotoilla seuraavasti:
+olkoon $I$ $n$-ulotteinen integraali, $\{\v{x}_1,\ldots,\v{x}_N\}\subset \field{C}^n$ ja $U:=\{p\in \field{P}^n \mid p(\v{x_i}) \forall \v{x}_i\}$.
+Tällöin seuraavat lauseet ovat yhtenevät:
+\begin{itemize}
+  \item $p\in U\cap\field{P}_d^n\implies I[p]=0$
+  \item on olemassa kubatuurisääntö $Q$, jolle pätee $I[p]=Q[p]\forall p\in\field{P}_d^n$ ja jonka 
+  pisteiden määrä on maksimissaan $N=\dim[\field{P}_d^n]-\dim[U\cap\field{P}_d^n]$ 
+\end{itemize}
+Ideaaliteoriaan perustuen on mahdollista muodostaa joitakin kubatuureja myös käytännössä.
+Tällöin ongelmaksi tulee polynomi-ideaalin kannan löytäminen \cite[s. 39]{Cools1997}.
+Lisätietoa ideaaliteoriasta ja kubatuureista löytyy esimerkiksi lähteistä
+\cite[kpl. 6.3 ja 9]{Cools1997} ja \cite{Schmid1980}.
 
 
-\subsection{Kolmipisteinen Gauss-Hermite kubatuuri}
+\subsubsection{Symmetriasta}
+
+% Palataan hetkeksi yksiulotteiseen tilanteeseen, ja mietitään integrandia $f(x)=x^3$.
+% Jos integrointialue on symmetrinen $y$-koordinaattiakselin suhteen, niin saadaan
+% $\defint{-a}{a}{x^3}{x}=0$. Selvästi tämä pätee kaikille integrandeille $f(x)=cx^{(2k+1)}$,
+% jossa $c\in\R$ ja $k\in\field{N}$, koska tällöin $f(x)=-f(-x)$.
+% 
+% Integraalin symmetrian määrää sen \emph{symmetriaryhmä}. Olkoon $G$ jokin sellaisten lineaaristen ortogonaalikuvausten
+% joukko, jotka pitävät origon muuttumattomana. Sanotaan, että joukko $\Omega\subset\R^n$ on \emph{invariantti}
+% joukon $G$ suhteen, eli G-invariantti, jos pätee $g\Omega=\Omega$ kaikille $g\in G$. Vastaavasti funktion $f$ sanotaan olevan
+% invariantti joukon $G$ suhteen, jos pätee $f(\v{x})=f(g\v{x})$ kaikille $g\in G$. Integraalin sanotaan olevan  
+% invariantti joukon $G$ suhteen, mikäli sen integroimisalue ja painofunktio ovat invariantteja joukon $G$
+% suhteen. Jos nyt määritellään vielä pisteen $\v{x}$ \emph{G-kehä}:ksi joukko $\{g(\v{x}) \mid g\in G\}$, niin
+% kubatuurisäännön sanotaan olevan G-invariantti jos sillä approksimoidaan G-invarianttia integraalia ja
+% jos sen tukipisteiden joukko on G-kehien unioni. Lisäksi kaikilla tukipisteillä jotka kuuluvat samalle
+% G-kehälle on sama paino. 
+% 	Tarkastellaan esimerkiksi neliötä $\Omega=\{(x,y) \mid \vert x \vert \leq 1,\;\vert y \vert \leq 1\}$. Tällöin
+% $\Omega$ on invariantti ortogonaalikuvausten
+% \begin{align*}
+% 	 G=&
+% 	 \bigg\{\begin{pmatrix} 1&0\\0&1 \end{pmatrix},\;
+% 	 \begin{pmatrix} 0&1\\-1&0 \end{pmatrix},\;
+% 	 \begin{pmatrix} -1&0\\0&-1 \end{pmatrix},\;
+% 	 \begin{pmatrix} 0&-1\\1&0 \end{pmatrix}, \\
+% 	 &\begin{pmatrix} 1&0\\0&-1 \end{pmatrix},\;
+% 	 \begin{pmatrix} 0&1\\1&0 \end{pmatrix},\;
+% 	 \begin{pmatrix} -1&0\\0&1 \end{pmatrix},\;
+% 	 \begin{pmatrix} 0&-1\\-1&0 \end{pmatrix}\bigg\}
+% \end{align*}
+% suhteen ja mielivaltaisen pisteen $(a,b)\in\Omega$ G-kehä on joukko
+% \begin{equation*}
+% 	\{(a,b),\;(b,-a),\;(-a,-b),\;(-b,-a),\;(a,-b),\;(b,a),\;(-a,b),\;(-b,-a)\}.	 
+% \end{equation*}
+% 
+% 
+% Kaiken tämän määrittelyn hyöty kubatuurisääntöjen löytämiselle tulee ilmeiseksi niin
+% sanotun Sobolevin teoreeman myötä. Funktioavaruuden $\field{P}_d^n$ G-invariantit polynomit muodostavat
+% aliavaruuden $\field{P}_d^n(G):=\{p(\v{x})\in\field{P} \mid p(g\v{x})=p(\v{x})\; \forall g \in G\}$.  
+% Sobolevin teoreeman mukaan G-invariantin kubatuurisäännön tarkkuusaste on $d$,
+% jos se on tarkka kaikille \emph{G-invarianteille} polynomeille korkeintaan astetta $d$.
+% Toisin sanoen $\field{P}_n^d$:ssä tarkalle G-invariantille kubatuurisäännölle riittää, että ratkaisemme
+% sellaisen yhtälöryhmän \eqref{eq_nonlinear_equations}, jossa $f_i$:t ovat aliavaruuden $\field{P}_d^n(G)$ kanta. 
+
+Hyödyntämällä Sobolevin \emph{invarianttiteoriaa} \cite[s. 17]{Cools1997}, voidaan yhtälöryhmän \eqref{eq_nonlinear_equations}
+yhtälöiden määrää joissakin tapauksissa radikaalisti pienentää. Tämä tarkoittaa käytännössä sitä, että etsittävälle
+kubatuurisäännölle määrätään tietty rakenne, joka perustuu integroimisalueen ja painofunktion
+symmetriaan. Arasatnamin \emph{et al.} \cite[s. 5]{Arasaratnam2009} esimerkkiä mukaillen tarkastellaan
+kubatuurisääntöä, jossa $n=20$ ja $d=3$. Tällöin yhtälöryhmässä \eqref{eq_nonlinear_equations} on
+$\frac{23!}{20!3!}=1771$ yhtälöä. Mutta mikäli rajoitutaan tarkastelemaan \emph{täysin symmetristä}
+kubatuurisääntöä, saadaan $N=2n=40$ pisteinen kubatuurisääntö ratkaistuksi ainoastaan
+\emph{kahden} yhtälön avulla. Olkoon $X$ kubatuurisäännön $Q$ tukipisteiden joukko. 
+$Q$:n sanotaan olevan täysin symmetrinen, jos
+pätee \[ \v{a}=(a_1,\ldots,a_n)\in X \implies \v{b}=(s_1a_{p_1},\ldots,s_na_{p_n})\in X, \] jossa
+$s_i\in\{-1,1\}$ ja $\{p_1,\ldots,p_n\}$ on mikä tahansa indeksien ${1,\ldots,n}$
+permutaatio \cite{Arasaratnam2009,Cools1997}. Lisäksi kaikilla näin saaduilla pisteillä $\v{a}$ ja $\v{b}$ on oltava
+samat painot.
+
+On olennaista huomata, että ratkaisun helpottumista lukuunottamatta ei oe mitään erityistä syytä
+miksi kubatuurisäännön symmetrian pitäsi olla sama kuin integroimiaslueen tai painofunktion.
+Päin vastoin, pakottamalla kubatuurisääntö noudattamaan tiettyä rakennetta voidaan
+estyä löytämästä sääntöä, jonka pistemäärä on pienin mahdollinen. Hyvä esimerkki tästä
+on tarkkuusastetta 9 oleva sääntö neliölle ($C_2$). Tällöin täysin symmetrisessä
+säännössä on 20 pistettä, mutta minimisäännössä, joka on invariantti rotaation suhteen, on 17. 
+
+
+\subsubsection{Alarajoista}
+
+Erittäin olennaista kubatuurisääntöjen löytämiselle on arvio
+pienimmälle mahdolliselle tukipisteiden määrälle $N$.
+Jotta yhtälöryhmää \eqref{eq_nonlinear_equations} voitaisiin lähteä
+ratkaisemaan, olisi $N$:lle saatava jokin arvio, mieluiten
+tietysti pienin mahdollinen \cite[s. 27]{Cools1997}. 
+Myös edellä esitellyn polynomisen ideaalin kannan löytäminen
+on vahvasti riippuvainen $N:stä$ \cite[s. 141]{Cools2001},
+jopa siinä määrin että Coolsin mielestä kubatuurisääntöjen
+ja ortogonaalisten polynomien tutkiminen ei kannata
+ennen kuin alarajoista osataan sanoa enemmän \cite[s. 2]{Cools2002}.
+
+Polynomisten ideaalien ja kubatuurien välisestä yhteydestä on
+vain pieni matka erääseen hyvin yleiseen alarajaan. Tarkastellaan
+ensin $\field{P}_{k}^n$:n dimensiota, jos rajoitutaan pelkästään
+tietylle integroimiasalueelle $\Omega$. Jos alue on esimerkiksi
+$n$-pallon pinta $\Omega=\{\v{x}\mid \sum_{i=1}^nx_i^2=1\}$, niin kaikki
+$\left(\sum_{i=1}^nx_i^2=1\right)^p,\;p\in\field{N}$ ovat yhteneväisiä
+vakiopolynomin $1$ kanssa ja merkitään
+\[ 
+\dim[\field{P}_{k\vert\Omega}^n] = \binom{n+d}{n}-\binom{n+d-2}{n}.
+\] 
+Nyt jos kubatuuri on tarkka kaikille $\field{P}_{2k}^n$, niin saadaan alaraja 
+\begin{equation} 
+	N\geq \dim[\field{P}_{k\vert \Omega}^n].
+	\label{eq_general_lower_bound}
+\end{equation}
+
+Kaavan \eqref{eq_general_lower_bound} ongelma on, että useimmissa tapauksissa
+siihen ei päästä. Ne harvat tapaukset joissa tämä alaraja on saavutettu
+on listattu lähteessä \cite[s. 29]{Cools1997}. Yhtä tapausta lukuunottamatta
+niiden kaikkien tarkkuusaste on parillinen. Tämä ei ole yllättävää, sillä
+kaavan \eqref{eq_general_lower_bound} alaraja on sama tarkkuuasteille $d=2k$ ja $d=2k+1$.
+
+Toinen yleinen alaraja koskee keskipisteensä suhteen symmetrisiä kubatuureja.
+Niiden tarkkuusaste on pariton ja niitä koskevan alarajan osoitti yleisesti
+Möller \cite{Moller1976}. Olkoon keskipisteensä suhteen symmetrisen
+kubatuurisäännön tarkkuusaste $d=2k+1,\;k\in\field{N}_0$ ja olkoon
+$R_{2k}$($R_{2k+1}$) polynomiavaruus, johon kuuluu kaikki $\field{P}_{2k+1\vert \Omega}^n$:n parilliset(parittomat) 
+polynomit. Tällöin pisteiden määrälle $N$ pätee
+\begin{equation}
+	\begin{array}{ll}
+	N\geq 2\dim[R_k]-1,&\quad \text{jos k on parillinen ja 0 on yksi pisteistä}\\
+	N\geq 2\dim[R_k],&\quad \text{muulloin}
+	\end{array}	 
+\end{equation}
+
+
+
+
+
+% Ortogonaalisiin polynomeihin päädytään tarkastelemalla
+% yhtälöryhmää \eqref{eq_nonlinear_equations}. Oletetaan, että olemme
+% hakemassa $N<\dim[\field{P}_d^n]$ pisteistä kubatuuria $Q$ integraalille $I$. Tällöin on löydyttävä
+% $N$ lineaarisesti riippumatonta polynomia $U_1,\dots,U_N\in\field{P}_d^n$,
+% jotka eivät häviä kaikissa pisteissä $\v{x_i}$. Vastaavasti löytyy myös
+% $t=\dim[\field{P}_d^n]-N$ lineaarisesti riippumatonta polynomia $R_1,\dots,R_t\in\field{P}_d^n$
+% jotka häviävät jokaisessa pisteessä $\v{x_i}$ ja nyt $\{U_1,\dots,U_N,R_1,R_t\}$ muodostavat
+% $\field{P}_d^n$:n kannan.
+% 	
+% Sanotaan, että polynomi $f\in\field{P}^n$ on \emph{d-ortogonaalinen} integraalin $I$ suhteen,
+% jos $I[fg]=0,\; fg\in\field{P}_d^n$. Selvästi, koska $Q$:n tarkkuusaste on $d$, on oltava \[ I[R_ip]=Q[R_ip]=0,\;\forall R_ip\in\field{P}_d^n. \]
+% ja tällöin $R_i$:t ovat d-ortogonaalisia. Ortogonaalisten 
+
+
+\subsection{Radonin 7 pisteinen kaava tasoalueille}
+
+Seuraavaksi käydään läpi eräs klassinen esimerkki
+kubatuurisäännöstä, jonka johtamisessa on hyödynnetty
+moniulotteisia ortogonaalisia polynomeja. Tuloksena saatava
+sääntö sisältää lisäksi todistettavasti pienimmän mahdollisen
+määrän tukipisteitä kyseiselle tarkkuusasteelle, mikäli 
+integroimisalue täyttää erään myöhemmin näytettävän ehdon \cite[s. 133]{Cools2001}.
+
+Oletetaan siis nyt, että ollaan etsimässä approksimaatiota
+kaksiulotteiselle integraalille $I$.
+Ensinnäkin, kahdessa ulottuvuudessa voidaan muodostaa neljä
+normalisoitua kolmannen asteen ortogonaalista polynomia. Merkitään
+$P$:llä normalisoitua polynomia jonka asteluku on täsmälleen $3$ ja $Q$:lla
+kaikkia kaksiulotteisia polynomeja joiden asteluku $\leq$ 2. Tällöin saadaan
+kolmannen asteen ortogonaalisten polynomien kanta
+
+\begin{equation}
+	\begin{array}{rclrcl}
+		P^{3}_0&=&x^3+Q_0,\;&
+		P^{3}_1&=&x^2y+Q_1\\
+		P^{3}_2&=&xy^2+Q_2,\;&
+		P^{3}_3&=&y^3+Q_3
+	\end{array} 
+\end{equation}
+
+Voidaan näyttää, että maksimissaan kolmella kolmannen
+asteen ortogonaalisella polynomilla, olkoot ne $K_1$,$K_2$ ja $K_3$,  
+on seitsemän yhteistä nollakohtaa ja nämä nollakohdat
+ovat sellaisen kubatuurin pisteet, jonka tarkkuusaste on $5$. 
+Ortogonaalisten polynomien välille
+voidaan muodostaa riippuvuus $xK_1+yK_2=K_3$ \cite[s. 103]{Stroud1971}. 
+Kahdelle ensimmäiselle saadaan
+saadaan edellä esitellyn kannan avulla muodot
+\[
+K_1=\alpha P^3_1+\beta P^3_2+\gamma P_3^3,\;K_2=-\alpha P^3_0-\beta P^3_1+\gamma P_2^3,
+\]
+jossa $\alpha$,$\beta$ ja $\gamma$ täytyy valita siten, että myös $K_3$ on kolmannen
+asteen ortogonaalinen polynomi. Jos nyt määritellään vakiot
+\[ 
+	\begin{array}{rcl}
+		A&=&\int_{\Omega}\left(P_0^3P_2^3-P_1^3P_1^3\right)\dd x \ds y  \\
+		B&=&\int_{\Omega}\left(P_0^3P_3^3-P_1^3P_2^3\right)\dd x \ds y \\
+		C&=&\int_{\Omega}\left(P_1^3P_3^3-P_2^3P_2^3\right)\dd x \ds y ,
+	\end{array}
+\]
+niin parametrien $\alpha$,$\beta$ ja $\gamma$ ratkaisemiseksi saadaan yhtälöryhmä
+
+\[
+	\begin{bmatrix}
+		0&A&B\\
+		-A&0&C\\
+		-B&-C&0
+	\end{bmatrix}
+	\begin{bmatrix}
+		\alpha\\
+		\beta\\
+		\gamma
+	\end{bmatrix}.
+\]
+
+Nyt jos pätee 
+\begin{equation} 
+	\label{eq_radon_constraint}
+	A^2+B^2+C^2 >0,
+\end{equation}
+niin parametrit voidaan määrittää skalaarikerrointa vaille. Muutoin parametrit voidaan
+valita vapaasti. Ehto \eqref{eq_radon_constraint} on selvästikin riippuvainen vain
+integrointialueesta ja painofunktiosta. Sellainen alue, jolle ehto \eqref{eq_radon_constraint}
+ei päde on onnistuttu muodostamaan ja tällöin on mahdollista muodostaa kubatuurisääntö
+jossa on vain $6$ pistettä. Yleisille ingreoimisalueille, kuten neliölle ja vakiopainofunktiolle, 
+ehto \eqref{eq_radon_constraint} kuitenkin pätee. Kun parametrit on laskettu matriisiyhtälön avulla,
+saadaan selville $K_1$ ja $K_2$. $K_3$ saatiin ehdosta $xK_1+yK_2=K_3$.
+
+Jos valitaan integroimisalueeksi neliö $C_2=\{(x,y)\mid \vert x \vert \leq 1,\;\vert y \vert \leq 1\}$
+ja painofunktioksi vakio $1$, niin ratkaisemalla edellä esitellyt yhtälöt saadaan
+kubatuuri:
+
+\begin{equation}
+	\begin{array}{rl}
+		\int_{C_2}f(x,y)\dd x \ds y \approx& \frac{8}{7}f(0,0)+\frac{5}{9}\sum_{i=1}^4f\left(\pm\sqrt{\frac{1}{3}},\pm\sqrt{\frac{3}{5}}\right)+\\
+		&\frac{20}{63}\left(f\left(\sqrt{\frac{14}{15}},0\right)+f\left(-\sqrt{\frac{14}{15}},0\right)\right)
+	\end{array}
+	\label{eq_radon_square} 
+\end{equation}
+ 
+
+
+
+
+
+
 
 \section{Koeasetelma}
 
