@@ -986,7 +986,7 @@ Nyt jos kubatuuri on tarkka kaikille $\field{P}_{2k}^n$, niin saadaan alaraja
 \end{equation}
 
 Kaavan \eqref{eq_general_lower_bound} ongelma on, että useimmissa tapauksissa
-siihen ei päästä. Ne harvat tapaukset joissa tämä alaraja on saavutettu
+sitä ei ole mahdollista saavuttaa. Ne harvat tapaukset joissa tämä alaraja on saavutettu
 on listattu lähteessä \cite[s. 29]{Cools1997}. Yhtä tapausta lukuunottamatta
 niiden kaikkien tarkkuusaste on parillinen. Tämä ei ole yllättävää, sillä
 kaavan \eqref{eq_general_lower_bound} alaraja on sama tarkkuuasteille $d=2k$ ja $d=2k+1$.
@@ -994,15 +994,48 @@ kaavan \eqref{eq_general_lower_bound} alaraja on sama tarkkuuasteille $d=2k$ ja 
 Toinen yleinen alaraja koskee keskipisteensä suhteen symmetrisiä kubatuureja.
 Niiden tarkkuusaste on pariton ja niitä koskevan alarajan osoitti yleisesti
 Möller \cite{Moller1976}. Olkoon keskipisteensä suhteen symmetrisen
-kubatuurisäännön tarkkuusaste $d=2k+1,\;k\in\field{N}_0$ ja olkoon
-$R_{2k}$($R_{2k+1}$) polynomiavaruus, johon kuuluu kaikki $\field{P}_{2k+1\vert \Omega}^n$:n parilliset(parittomat) 
+kubatuurisäännön tarkkuusaste $d=2s+1,\;s\in\field{N}_0$ ja olkoon
+$R_{2k}^n$ polynomiavaruus, johon kuuluu kaikki tarkkuusasteen $2k$ parilliset
+polynomit ja  $R_{2k+1}^n$ polynomiavaruus, johon kuuluu kaikki tarkkuusasteen $2k+1$ parittomat
 polynomit. Tällöin pisteiden määrälle $N$ pätee
 \begin{equation}
-	\begin{array}{ll}
-	N\geq 2\dim[R_k]-1,&\quad \text{jos k on parillinen ja 0 on yksi pisteistä}\\
-	N\geq 2\dim[R_k],&\quad \text{muulloin}
-	\end{array}	 
+	N\geq 2\dim[R_{s-1}^n]-
+	\begin{cases}
+		1& \text{jos s on parillinen,}\\
+	 	0& \text{jos s on pariton.}
+	\end{cases}
+	\label{eq_moller1}	 
 \end{equation}
+Ilmaistuna eksplisiittisemmin kaavasta \eqref{eq_moller1} saadaan:
+\begin{equation}
+	N\geq \binom{n+s-1}{n}+
+	\begin{cases}
+		\sum_{k=1}^{n-1}2^{k-n}\binom{k+s-1}{k}& \text{jos s on parillinen,}\\
+	 	\sum_{k=1}^{n-1}(1-2^{k-n})\binom{k+s-2}{k}& \text{jos s on pariton.}
+	\end{cases}
+	\label{eq_moller2}	 
+\end{equation}
+Möllerin alarajaa on havainnollistettu kuvassa \ref{fig_mollerpoints},
+jossa alarajan mukainen pistemäärä on kuvattu ulottuvuuden $n$
+ja tarkkuusasteen $d=2s-1$ funktiona.
+\scalefig{fig_mollerpoints}{1.0}{Möllerin alaraja keskipisteensä
+suhteen symmetrisille kubatuureille ulottuvuuden ja tarkkuusasteen funktiona}
+Kuten kuvasta \ref{fig_mollerpoints} nähdään, lähtee
+vaadittavien pisteiden määrä jyrkkään nousuun suurin piirtein 
+kun tarkkuusaste ja ulottuvuuksien määrä on ylittänyt kymmenen.
+Jos tarkkuusaste pidetään melko matalana, niin pisteiden
+määrä ei kasva liian suureksi edes suurilla $n$:än arvoilla.
+Esimerkiksi kun $n=100$, saadaan pisteiden
+vähimmäismääräksi tarkkuusasteilla $d=5$ ja $d=7$
+vastaavasti $N=10101$ ja $N=343600$. Hinrichs \emph{et al} ovat
+vastikään johtaneet kubatuurit, jotka saavuttavat
+näissä tilanteissa arvot $N=10701$ ja $N=404001$ 
+(integroimisalueena n-kuutio ja vaatimuksena symmetrinen 
+tulomuotoinen painofunktio) \cite{Hinrichs2007}. 
+Nämä ovat ovat jo hyvin lähellä minimiä.
+Möllerin alarajan perusteella voidaan joka tapauksessa päätellä,
+että suuren dimension ja tarkkuuasteen ongelmissa ratkaisua
+täytyy etsiä muualta kuin interpolatorisista kubatuureista.  
 
 
 
@@ -1110,16 +1143,15 @@ kubatuuri:
  
 \section{Koeasetelma}
 
-Valittujen työssä esiteltyjen menetelmien suorituskykyä arvioidaan kahden koetilanteen avulla.
-Ensimmäisessä koetilanteessa keskitytään approksimoimaan kahden muuttujan
+Koeasetelmassa keskitytään approksimoimaan kahden muuttujan
 funktion integraalia
 \begin{equation}
 	I_1[f(x,y)]=\int_{S_2}f(x,y)\dd x \ds y. 
 \end{equation} 
 Integrandeina käytetään funktioita
 \begin{align*}
-	F_1(x,y)=e^{-\frac{1}{2(1-0.7^2)}\left(x^2+y^2-2*0.7*xy)\right)}\\
-	F_2(x,y)=\sqrt{\vert xy \vert},
+	F_1(x,y)=&e^{-\frac{1}{2(1-0.7^2)}\left(x^2+y^2-2*0.7*xy)\right)}\\
+	F_2(x,y)=&\sqrt{\vert xy \vert},
 \end{align*}
 joita on havainnollistettu kuvassa \ref{fig_3dfunc}. $F_1$ on skalaarikerrointa
 lukuunottamatta kaksiulotteinen normaalijakauma, jonka odotusarvo on origo ja jonka
@@ -1134,19 +1166,36 @@ integraalin symmetriaa jakamalla integraali neljään identtiseen osaan, jolloin n
 lainkaan. Nyt on kuitenkin pyritty konstruoimaan kubatuurien kannalta
 haastava tilanne ja integraalia ei jaeta osiin.
 
-Ensimmäisen koetilanteen kubatuureiksi valitaan seuraavat menetelmät:
+\scalefig{fig_3dfunc}{1.00}{Ensimmäisen koetilanteen testifunktioiden kuvaajat. Integroimisaluetta $[-1,1]^2$ 
+on pyritty havainnollistamaan läpinäkyvällä suorakulmaisella särmiöllä. Integraalin arvo
+on särmiön ja funktion kuvaajan rajaama tilavuus. }
+
+
+Kubatuureiksi valitaan seuraavat menetelmät:
 \begin{itemize}
   \item $Q_{3^2}[f]:=9$-pisteinen tulosääntö, joka perustuu aiemmin
   johdettuun $3$-pisteiseen Gaussin kvadratuuriin
   \item $Q_{7}[f]:=7$-pisteinen Radonin minimisääntö
+  \item $Q_{10^2}[f]:=100$-pisteinen tulosääntö, joka perustuu $10$-pisteiseen Gaussin kvadratuuriin
   \item $Q_{68}:=68$-pisteinen rotaatioinvariantti korkean tarkkuusasteen kubatuuri.
 \end{itemize}
 $Q_{3^2}$:n yleinen tarkkuusaste on $5$, kuten myös $Q_{7}$:n tarkkuusaste. 
-$Q_{68}$:n tarkkuusaste on $19$ ja se on johdettu aiemmin esiteltyä invarianttimenetelmää käyttäen \cite{Omelyan2006}. 
-Sen tukipisteiden määrä on myös pienin tunnettu sarjassaan.
+$Q_{10^2}$:n yleinen tarkkuusaste on $19$. $Q_{68}$:n tarkkuusaste on $19$ 
+ja se on johdettu aiemmin esiteltyä invarianttimenetelmää käyttäen \cite{Omelyan2006}. 
+Sen tukipisteiden määrä on myös pienin tunnettu sarjassaan. Kunkin kubatuurin
+käyttämät tukipisteet on merkitty kuvaan \ref{fig_points}, jossa pisteen
+tummuus vastaa sen saamaa painoa (mitä tummempi, sitä suurempi paino). 
+$Q_{10^2}$:n ja $Q_{10^2}$:n pisteiden jakaumat 
+heijastavat niiden tulomuotoa. Selvästi on myös havaittavissa, että
+pisteiden jakauma on tiheämpi ja painot suuremmat alueen reunoilla kuin sen keskellä.
 
-Taulukossa \ref{table_results1} on esitetty ensimmäisen koetilanteen tulokset.
-Siihen lisäksi laskettu absoluuttinen virhe, joka on saatu vertaamalla
+\scalefig{fig_points}{0.7}{Koasetelmassa käytettyjen kubatuurien tukipisteet integroimisalueessa $S_2$. Pisteen tummuus vastaa
+sen saamaa painoa.}
+
+\section{Tulokset}
+
+Koeasetelman tulokset on esitetty taulukossa \ref{table_results1}.
+Siihen lisäksi laskettu suhteellinen virhe $E[f]$, joka on saatu vertaamalla
 kubatuurin tulosta oikeaan tulokseen. Ensimmäisen integrandin tapauksessa
 on hyödynnetty MATLAB:in $mvncdf$ funktiota, jonka avulla oikean
 tuloksen voi laskea mielivaltaisella tarkkuudella. Toiselle integrandille taas
@@ -1155,18 +1204,43 @@ virhearvion.
 
 \begin{table}[h!]
 	\centering
-	\topcaption{Ensimmäisen koetilanteen tulokset}
+	\topcaption{Koeasetelman tulokset}
 	\input{matlab/results1.tex}
 	\label{table_results1}
 \end{table}
 
+Tulosten perusteella kaikki neljä kubatuurisääntöä suoriutuivat
+$F_1$:n integroimisesta hyväksyttävästi. $Q_7$:n $2.6\%$:n virhe on tosin
+melkein $9$ kertaa suurempi kuin toiseksi suurin virhe. Tämä johtuu
+todennäköisesti siitä, että $Q_{3^2}$ integroi tarkasti
+hieman suuremman joukon polynomeja kuin $Q_7$ ($Q_{3^2}$:n \emph{yleinen} tarkkuusaste
+on sama kuin $Q_7$:n tarkkuusaste). Esimerkiksi $Q_{3^2}[x^5y^5]=0$, mutta
+$Q_{7}[x^5y^5]\neq 0$. Kuten oli odotettavissa, $Q_{10^2}$ ja $Q_{68}$ saavuttivat
+erittäin tarkan tuloksen.  Se, että $Q_{10^2}$:n absoluuttinen virhe oli
+luokkaa $10^{-13}$ ja $Q_{68}$:n luokkaa $10^{-9}$ johtunee myös tässä
+tapauksessa tulosäännön yleisestä tarkkuusasteesta.
 
-\scalefig{fig_3dfunc}{1.00}{Ensimmäisen koetilanteen testifunktioiden kuvaajat. Integroimisaluetta $[-1,1]^2$ 
-on pyritty havainnollistamaan läpinäkyvällä suorakulmaisella särmiöllä. Integraalin arvo
-on särmiön ja funktion kuvaajan rajaama tilavuus. }
+$F_2$ tuotti alhaisen tarkkuusasteen kubatuureille $Q_{3^2}$ ja $Q_7$
+huomattavia ongelmia. Kummankaan tulos ei ole käyttökelpoinen, mutta
+$Q_{3^2}$:n virhe on todella suuri. Tämän täytyy johtua tukipisteiden
+sijoittumisesta epäedullisesti $F_2$:n integroinnin suhteen.
+Korkean tarkkuusasteen säännöt saavuttavat hankalasta integrandista 
+huolimatta melko hyvän tuloksen ja tulosäännön hiukan pienempi 
+virhe johtunee jälleen sen yleisestä tarkkuusasteesta. 
+Kuten aiemmin jo todettiin, parempiin
+tuloksiin pääsemiseksi tulisi hyödyntää integraalin symmetriaa.
 
 
-\section{Tulokset}
+
+
+
+ 
+ 
+
+
+
+
+
 
 \section{Yhteenveto}
 \clearpage{}

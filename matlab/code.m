@@ -139,7 +139,8 @@ c = 0.7;
 f2=@(x,y,c) exp(-1*(2*(1-c^2))^-1*(x.^2+y.^2-2*c*x.*y));
 
 [cdf,cErr] = mvncdf([a a],[b b],[],[1 c; c 1],statset('TolFun',1e-14));
-correct = cdf*2*pi*sqrt(1-c^2);
+correct = [];
+correct(1) = cdf*2*pi*sqrt(1-c^2);
 Z = f2(X,Y,c);
 surf(X,Y,Z,'FaceAlpha',0.8,'EdgeAlpha',0.3);
 %axis([-2 2 -2 2 -1 1]);
@@ -156,7 +157,7 @@ title('$$F_1=e^{-\frac{1}{1.02}\left(x^2+y^2-1.4xy\right)}$$','interpreter','lat
 
 subplot(1,2,2);
 f3=@(x,y) abs(x.*y).^0.5;%+abs(x)-0.5*y;
-correct2 = dblquad(f3,a,b,a,b,1e-8);
+correct(2) = dblquad(f3,a,b,a,b,1e-8);
 Z = f3(X,Y);
 h = surf(X,Y,Z,'FaceAlpha',0.8,'EdgeAlpha',0.3,'FaceColor','interp');
 shading faceted;
@@ -178,7 +179,7 @@ axis square;
 title('$$F_2=\sqrt{\vert xy \vert}$$','interpreter','latex','FontSize',14);
 %get(h);
 
-%% print figure in pdf
+%% print figure in jpg
 
 %previewfig(gcf,'Color','rgb');
 %exportfig(gcf,'../fig_3dfunc.png','Format','png','Color','rgb','Renderer','opengl');
@@ -196,54 +197,170 @@ set(gcf, 'PaperPositionMode', 'manual');
 set(gcf, 'PaperPosition', [0 0.01 figLength figHeight]);
 print(gcf, '-dpdf', '../fig_3dfunc.pdf');
 
-%% 9-pisteinen tulosääntö
+%% test results
 
-points = 3;
-prodRule2 = gauss2D(@(x,y)f2(x,y,c),points-1);
-err = abs(correct-prodRule2);
-relErr = (err/correct)*100;
-fprintf('gauss2D-%d: %.14f, err: %.14f\n',points^2,prodRule2,err);
-results(1,1:2)=[prodRule2 relErr];
+contenders = {
+    @(f)gauss2D(f,3-1); % tulosääntö d=5, N=9
+    @radonSquare; % radon d=5,N=7
+    @(f)gauss2D(f,10-1); % tulosääntö d=19, N=100
+    @minimal19; %minimaalinen d=19,N=68,S_2
+};
+functions = {@(x,y)f2(x,y,c);f3};
+results = zeros(length(contenders),2*length(functions));
+colLabels = {'Kubatuuri' '$Q[F_1]$' '$E[F_1]$' '$Q[F_2]$' '$E[F_2]$'};
+rowLabels = {'$Q_{3^2}$' '$Q_{7}$' '$Q_{68}$' '$Q_{10^2}$'};
+rowLabels2 = {'$Q_{3^2}$' '$Q_{7}$' '$Q_{68}$' '$Q_{10^2}$'};
+rowLabels2(3) = rowLabels(4);
+rowLabels2(4) = rowLabels(3);
+figure;
+colormap(0.7*gray);
+for i = 1:length(contenders)
+    for j=1:length(functions)
+       rule = contenders{i};
+       [res X Y w] =  rule(functions{j});       
+       
+       err = abs(correct(j)-res);
+       relErr = (err/correct(j))*100;
+       results(i,(2*j-1):2*j)=[res relErr]; 
+    end
+    subplot(2,2,i);
+    scatter(X,Y,14,w,'filled');
+    axis square;
+    %axes([-1.1 1]);
+    set(gca,'XLim',1.1*get(gca,'XLim'),'YLim',1.1*get(gca,'YLim'),'Box','on');
+    %set();
+    drawnow;
+    if(length(X)==68)
+        qp = [X Y];
+        %disp(qp);
+    end
+    title(rowLabels2{i},'interpreter','latex','FontSize',14);
+    %disp(size(X));
+end
 
 
-prodRule2 = gauss2D(f3,points-1);
-err = abs(correct2-prodRule2);
-relErr = (err/correct)*100;
-fprintf('gauss2D-%d: %.14f, err: %.14f\n',points^2,prodRule2,err);
-results(1,3:4)=[prodRule2 relErr];
+
+matrix2latex(results,'~/Documents/School/Kandi/matlab/results1.tex','rowLabels',rowLabels,...
+    'columnLabels',colLabels,'alignment','c','format',{'$%.5f$' '$%.1f\\%%$' '$%.5f$' '$%.1f\\%%$'});
+
+%exportfig(gcf,'~/Documents/School/Kandi/fig_points.pdf','Format','pdf');
+
+figLength = 6;
+xyRatio = 16/10;
+figHeight = (1/xyRatio)*figLength;
+%axis([-2 2 0 1.02]);
+%set(gca, 'Position', get(gca, 'OuterPosition') - ...
+%    get(gca, 'TightInset') * [-1 0 1 0; 0 -1 0 1; 0 0 1 0; 0 0 0 1]*1.7);
+set(gcf, 'PaperUnits', 'inches');
+set(gcf, 'PaperSize', [figLength figHeight]);
+set(gcf, 'PaperPositionMode', 'manual');
+set(gcf, 'PaperPosition', [0 0.01 figLength figHeight]);
+print(gcf, '-dpdf','~/Documents/School/Kandi/fig_points.pdf');
 
 
-%% radon 7-pisteinen
 
-radRule = radonSquare(@(x,y)f2(x,y,c));
-err = abs(correct-radRule);
-relErr = (err/correct)*100;
-fprintf('radon: %.5f, err: %.5f\n',radRule,abs(correct-radRule));
-results(2,1:2)=[radRule relErr];
 
-radRule = radonSquare(f3);
-err = abs(correct2-radRule);
-relErr = (err/correct)*100;
-fprintf('radon: %.5f, err: %.5f\n',radRule,abs(correct2-radRule));
-results(2,3:4)=[radRule relErr];
+%%
+%disp((results(1,3)-correct(2))/(results(2,3)-correct(2)));
+fprintf('correct2: %.12f\n',correct(2));
+fprintf('minimal19: %.12f, err: %0.5g\n',results(4,3),abs(correct(2)-results(4,3)));
+fprintf('prod100: %.12f, err: %0.5g\n',results(3,3),abs(correct(2)-results(3,3)));
+smart = 2*minimal19_s(f3,0.5,0.5);
+fprintf('smartmin19: %.12f, err: %0.12f\n',smart,abs(correct(2)-smart));
 
-%% minimaalinen d=19,N=68,S_2
-minim = minimal19(@(x,y)f2(x,y,c));
-err = abs(correct-minim);
-relErr = (err/correct)*100;
-fprintf('minimal19: %.12f, err: %.12f\n',minim,abs(correct-minim));
-results(3,1:2)=[minim relErr];
 
-minim = minimal19(f3);
-err = abs(correct2-minim);
-relErr = (err/correct)*100;
-fprintf('minimal19: %.12f, err: %.12f\n',minim,abs(correct2-minim));
-results(3,3:4)=[minim relErr];
+%%
+% %%     
+% points = 3;
+% prodRule2 = ;
+% err = abs(correct-prodRule2);
+% relErr = (err/correct)*100;
+% fprintf('gauss2D-%d: %.14f, err: %.14f\n',points^2,prodRule2,err);
+% 
+% 
+% 
+% prodRule2 = gauss2D(f3,points-1);
+% err = abs(correct2-prodRule2);
+% relErr = (err/correct)*100;
+% fprintf('gauss2D-%d: %.14f, err: %.14f\n',points^2,prodRule2,err);
+% results(1,3:4)=[prodRule2 relErr];
+% 
+% 
+% %% radon 7-pisteinen
+% 
+% radRule = radonSquare(@(x,y)f2(x,y,c));
+% err = abs(correct-radRule);
+% relErr = (err/correct)*100;
+% fprintf('radon: %.5f, err: %.5f\n',radRule,abs(correct-radRule));
+% results(2,1:2)=[radRule relErr];
+% 
+% radRule = radonSquare(f3);
+% err = abs(correct2-radRule);
+% relErr = (err/correct)*100;
+% fprintf('radon: %.5f, err: %.5f\n',radRule,abs(correct2-radRule));
+% results(2,3:4)=[radRule relErr];
+% 
+% %% tulosääntö d=19,N=100,S_2
+% minim = minimal19(@(x,y)f2(x,y,c));
+% err = abs(correct-minim);
+% relErr = (err/correct)*100;
+% fprintf('minimal19: %.12f, err: %.12f\n',minim,abs(correct-minim));
+% results(3,1:2)=[minim relErr];
+% 
+% minim = minimal19(f3);
+% err = abs(correct2-minim);
+% relErr = (err/correct)*100;
+% fprintf('minimal19: %.12f, err: %.12f\n',minim,abs(correct2-minim));
+% results(3,3:4)=[minim relErr];
+% 
+% %% minimaalinen d=19,N=68,S_2
+% minim = minimal19(@(x,y)f2(x,y,c));
+% err = abs(correct-minim);
+% relErr = (err/correct)*100;
+% fprintf('minimal19: %.12f, err: %.12f\n',minim,abs(correct-minim));
+% results(3,1:2)=[minim relErr];
+% 
+% minim = minimal19(f3);
+% err = abs(correct2-minim);
+% relErr = (err/correct)*100;
+% fprintf('minimal19: %.12f, err: %.12f\n',minim,abs(correct2-minim));
+% results(3,3:4)=[minim relErr];
 
-%% exporttaa tulokset
+%% moller nodes
 
-matrix2latex(results,'~/Documents/School/Kandi/matlab/results1.tex','rowLabels',{'$Q_{3^2}$' '$Q_{7}$' '$Q_{68}$'},...
-    'columnLabels',{'$Q[F_1]$' '$E[F_1]$' '$Q[F_2]$' '$E[F_2]$'},'alignment','c','format',{'$%.5f$' '$%.1f\\%%$' '$%.5f$' '$%.1f\\%%$'});
+s = 2:15;
+n = 1:30;
+
+[S,N] = meshgrid(s,n);
+Z = zeros(size(S));
+for i=1:size(S,1)
+    for j=1:size(S,2)
+        Z(i,j)=mollerNodes(N(i,j),S(i,j));
+    end
+end
+
+s = surf(N,2*S-1,min(2e6,Z));
+xlabel('ulottuvuus');
+ylabel('tarkkuusaste');
+zlabel('pisteiden määrä');
+set(gca,'XMinorTick','on','YMinorTick','on');
+set(s,'EdgeColor','interp');
+%exportfig(gcf,'~/Documents/School/Kandi/fig_mollerpoints.pdf','Format','pdf','Color','rgb');
+%% save
+
+figLength = 6;
+xyRatio = 16/10;
+figHeight = (1/xyRatio)*figLength;
+set(gcf, 'PaperUnits', 'inches');
+set(gcf, 'PaperSize', [figLength figHeight]);
+set(gcf, 'PaperPositionMode', 'manual');
+set(gcf, 'PaperPosition', [0 0.01 figLength figHeight]);
+print(gcf, '-dpdf','~/Documents/School/Kandi/fig_mollerpoints.pdf');
+
+
+
+
+
 
 
 
