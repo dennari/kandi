@@ -1108,14 +1108,63 @@ kubatuuri:
 	\label{eq_radon_square} 
 \end{equation}
  
-
-
-
-
-
-
-
 \section{Koeasetelma}
+
+Valittujen työssä esiteltyjen menetelmien suorituskykyä arvioidaan kahden koetilanteen avulla.
+Ensimmäisessä koetilanteessa keskitytään approksimoimaan kahden muuttujan
+funktion integraalia
+\begin{equation}
+	I_1[f(x,y)]=\int_{S_2}f(x,y)\dd x \ds y. 
+\end{equation} 
+Integrandeina käytetään funktioita
+\begin{align*}
+	F_1(x,y)=e^{-\frac{1}{2(1-0.7^2)}\left(x^2+y^2-2*0.7*xy)\right)}\\
+	F_2(x,y)=\sqrt{\vert xy \vert},
+\end{align*}
+joita on havainnollistettu kuvassa \ref{fig_3dfunc}. $F_1$ on skalaarikerrointa
+lukuunottamatta kaksiulotteinen normaalijakauma, jonka odotusarvo on origo ja jonka
+muuttujien välinen korrelaatio on $0.7$. Se on \emph{sileä} funktio, joten polynomiapproksimaatioihin
+perustuvien kubatuurien konvergenssin pitäisi olla nopea. Mikäli muuttujien välillä ei olisi
+korrelaatiota, voisi tällaisen integrandin integroida yksiulotteisten integraalien tulona.
+ 
+$F_2$ taas valittu siten, että sen osittaisderivaatoilla on epäjatkuvuuskohtia. Tällaisen
+integrandin polynomiapproksimaation konvergenssi on huomattavasti hitaampi kuin sileän
+funktion tapauksessa. Todellisuudessa tässä tilanteessa kannattaisi hyödyntää
+integraalin symmetriaa jakamalla integraali neljään identtiseen osaan, jolloin näiden epäjatkuvuuskohtien yli ei tarvitsisi integroida
+lainkaan. Nyt on kuitenkin pyritty konstruoimaan kubatuurien kannalta
+haastava tilanne ja integraalia ei jaeta osiin.
+
+Ensimmäisen koetilanteen kubatuureiksi valitaan seuraavat menetelmät:
+\begin{itemize}
+  \item $Q_{3^2}[f]:=9$-pisteinen tulosääntö, joka perustuu aiemmin
+  johdettuun $3$-pisteiseen Gaussin kvadratuuriin
+  \item $Q_{7}[f]:=7$-pisteinen Radonin minimisääntö
+  \item $Q_{68}:=68$-pisteinen rotaatioinvariantti korkean tarkkuusasteen kubatuuri.
+\end{itemize}
+$Q_{3^2}$:n yleinen tarkkuusaste on $5$, kuten myös $Q_{7}$:n tarkkuusaste. 
+$Q_{68}$:n tarkkuusaste on $19$ ja se on johdettu aiemmin esiteltyä invarianttimenetelmää käyttäen \cite{Omelyan2006}. 
+Sen tukipisteiden määrä on myös pienin tunnettu sarjassaan.
+
+Taulukossa \ref{table_results1} on esitetty ensimmäisen koetilanteen tulokset.
+Siihen lisäksi laskettu absoluuttinen virhe, joka on saatu vertaamalla
+kubatuurin tulosta oikeaan tulokseen. Ensimmäisen integrandin tapauksessa
+on hyödynnetty MATLAB:in $mvncdf$ funktiota, jonka avulla oikean
+tuloksen voi laskea mielivaltaisella tarkkuudella. Toiselle integrandille taas
+on käytetty MATLAB:in funktiota $dblquad$, joka myös kykenee tarjoamaan 
+virhearvion.
+
+\begin{table}[h!]
+	\centering
+	\topcaption{Ensimmäisen koetilanteen tulokset}
+	\input{matlab/results1.tex}
+	\label{table_results1}
+\end{table}
+
+
+\scalefig{fig_3dfunc}{1.00}{Ensimmäisen koetilanteen testifunktioiden kuvaajat. Integroimisaluetta $[-1,1]^2$ 
+on pyritty havainnollistamaan läpinäkyvällä suorakulmaisella särmiöllä. Integraalin arvo
+on särmiön ja funktion kuvaajan rajaama tilavuus. }
+
 
 \section{Tulokset}
 
