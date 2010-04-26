@@ -1,6 +1,6 @@
 
 %% Käytä näitä, jos kirjoitat suomeksi
-\documentclass[finnish,12pt,twoside]{article}
+\documentclass[finnish,12pt]{article}
 \usepackage{aaltothesis}
 \usepackage[pdftex]{graphicx} 
 \usepackage{topcapt} % taulukon otsikot toimivat myös taulukon päällä komennolla \topcaption
@@ -105,11 +105,11 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 
 \place{Espoo}
 %% Kandidaatintyön päivämäärä on sen esityspäivämäärä! 
-\date{10.5.2010}
+\date{\today}
 
 %% Kandidaattiseminaarin vastuuopettaja TAI
 %% Diplomityön valvoja
-\supervisor{Prof. Markus Turunen}{Prof. Markus Turunen}
+\supervisor{D.Sc.(Tech.) Markus Turunen}{TkT Markus Turunen}
 
 %% Kandidaatintyön ohjaaja(t) TAI
 %% Diplomityön ohjaaja(t)
@@ -120,26 +120,31 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 
 %% Tehdään kansilehti
 \makecoverpage
+% Suomenkielinen tiivistelmä
+%
+% Tiivistelmän avainsanat
+\keywords{kvadratuuri, kubatuuri, gaussinen kvadratuuri, numeerinen integrointi, polynomiapproksimaatio}
+% Tiivistelmän tekstiosa
+\begin{abstractpage}[finnish]
+Tässä kandidaatintyössä kartoitetaan numeerisia integroimismenetelmiä, eli
+kvadratuureja, joita kutsutaan usean ulottuvuuden tapauksessa kubatuureiksi.
+Työssä esitetään erilaisia keinoja integraalien
+approksimointiin, rajoittuen interpolatorisiin kvadratuureihin
+ja kubatuureihin, jotka ovat tarkkoja tietyn asteluvun polynomeille.
 
+Työn kokeellisessa osiossa vertaillaan neljää eri kubatuuria
+kaksiulotteisten integraalien ratkaisemiseksi. Interpolatoristen
+kubatuurien eduiksi esitetään vaadittavien funktioevaluaatioiden
+pientä määrää ja suurta tarkkuutta verrattuna kilpaileviin menetelmiin.
+Ongelmana on kuitenkin tällaisten sääntöjen määrittämisen vaikeus.
 
-%% Suomenkielinen tiivistelmä
-%% 
-%% Tiivistelmän avainsanat
-%\keywords{kvadratuuri, kubatuuri, gaussinen kvadratuuri, numeerinen integrointi, polynomiapproksimaatio}
-%% Tiivistelmän tekstiosa
-%\begin{abstractpage}[finnish]
-%  Tiivistelmässä on lyhyt selvitys (noin 100 sanaa)
-%  kirjoituksen tärkeimmästä sisällöstä: mitä ja miten on tutkittu,
-%  sekä mitä tuloksia on saatu. 
-%  Tiivistelmässä on lyhyt selvitys (noin 100 sanaa)
-%  kirjoituksen tärkeimmästä sisällöstä: mitä ja miten on tutkittu,
-%  sekä mitä tuloksia on saatu.
-%\end{abstractpage}
+\end{abstractpage}
 
-%% Pakotetaan uusi sivu varmuuden vuoksi, jotta 
-%% mahdollinen suomenkielinen ja englanninkielinen tiivistelmä
-%% eivät tule vahingossakaan samalle sivulle
-%\newpage
+% Pakotetaan uusi sivu varmuuden vuoksi, jotta
+% mahdollinen suomenkielinen ja englanninkielinen tiivistelmä
+% eivät tule vahingossakaan samalle sivulle
+\newpage
+
 %
 %% English abstract, uncomment if you need one. 
 %% 
@@ -156,12 +161,13 @@ linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
 
 %% Esipuhe
 \mysection{Esipuhe}
-
+Haluan kiittää ohjaajaani Simo Särkkää 
+saamastani hyvästä ohjauksesta työn eri vaiheissa.\\
 \vspace{5cm}
 \dateandplace
 
 \vspace{5mm}
-{\hfill \author \hspace{1cm}}
+{\hfill Ville Väänänen \hspace{1cm}}
 
 %% Pakotetaan varmuuden vuoksi esipuheen jälkeinen osa
 %% alkamaan uudelta sivulta
@@ -268,7 +274,7 @@ $Q[f]$ on kvadratuuri jos $n=1$ ja kubatuuri jos $n\geq 2$,
 $w(\v{x})$ on \emph{painofunktio}, pisteet $\{\v{x}_i\}\in\R^n$ ovat \emph{solmut} tai \emph{tukipisteet}, 
 $\{w_i\}\in\R$ ovat \emph{painot} ja $E$ on integrointimenetelmän virhe. Vuonna 1814 saksalainen matemaatikko Carl Friedrich Gauss julkaisi merkittävän
 kaavan \eqref{eq_cubature} mukaisen tuloksensa (tapaukselle $n=1$ ja $w(x):=1$), joka tunnetaan hänen mukaansa 
-nimellä \emph{Gaussin kvadratuuri} \cite{Gautschi1997}. Kyseessä on elegantti kvadratuuri, jossa hyödynnetään \emph{ortogonaalisia
+nimellä \emph{Gaussin kvadratuuri} \cite{Gauss1814,Gautschi1997}. Kyseessä on elegantti kvadratuuri, jossa hyödynnetään \emph{ortogonaalisia
 polynomeja} ja saavutetaan suuri tarkkuus pienellä funktio-evaluaatioiden määrällä. Tästä vaikuttuneena kirjoitti aikalaisensa
 Friedrich Bessel, myöskin tunnustettu matemaatikko, hänelle seuraavasti:
 \begin{quote} 
@@ -326,7 +332,8 @@ Yhdessä ulottuvuudessa geometrisesti tarkasteltuna luku $\defint{a}{b}{f(x)}{x}$
 suorien $x=a$ ja $x=b$ rajaamaa pinta-alaa. Tämä on suora seuraus Riemann-integraalin määritelmästä. 
 Olkoon \[ P=\{a=x_{0}<x_{1}<\dots{}<x_{n-1}<x_{n}=b\} \] välin $[a,b]$ $n$-intervallinen jako, $\vert P \vert=max_i\{x_i-x_{i-1}\}$ sen pisimmän intervallin pituus ja olkoon $\zeta_i\in[x_{i-1},x_i]$ mikä tahansa piste intervallilla $i$. Tällöin summaa \[ \sum_{i=1}^{n}f(\zeta_i)(x_i-x_{i-1}) \] kutsutaan Riemann--summaksi.
 Tarkastellaan Riemann--summien $S_k$ muodostamaa sarjaa, jonka jaoille $P_k$ pätee
-$\lim_{k\to\infty}\vert P_k \vert = 0$. Nyt jos mikä tahansa näin muodostettu Riemann--summien sarja suppenee \emph{yhteiseen} raja-arvoon 
+$\lim_{k\to\infty}\vert P_k \vert = 0$. Nyt jos mikä tahansa näin muodostettu Riemann--summien sarja suppenee, eli \emph{konvergoituu},
+\emph{yhteiseen} raja-arvoon 
 $S$, eli $\lim_{k\to\infty}S_k = S$, niin   
 \begin{equation}		
 		 \defint{a}{b}{f(x)}{x} = S.	
@@ -341,10 +348,10 @@ integraali määritellä tavallisten integraalien raja-arvoina, mikäli nämä ovat ol
 ja jos $\lim_{x\to a}f(x)=\infty$, niin \[ \defint{a}{b}{f(x)}{x} = \lim_{r\to a^{+}}\defint{r}{b}{f(x)}{x}. \]
 
 Kuten jo kaavasta \eqref{eq_cubature} voidaan päätellä, usein yksinkertaisen integraalin $\defint{a}{b}{f(x)}{x}$ sijaan
-on kohdataan \emph{painotettuja} integraaleja $\defint{a}{b}{f(x)w(x)}{x}$. Jos integroimissääntö $Q[f]$ on määritelty jonkin
-painofunktion $w(x)$ suhteen, se on ``lukittu'' ja ainoastaan funktiota $f(x)$ voidaan varioida. Tässä työssä painofunktio oletetaan
-aina ei-negatiiviseksi ja rajoitetuksi. Jos painofunktio on normalisoitu siten että $\defint{\R}{}{w(x)}{x}=1$, painofunktiota kutsutaan
-jakaumaksi ja $\defint{a}{b}{f(x)w(x)}{x}$ on tällöin painotettu keskiarvo.
+käsitellään \emph{painotettuja} integraaleja $\defint{a}{b}{f(x)w(x)}{x}$. Jos integroimissääntö $Q[f]$ on määritelty jonkin
+painofunktion $w(x)$ suhteen, on painofunktio ``lukittu'' ja ainoastaan funktiota $f(x)$ varioidaan. Tässä työssä $w(x)$ oletetaan
+aina ei-negatiiviseksi ja rajoitetuksi integromisalueessa. Jos painofunktio on normalisoitu siten, että $\defint{\R}{}{w(x)}{x}=1$, 
+painofunktiota kutsutaan \emph{jakaumaksi} ja $\defint{a}{b}{f(x)w(x)}{x}$ on tällöin $f(x)$:n painotettu keskiarvo.
 
 
 
@@ -380,6 +387,7 @@ Yleinen \emph{approksimaatio-ongelma} voidaan muotoilla seuraavasti: olkoon $f$ 
 funktio ja $\|\cdot\|$ normi, joka on määritelty halutunlaisia funktioita sisältävän vektorivaruuden, eli funktioavaruuden, $\Phi$
 funktioille $\varphi$. Etsi $\hat{\varphi}\in\Phi$ siten että
 \begin{equation}
+	 \label{eq_general_approximation}
 	 \|f-\hat\varphi\|\leq\|f-\varphi\|\quad\forall\varphi\in\Phi .\cite{Gautschi1997}
 \end{equation}
 Normin valinta määrää, missä mielessä mikäkin approksimaatio on optimaalinen. Yleisesti käytetty normi on 
@@ -405,12 +413,20 @@ käytettyjä approksimointifunktioita ja ylivoimaisesti suurin osa numeerisista in
 perustuu integrandin approksimointiin polynomilla \cite{Davis1975}. Tämä johtuu muun muassa siitä, että polynomien 
 käyttäytyminen tunnetaan hyvin perinpohjaisesti sekä \emph{Weierstrassin teoreemasta}, jonka mukaan mitä tahansa jatkuvaa
 funktiota voidaan approksimoida äärellisellä välillä mielivaltaisen tarkasti tarpeeksi korkea-asteisella 
-polynomilla \cite{Davis1975}\cite{Gautschi1997}.  
+polynomilla \cite{Davis1975,Gautschi1997}. Toisin sanoen, jos kaavassa \eqref{eq_general_approximation} korvataan
+$\hat\varphi$ $n$-asteisella polynomilla $\hat{p}_n$ ja $f$ on jatkuva äärellisellä approksimointivälillä, niin
+\begin{equation} 
+	\label{eq_approximation_convergence}
+	n\to\infty\implies\|f-\hat{p}_n\|\to 0.
+\end{equation}
+Konvergenssin nopeus riippuu $f$:n \emph{sileydestä}, eli sen jatkuvien derivaattojen \\$f',f'',\dots,f^{(k)}$ 
+lukumäärästä \cite[s. 74]{Trefethen2008}. Jos funktiolla on ääretön määrä jatkuvia derivaattoja,
+kuten esimerkiksi funktiolla $f(x)=e^{x}$, sitä kutsutaan \emph{sileäksi}.
 
 Polynomisessa interpolaatiossa $\Phi=\mathbb{P}_m$, eli vektoriavaruus, johon kuuluvat kaikki polynomit joiden asteluku $\Deg(p)\leq m$.
 Halutaan siis löytää sellainen polynomi $p$, jolle pätee $p(x_i) = f(x_i)\quad\forall i$, kun $\{x_i\}$ on $n+1$ 
 erillistä pistettä ja $\{f(x_i)\}\in\R$ niitä vastaavat mielivaltaiset arvot. Osoittautuu että, $p$ on aina olemassa, 
-se on ainutkertainen ja $m\leq n$.\cite{Cheney2007}
+se on ainutkertainen ja $m\leq n$.\cite[s. 128]{Cheney2007}
 
 Interpoloiva polynomi $p$ voidaan konstruoida \emph{Lagrange} muodossaan Lagrangen \emph{kantapolynomien} $\ell_i$ avulla:
 \begin{align*}
@@ -438,8 +454,9 @@ integrointiväli oli jaettu osaväleihin ja integrandia approksimoitiin
 ensimmäisen asteen polynomilla jokaisella osavälillä. 
 Menetelmää, jossa samaa sääntöä käytetään toistuvasti usealla 
 osavälillä, kutsutaan \emph{paloittaiseksi} (eng. \emph{compound} tai \emph{composite}) 
-\cite{Davis1975}. Jos integrointiväli on jaettu osaväleihin, seuraavassa 
-tarkastelussa keskitytään ainoastaan yhteen osaväliin (joka sisältää $n+1$ pistettä).
+\cite{Davis1975}. Seuraavassa keskitytään tilanteeseen, jossa sääntöä
+käytetään vain kerran. Muistetaan kuitenkin, että interpolatorisen säännön
+tarkkuuttaa voidaan aina parantaa käyttämällä sitä paloittain.
  
 Jos nyt tasavälisellä jaolla $\{a=x_0,x_1=a+h,\dots,x_{n-1}=a+(n-1)h,x_n=a+nh=b\}$ käytetään $f$:n 
 tilalla edellä määriteltyä interpoloivaa polynomia $p$, saadaan
@@ -454,16 +471,23 @@ Tällä tavalla muodostetut menetelmät tunnetaan nimellä \emph{Newton-Cotes} menet
 lukumäärässä. Jos välin päätepisteet kuuluvat interpolaatiopisteiden joukkoon, menetelmää kutsutaan suljetuksi 
 ja jos eivät, niin avoimeksi. \cite{Gautschi1997}
 
-Havaitaan, että mikäli kaavassa \ref{eq_newton_cotes} valitaan $n=1$, ja sovelletaan sitä toistuvasti usealla osavälillä,
+Havaitaan, että mikäli kaavassa \ref{eq_newton_cotes} valitaan $n=1$, ja sovelletaan sitä paloittain,
 saadaan edellä esitelty puolisuunnikasmenetelmä (\ref{eq_trapezoid}).
 Jos taas valitaan $n=2$, eli interpolaatioon käytetään kolmea pistettä, saadaan laajalti käytetty 
 \emph{Simpsonin} menetelmä: \cite{Gautschi1997}
-\begin{align*} 
-	&\defint{x_{k}}{x_{k+2}}{f(x)}{x} \approx \frac{h}{3}\left(f(x_k)+4f(x_{k+1})+f(x_{k+2})\right) \\
-	\implies & \defint{a}{b}{f(x)}{x} \approx \frac{h}{3}\left(f(a)+4f(x_{1})+2f(x_{2})+4f(x_{3})+2f(x_{4})+\dots+4f(x_{n-1})+f(b)\right)
-\end{align*}
+\begin{equation} 
+	\label{eq_simpson}
+	\defint{a}{b}{f(x)}{x} \approx \frac{h}{3}\left(f(a)+4f(\frac{a+b}{2})+f(b)\right) \\
+\end{equation}
 
-Virheen $E_n(p)$ pienentämiseksi voidaan nähdä kaksi eri lähestymistapaa: joko käytetään pienen $n$:n Newton-Cotes kaavaa aina vain lyhyemmillä osaväleillä tai käytetään pidempiä osavälejä mutta suurta $n$:ää. Ensimmäisessä tapauksessa evaluointipisteiden määrä kasvaa nopeasti epäkäytännöllisen suureksi. Kuitenkin sekä puolisuunnikasmenetelmä että Simpsonin menetelmä ovat erittäin laajalti käytettyjä ja voidaan näyttää, että kun osavälien määrä $N\to\infty$ niin $E_n(p)\to 0$ kaikille integrointivälillä jatkuville funktioille. Toisessa tapauksessa $n:än$ kasvaessa suureksi, voivat painot $w_i$ olla joko positiivisia tai negatiivisiä ja absoluuttiselta arvoltaan milivaltaisen suuria, jolloin nämä menetelmät eivät enää ole numeerisessa mielessä stabiileja. Tämän vuoksi korkean tarkkuusasteen Newton-Cotes
+Virheen $E_n(p)$ pienentämiseksi voidaan nähdä kaksi eri lähestymistapaa: joko käytetään pienen $n$:n 
+Newton-Cotes kaavaa aina vain lyhyemmillä osaväleillä tai käytetään pidempiä osavälejä mutta suurta $n$:ää. 
+Ensimmäisessä tapauksessa evaluointipisteiden määrä kasvaa nopeasti epäkäytännöllisen suureksi. 
+Kuitenkin sekä puolisuunnikasmenetelmä että Simpsonin menetelmä ovat erittäin laajalti käytettyjä 
+ja voidaan näyttää, että kun osavälien määrä $N\to\infty$ niin $E_n(p)\to 0$ kaikille integrointivälillä 
+jatkuville funktioille. Toisessa tapauksessa $n:än$ kasvaessa suureksi, voivat painot $w_i$ olla 
+joko positiivisia tai negatiivisiä ja absoluuttiselta arvoltaan mielivaltaisen suuria, jolloin 
+nämä menetelmät eivät enää ole numeerisessa mielessä stabiileja. Tämän vuoksi korkean tarkkuusasteen Newton-Cotes
 menetelmiä ei juurikaan käytetä.\cite{Krylov1962}
 
 Sanotaan että kvadratuurisäännön (polynominen) \emph{tarkkuusaste} on $d$, jos se antaa tarkan tuloksen kaikille polynomeille, jotka ovat 
@@ -476,7 +500,7 @@ on interpolatorinen tarkkuusaste paras mahdollinen, mutta jos solmupisteet voida
 
 Tarkastellaan nyt kaavan \eqref{eq_cubature} mukaista integroimissääntöä yhdessä ulottuvuudessa
 \begin{equation}
-	\defint{a}{b}{f(x)w(x)}{x}=\sum_{i=1}^nf(x_i)w_i+E_n(f).
+	\defint{a}{b}{f(x)w(x)}{x}=\sum_{i=1}^nf(x_i)w_i+E_n[f].
 	\label{eq_weighted_quadrature}
 \end{equation} ja oletetaan että painot $w_i$ on määritelty kuten aiemminkin, mutta painotettuna versiona
 \begin{equation}
@@ -576,7 +600,7 @@ Tiedetään kuitenkin, että peräkkäiset ortogonaaliset polynomit $\pi_k(x)$ toteut
 \end{align} missä $\alpha_k\in\R$ ja $\beta_k>0\in\R$ riippuvat painofunktiosta. 
 
 Rekursiokaavasta \eqref{eq_orthogonal_recursion} päästään suoraan tulokseen, jonka perusteella
-solmut $x_i$ ja painot $w_i$ saadaan laskettua tietyn Jaakobin--matriisin ominaisarvojen ja -vektorien
+solmut $x_i$ ja painot $w_i$ saadaan laskettua tietyn Jacobin--matriisin ominaisarvojen ja -vektorien
 avulla. Numeerisesta lineaarialgebrasta taas tunnetaan tehokkaita ratkaisualgoritmeja (kuten Lanczos-algoritmi) 
 tällaisten ominaisarvo-ongelmien ratkaisemiseksi, joten myös Gaussin kvadratuureja
 voidaan laskea tehokkaasti, mikäli $\alpha_k$ ja $\beta_k$ tunnetaan.\cite{Trefethen1997}
@@ -589,7 +613,7 @@ voidaan laskea tehokkaasti, mikäli $\alpha_k$ ja $\beta_k$ tunnetaan.\cite{Trefe
 		Merkintä & Nimi & $w(t)$ & $[a,b]$ \\
 		\midrule
 		$P_n$ & Legendre &$1$ & $[-1,1]$ \\
-		$P_n^{(\alpha,\beta)}$ & Jaakob & $(1-t)^\alpha(1+t)^\beta$ & $[-1,1]$ \\
+		$P_n^{(\alpha,\beta)}$ & Jacob & $(1-t)^\alpha(1+t)^\beta$ & $[-1,1]$ \\
 		$T_n$ & Tsebysev 1 & $(1-t^2)^{-\frac{1}{2}}$ & $[-1,1]$ \\
 		$U_n$ & Tsebysev 2 & $(1-t^2)^{\frac{1}{2}}$ & $[-1,1]$ \\		
 		$L_n^{(\alpha)}$ & Laguerre & $t^\alpha e^{-t}$ & $[0,\infty]$  \\
@@ -604,16 +628,42 @@ voidaan laskea tehokkaasti, mikäli $\alpha_k$ ja $\beta_k$ tunnetaan.\cite{Trefe
 
 Gaussin kvadratuurisääntö on optimaalinen kaavan \eqref{eq_weighted_quadrature} mukainen sääntö siinä
 mielessä, että sen polynominen tarkkuus on suurin mahdollinen. Tämän lisäksi sillä on muitakin haluttavia
-ominaisuuksia, kuten 
+ominaisuuksia, kuten: 
 \begin{enumerate}
-  \item Kaikki solmut $x_i$ kuuluvat integroimisvälille $[a,b]$. Tämä on erittäin toivottava
- ominaisuus, joka ei aina ole saavutettavissa useammassa ulottuvuudessa.
- \item Kaikki painot $w_i$ ovat positiivisia, koska
- \[ 0 < \defint{a}{b}{\ell_i^2(x)w(x)}{x} = \sum_{k=1}^nw_k\ell_i^2(x_k) = w_i \quad \forall i=1,\dots,n\;,\] mikä tarkoittaa
- että kaava on numeerisesti stabiili.
- \item Äärellisellä integroimisvälillä ja integroimisvälillä jatkuvalla integrandilla Gaussin kvadratuurisääntö
- supistuu integraalin tarkkaan arvoon, kun $n\to\infty$.
+  \item kaikki solmut $x_i$ kuuluvat integroimisvälille $[a,b]$
+ \item kaikki painot $w_i$ ovat positiivisia, koska
+ \[ 0 < \defint{a}{b}{\ell_i^2(x)w(x)}{x} = \sum_{k=1}^nw_k\ell_i^2(x_k) = w_i \quad \forall i=1,\dots,n\;,\] joka tarkoittaa
+ että Gaussin kvadratuuri on numeerisesti stabiili
+ \item jos integrandi on jatkuva ja integroimisväli on äärellinen, niin $E_n[f]\to 0$, kun $n\to\infty$.
 \end{enumerate}
+
+Painojen $w_i$ positiivisuus on tärkeä ominaisuus kaikkien muotoa \eqref{eq_weighted_quadrature} olevien
+kvadratuurien konvergenssin kannalta, sillä voidaan osoittaa, että tässä tapauksessa
+kaikille integroimisvälillä jatkuville integrandeille $f$, ääretön-normin kannalta parhaalle
+maksimissaan $n$-asteiselle polynomiapproksimaatiolle $\hat{p}_n(x)$ ja kaikille $n>0$ pätee
+\begin{equation}
+	\label{eq_quadrature_convergence}
+	\left\vert \defint{a}{b}{f(x)w(x)}{x}-\sum_{i=1}^nf(x_i)w_i \right\vert < 4\|f(x)-\hat{p}_n(x)\|_{\infty}.
+\end{equation}
+Kaava \eqref{eq_quadrature_convergence} tarkoittaa siis, että mikäli kvadratuurin painot ovat positiiviset,
+niin kvadratuurin konvergenssi on nopea, jos parhaan polynomiapproksimaation konvergenssi on nopea \cite{Trefethen2008}.
+Gaussin kvadratuurien tapauksessa kaavassa \eqref{eq_quadrature_convergence} voidaan $\hat{p}_n(x)$
+korvata $\hat{p}_{2n+1}(x)$:llä.
+
+Kaavan \eqref{eq_quadrature_convergence} ja polynomiapproksimoinnin teorian avulla voidaan
+Gaussin kvadratuureille johtaa virhearvio \cite{Trefethen2008}. Olkoon $\|f\|_T=\left\|\frac{f'(x)}{\sqrt{1-x^2}}\right\|_1$.
+Olkoon f jatkuva integroimisvälillä $[-1,1]$,
+olkoon sillä jatkuvat $k-1$ derivaattaa jollakin $k\geq 1$ ja olkoon $\|f^{(k)}\|_T<\infty$. 
+Tällöin Gaussin kvadratuurin virheelle pätee kaikilla $n\geq\frac{k}{2}$
+\begin{equation}
+	\vert E_n[f] \vert \leq \frac{32\|f^{(k)}\|_T}{15\pi k(2n+1-k)^k}. 
+\end{equation}
+Numeerisessa integroinnissa syntyvän virheen arvioiminen on välttämätöntä, jos halutaan
+pystyä varmistumaan saadun tuloksen laadusta. Lisäksi, jos numeeriselle integroimismenetelmälle
+on olemassa virhearvio, sen konvergenssia voidaan yleensä nopeuttaa tämän arvion avulla.
+Esimerkkinä tästä on \emph{Romberg}-kvadratuuri, jossa paloittaisen puolisuunnikassäännön
+konvergenssia nopeutetaan Richardson-ekstrapolaation avulla \cite[s. 204]{Cheney2007}.
+
 
 On tavallista että Gaussin kvadratuurisääntö on annettu jollekin äärelliselle integrointivälille $[c,d]$ (usein $[-1,1]$), 
 mutta sitä halutaan soveltaa toisella äärellisellä välillä $[a,b]$. 
@@ -669,8 +719,8 @@ etsimämme kvadratuuri on tarkka monomeille ${1,x,x^2}$. Näin saadaan toinen yhtä
 \end{equation*}
 jonka ratkaisu on $w_0=w_2=\frac{5}{9}$ ja $w_1=\frac{8}{9}$. Etsimämme kvadratuuri on siis
 \begin{equation*}
-	 \defint{-1}{1}{f(x)}{x}\approx G_3(f(x))=\frac{5}{9}f\left(-\sqrt{\frac{3}{5}}\right)+\frac{8}{9}f(0)+\frac{5}{9}f\left(\sqrt{\frac{3}{5}}\right)\\
-\end{equation*}.
+	 \defint{-1}{1}{f(x)}{x}\approx G_3(f(x))=\frac{5}{9}f\left(-\sqrt{\frac{3}{5}}\right)+\frac{8}{9}f(0)+\frac{5}{9}f\left(\sqrt{\frac{3}{5}}\right).
+\end{equation*}
 Muuttujanvaihdoksen $t=x+1$ avulla voidaan edellä laskettua kvadratuuria käyttää välillä $[0,2]$, jolloin soveltamalla 
 sitä jo aiemmin tutkimaamme esimerkki-integrandiin $f(x)=e^{-x^2}$ ja hyödyntällä integrandin symmetrisyyttä $y$-akselin suhteen, 
 saadaan tulokseksi
@@ -678,11 +728,19 @@ saadaan tulokseksi
 	 \defint{-2}{2}{e^{-x^2}}{x}=2\defint{0}{2}{e^{-x^2}}{x}\approx 2G_3(e^{-(x+1)^2})\approx& 1.7577\\
 	 2E_{G_3}(e^{-(x+1)^2})\approx& 0.0064.
 \end{align*}
-Vastaavasti käyttämällä Simpsonin menetelmää samassa tilanteessa saadaan virheeksi
+Vastaavasti käyttämällä Simpsonin menetelmää \eqref{eq_simpson} samassa tilanteessa, saadaan virheeksi
 \begin{align*}
 	 2E_S(e^{-x^2})\approx& 0.1043,
 \end{align*}
 joka on yli $16$ kertaa suurempi kuin Gaussin kvadratuurin virhe.
+
+Käytännössä Gaussin kvadratuurin laskemisessa hyödynnetään jo aiemmin mainittua
+mahdollisuutta muuntaa ongelma tridiagonaalisen matriisin
+ominaisarvojen ja -vektoreiden selvittämiseksi. Tämä on mahdollista
+tehdä algoritmisessa suoritusajassa $O(n^2)$ \cite{Trefethen2008}.
+Trefethen esittää artikkelissaan \cite{Trefethen2008} seitsemän
+rivisen MATLAB--funktion, joka laskee Gaussin kvadratuurin valitulla
+mielivaltaisella tarkkuusteella (vakiopainofunktiolle).
 
 \section{Kubatuurit}
 
@@ -941,19 +999,26 @@ symmetriaan. Arasatnamin \emph{et al.} \cite[s. 5]{Arasaratnam2009} esimerkkiä m
 kubatuurisääntöä, jossa $n=20$ ja $d=3$. Tällöin yhtälöryhmässä \eqref{eq_nonlinear_equations} on
 $\frac{23!}{20!3!}=1771$ yhtälöä. Mutta mikäli rajoitutaan tarkastelemaan \emph{täysin symmetristä}
 kubatuurisääntöä, saadaan $N=2n=40$ pisteinen kubatuurisääntö ratkaistuksi ainoastaan
-\emph{kahden} yhtälön avulla. Olkoon $X$ kubatuurisäännön $Q$ tukipisteiden joukko. 
+\emph{kahden} yhtälön avulla. 
+
+Olkoon $X$ kubatuurisäännön $Q$ tukipisteiden joukko. 
 $Q$:n sanotaan olevan täysin symmetrinen, jos
 pätee \[ \v{a}=(a_1,\ldots,a_n)\in X \implies \v{b}=(s_1a_{p_1},\ldots,s_na_{p_n})\in X, \] jossa
 $s_i\in\{-1,1\}$ ja $\{p_1,\ldots,p_n\}$ on mikä tahansa indeksien ${1,\ldots,n}$
 permutaatio \cite{Arasaratnam2009,Cools1997}. Lisäksi kaikilla näin saaduilla pisteillä $\v{a}$ ja $\v{b}$ on oltava
-samat painot.
+samat painot. Kubatuuria sanotaan \emph{keskipisteensä suhteen symmetriseksi} jos pätee
+\[
+	Q[\v{x^\alpha}]=0\quad\forall \v{\alpha}\in\field{N}_0^n,\;\sum_{i=1}^n\alpha_i=\text{pariton}\;\cite{Lu2005}.
+\] 
+
+
 
 On olennaista huomata, että ratkaisun helpottumista lukuunottamatta ei oe mitään erityistä syytä
 miksi kubatuurisäännön symmetrian pitäsi olla sama kuin integroimiaslueen tai painofunktion.
 Päin vastoin, pakottamalla kubatuurisääntö noudattamaan tiettyä rakennetta voidaan
 estyä löytämästä sääntöä, jonka pistemäärä on pienin mahdollinen. Hyvä esimerkki tästä
 on tarkkuusastetta 9 oleva sääntö neliölle ($C_2$). Tällöin täysin symmetrisessä
-säännössä on 20 pistettä, mutta minimisäännössä, joka on invariantti rotaation suhteen, on 17. 
+säännössä on 20 pistettä, mutta minimisäännössä, joka on invariantti rotaation suhteen, on 17 \cite{Cools1997}. 
 
 
 \subsubsection{Alarajoista}
@@ -1011,7 +1076,7 @@ Ilmaistuna eksplisiittisemmin kaavasta \eqref{eq_moller1} saadaan:
 	N\geq \binom{n+s-1}{n}+
 	\begin{cases}
 		\sum_{k=1}^{n-1}2^{k-n}\binom{k+s-1}{k}& \text{jos s on parillinen,}\\
-	 	\sum_{k=1}^{n-1}(1-2^{k-n})\binom{k+s-2}{k}& \text{jos s on pariton.}
+	 	\sum_{k=1}^{n-1}(1-2^{k-n})\binom{k+s-2}{k}& \text{jos s on pariton \cite{Lu2005}.}
 	\end{cases}
 	\label{eq_moller2}	 
 \end{equation}
@@ -1125,13 +1190,21 @@ niin parametrit voidaan määrittää skalaarikerrointa vaille. Muutoin parametrit v
 valita vapaasti. Ehto \eqref{eq_radon_constraint} on selvästikin riippuvainen vain
 integrointialueesta ja painofunktiosta. Sellainen alue, jolle ehto \eqref{eq_radon_constraint}
 ei päde on onnistuttu muodostamaan ja tällöin on mahdollista muodostaa kubatuurisääntö
-jossa on vain $6$ pistettä. Yleisille ingreoimisalueille, kuten neliölle ja vakiopainofunktiolle, 
+jossa on vain $6$ pistettä. Yleisille integroimisalueille, kuten neliölle ja vakiopainofunktiolle, 
 ehto \eqref{eq_radon_constraint} kuitenkin pätee. Kun parametrit on laskettu matriisiyhtälön avulla,
 saadaan selville $K_1$ ja $K_2$. $K_3$ saatiin ehdosta $xK_1+yK_2=K_3$.
 
 Jos valitaan integroimisalueeksi neliö $C_2=\{(x,y)\mid \vert x \vert \leq 1,\;\vert y \vert \leq 1\}$
-ja painofunktioksi vakio $1$, niin ratkaisemalla edellä esitellyt yhtälöt saadaan
-kubatuuri:
+ja painofunktioksi vakio $1$, niin ratkaisemalla edellä esitellyt yhtälöt saadaan ortogonaalisiksi
+polynomeiksi lopulta 
+\begin{align*}
+	K_1=&x^3-\frac{3}{5}x\\
+	K_2=&xy^2-\frac{1}{3}x\\
+	K_3=&x^2y+y^3-\frac{14}{15}y.
+\end{align*}
+Näiden nollakohdista saadaan ratkaistua kubatuurin pisteet, jonka jälkeen
+painot saadaan pisteiden sijoittamisen jälkeen lineaarisesta yhtälöryhmästä \eqref{eq_nonlinear_equations}.
+Lopullinen kubatuuri on \cite[s. 246]{Stroud1971}:
 
 \begin{equation}
 	\begin{array}{rl}
@@ -1146,7 +1219,7 @@ kubatuuri:
 Koeasetelmassa keskitytään approksimoimaan kahden muuttujan
 funktion integraalia
 \begin{equation}
-	I_1[f(x,y)]=\int_{S_2}f(x,y)\dd x \ds y. 
+	I_1[f(x,y)]=\int_{C_2}f(x,y)\dd x \ds y. 
 \end{equation} 
 Integrandeina käytetään funktioita
 \begin{align*}
@@ -1173,10 +1246,10 @@ on särmiön ja funktion kuvaajan rajaama tilavuus. }
 
 Kubatuureiksi valitaan seuraavat menetelmät:
 \begin{itemize}
-  \item $Q_{3^2}[f]:=9$-pisteinen tulosääntö, joka perustuu aiemmin
+  \item $Q_{3^2}:=9$-pisteinen tulosääntö, joka perustuu aiemmin
   johdettuun $3$-pisteiseen Gaussin kvadratuuriin
-  \item $Q_{7}[f]:=7$-pisteinen Radonin minimisääntö
-  \item $Q_{10^2}[f]:=100$-pisteinen tulosääntö, joka perustuu $10$-pisteiseen Gaussin kvadratuuriin
+  \item $Q_{7}:=7$-pisteinen Radonin minimisääntö
+  \item $Q_{10^2}:=100$-pisteinen tulosääntö, joka perustuu $10$-pisteiseen Gaussin kvadratuuriin
   \item $Q_{68}:=68$-pisteinen rotaatioinvariantti korkean tarkkuusasteen kubatuuri.
 \end{itemize}
 $Q_{3^2}$:n yleinen tarkkuusaste on $5$, kuten myös $Q_{7}$:n tarkkuusaste. 
@@ -1189,18 +1262,19 @@ $Q_{10^2}$:n ja $Q_{10^2}$:n pisteiden jakaumat
 heijastavat niiden tulomuotoa. Selvästi on myös havaittavissa, että
 pisteiden jakauma on tiheämpi ja painot suuremmat alueen reunoilla kuin sen keskellä.
 
-\scalefig{fig_points}{0.7}{Koasetelmassa käytettyjen kubatuurien tukipisteet integroimisalueessa $S_2$. Pisteen tummuus vastaa
+\scalefig{fig_points}{0.7}{Koasetelmassa käytettyjen kubatuurien tukipisteet integroimisalueessa $C_2$. Pisteen tummuus vastaa
 sen saamaa painoa.}
 
 \section{Tulokset}
 
 Koeasetelman tulokset on esitetty taulukossa \ref{table_results1}.
-Siihen lisäksi laskettu suhteellinen virhe $E[f]$, joka on saatu vertaamalla
+Siihen on lisäksi laskettu suhteellinen virhe $E[f]$, joka on saatu vertaamalla
 kubatuurin tulosta oikeaan tulokseen. Ensimmäisen integrandin tapauksessa
-on hyödynnetty MATLAB:in $mvncdf$ funktiota, jonka avulla oikean
-tuloksen voi laskea mielivaltaisella tarkkuudella. Toiselle integrandille taas
-on käytetty MATLAB:in funktiota $dblquad$, joka myös kykenee tarjoamaan 
-virhearvion.
+on hyödynnetty MATLAB(R):in $mvncdf$ funktiota, joka pystyy takaamaan
+annetun virhetoleranssin. Toiselle integrandille taas
+on käytetty MATLAB:in funktiota $dblquad$, joka on tulomenetelmä ja 
+perustuu kvadratuurifunktion $quad$ \cite{MatlabQuad}. Myös $dblquad$ pystyy
+takaamaan annetun virhetoleranssin.
 
 \begin{table}[h!]
 	\centering
@@ -1230,19 +1304,66 @@ virhe johtunee jälleen sen yleisestä tarkkuusasteesta.
 Kuten aiemmin jo todettiin, parempiin
 tuloksiin pääsemiseksi tulisi hyödyntää integraalin symmetriaa.
 
-
-
-
-
- 
- 
-
-
-
-
-
-
 \section{Yhteenveto}
+
+Yhden muuttujan funktioiden numeerinen integrointi on ongelma,
+johon on tarjolla tehokkaita menetelmiä. 
+Annetulla tukipisteiden määrällä ovat
+Gaussin kvadratuurit näistä polynomiapproksimaation
+mielessä tarkimpia. Niiden käyttäminen vaatii kuitenkin
+painojen selvittämisen lisäksi myös tukipisteiden laskemisen, joka
+kuitenkin onnistuu ratkaisemalla tiettyjen ortogonaalisten
+polynomien nollakohtia.
+Useimmissa tapauksissa riittää niinkin yksinkertainen
+keino kuin Simpsonin menetelmä, jonka adaptiivista versiota
+käyttää esimerkiksi MATLAB:in kvadratuurifunktio $quad$ \cite{MatlabQuad}.
+Konvergenssi on taattu, jos integroimisväli vain jaetaan tarpeeksi
+pieniin osiin ja huomioidaan mahdolliset derivataan epäjatkuvuuskohdat.
+
+Tilanne muodostuu huomattavasti ongelmallisemmaksi muuttujien määrän,
+eli integraalin dimension, kasvaessa. Tällöin erilaisia
+integroimisalueita on ääretön määrä. Mikäli integroimisalue 
+(ja painofunktio) on mahdollista
+saattaa tulomuotoon, voidaan ainakin kahdessa ja
+kolmessa dimensiossa hyvin käyttää yhden dimension
+menetelmään, yleensä Gaussin kvadratuuriin, perustuvaa tulosääntöä.
+Tulosääntöjä käytettäessa tarvittavien pisteiden, ja siis funktioevaluaatioiden,
+määrä kasvaa eksponentiaalisesti dimension suhteen. Tätä kutsutaan
+dimensionaalisuuden kiroukseksi.
+
+Dimensionaalisuuden kirousta on mahdollista paeta käyttämällä
+interpolatorisia kubatuureja. Tällöin vaadittavien funktioevaluaatioiden
+määrä ei enää riipu eksponentiaalisesti dimensiosta. Näiden menetelmien
+suurin ongelma on kuitenkin niiden määrittäminen. Gaussin kvadratuurin idea
+voidaan muotoilla myös monessa ulottuvuudessa, mutta analogisen
+kubatuurin olemassaolo vaatii, että integroimisalueesta ja painofunktiosta
+riippuvilla moniulotteisilla ortogonaalisilla polynomeilla
+on tarpeeksi suuri määrä yhteisiä nollakohtia. Tiedetään, että näin
+ei ole tavallisten integroimisalueiden, kuten neliön tai kolmion,
+ja vakiopainofunktion tapauksessa.
+
+Vaikka tavallisesti ei voidakaan saavuttaa Gaussin kvadratuurien
+mielessä optimaalista pisteiden määrää, interpolatorinen kubatuuri
+on kuitenkin olemassa jokaiselle integraalille. Sen määrittäminen
+voi kuitenkin olla äärimmäisen vaikeaa, sillä se vaatii
+suuren epälineaarisen yhtälöryhmän ratkaisemista. Vaikeutta lisää myös 
+se, että yleisessä tapauksessa vaadittavien pisteiden vähimmäismäärää ei tiedetä
+ja jotta yhtölöryhmä voitaisiin edes muodostaa, täytyisi pistemäärälle
+saada jokin arvio. Tilannetta voidaan helpottaa hyödyntämällä approksimoitavan
+integraalin symmetriaa. Pakottamalla etsittävälle kubatuurisäännölle tietty
+symmetria voidaan yhtälöryhmää huomattavasti pienentää ja sen jälkeen
+se voidaan yrittää ratkaista hyödyntämällä tietokoneiden suurta
+laskentatehoa \cite[s. 6]{Cools2002}. Tyypillinen esimerkki tällaisesta
+proseduurista löytyy lähteestä \cite{Stoyanova2009}. Kattava tietokanta
+julkaistuista interpolatorisista kubatuureista on pyritty muodostamaan lähteessä \cite{Cools2003}. 
+
+Vaikka interpolatoristen kubatuurien ratkaiseminen olisi helpompaa,
+on selvää että joka tapauksessa vaadittavien pisteiden
+määrä nousee liian suureksi jos dimensioita on muutamaa
+kymmentä enemmän. Tällöin täytyy turvautua täysin eri typpisiin
+menetelmiin, kuten erilaisiin Monte-Carlo menetelmiin. Suuridimensioisia
+integraaleja käsitellään esimerkiksi lähteissä \cite{Cools2009,Cools2010}. 
+
 \clearpage{}
 
 \addcontentsline{toc}{section}{Viitteet}
