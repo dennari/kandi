@@ -355,7 +355,7 @@ kuvassa \ref{fig_lusums} (jaon ei välttämättä tarvitse olla tasavälinen). Kuvast
 helppo nähdä, että jaon tihentyessä Riemannin summat suppenevat samaan arvoon, joka vastaa kuvaajan $y=f(x)$ ja $x$-akselin 
 rajaamaa pinta-alaa välillä $[-2,2]$.\cite{Davis1975}
 
-Jos integrandi on tai integroimisväli ovat rajoittamattomia, jolloin integraalia kutsutaan \emph{epäoleelliseksi}, voidaan
+Jos integrandi tai integroimisväli on rajoittamaton, jolloin integraalia kutsutaan \emph{epäoleelliseksi}, voidaan
 integraali määritellä tavallisten integraalien raja-arvoina, mikäli nämä ovat olemassa. Esimerkiksi 
 \[ \defint{a}{\infty}{f(x)}{x}=\lim_{r\to\infty}\defint{a}{r}{f(x)}{x}, \]  
 \[ \defint{-\infty}{\infty}{f(x)}{x}=\defint{\R}{}{f(x)}{x}=\defint{-\infty}{0}{f(x)}{x}+\defint{0}{\infty}{f(x)}{x} \] 
@@ -503,7 +503,7 @@ osavälejä mutta kasvatetaa $n$:ää. Ensimmäisessä tapauksessa evaluointipisteiden
 kasvaa nopeasti epäkäytännöllisen suureksi. 
 Kuitenkin sekä puolisuunnikasmenetelmä että Simpsonin menetelmä ovat erittäin laajalti käytettyjä 
 ja voidaan näyttää, että kun osavälien määrä $N\to\infty$, niin $E_n[p]\to 0$ kaikille integrointivälillä 
-jatkuville integrandeille. Toisessa tapauksessa $n$:än kasvaessa suureksi, voivat painot $w_i$ olla 
+jatkuville integrandeille. Toisessa tapauksessa $n$:n kasvaessa suureksi, voivat painot $w_i$ olla 
 joko positiivisia tai negatiivisiä ja absoluuttiselta arvoltaan mielivaltaisen suuria, jolloin 
 nämä menetelmät eivät enää ole numeerisessa mielessä stabiileja. Tämän vuoksi korkean tarkkuusasteen Newton--Cotes
 menetelmiä ei juurikaan käytetä.\cite{Krylov1962}
@@ -857,7 +857,7 @@ pisteiden määräksi $p^n$, joka kasvaa äkkiä epäkäytännöllisen suureksi. Tarvitaa
 
 \subsection{Interpolatoriset kubatuurit}
 
-Interpolatoriset kvadratuurisäännöt, voitiin muodostaa
+Interpolatoriset kvadratuurisäännöt voitiin muodostaa
 helposti integroimalla interpolaatiopolynomia, joka on aina olemassa. 
 Interpolaatiopolynomille ei valitettavasti
 ole olemassa suoraa yleistystä useammassa ulottuvuudessa, toisin sanoen, jos on annettu mielivaltaiset
@@ -1039,7 +1039,7 @@ samat painot. Kubatuuria sanotaan \emph{keskipisteensä suhteen symmetriseksi} jo
 
 On olennaista huomata, että ratkaisun helpottumista lukuunottamatta ei ole mitään erityistä syytä
 miksi kubatuurisäännön symmetrian pitäsi olla sama kuin integroimisalueen tai painofunktion.
-Päin vastoin, pakottamalla kubatuurisääntö noudattamaan tiettyä rakennetta voidaan
+Päinvastoin, pakottamalla kubatuurisääntö noudattamaan tiettyä rakennetta voidaan
 estyä löytämästä sääntöä, jonka pistemäärä on pienin mahdollinen. Hyvä esimerkki tästä
 on tarkkuusastetta 9 oleva sääntö neliölle ($C_2$). Tällöin täysin symmetrisessä
 säännössä on 20 pistettä, mutta \emph{minimisäännössä}, joka on invariantti rotaation suhteen, on 17 \cite{Cools1997}. 
@@ -1257,7 +1257,7 @@ muuttujien välinen korrelaatio on $0.7$. Se on sileä funktio, joten polynomiappr
 perustuvien kubatuurien konvergenssin pitäisi olla nopea. Mikäli muuttujien välillä ei olisi
 korrelaatiota, voisi tällaisen integrandin integroida yksiulotteisten integraalien tulona.
  
-$F_2$ taas valittu siten, että sen osittaisderivaatoilla on epäjatkuvuuskohtia. Tällaisen
+$F_2$ taas on valittu siten, että sen osittaisderivaatoilla on epäjatkuvuuskohtia. Tällaisen
 integrandin polynomiapproksimaation konvergenssi on huomattavasti hitaampi kuin sileän
 funktion tapauksessa. Todellisuudessa tässä tilanteessa kannattaisi hyödyntää
 integraalin symmetriaa jakamalla integraali neljään identtiseen osaan, jolloin osittaisderivaattojen 
@@ -1306,7 +1306,7 @@ kubatuurin tulosta oikeaan tulokseen. Ensimmäisen integrandin tapauksessa
 on hyödynnetty MATLAB:in $mvncdf$ funktiota, joka pystyy takaamaan
 annetun virhetoleranssin. Toiselle integrandille taas
 on käytetty MATLAB:in funktiota $dblquad$, joka on tulomenetelmä ja 
-perustuu kvadratuurifunktion $quad$ \cite{MatlabQuad}. Myös $dblquad$ pystyy
+perustuu kvadratuurifunktioon $quad$ \cite{MatlabQuad}. Myös $dblquad$ pystyy
 takaamaan annetun virhetoleranssin.
 
 \begin{table}[h!]
@@ -1343,7 +1343,7 @@ Yhden muuttujan funktioiden numeerinen integrointi on ongelma,
 jonka ratkaisemiseksi on tarjolla tehokkaita menetelmiä. 
 Annetulla tukipisteiden määrällä ovat
 Gaussin kvadratuurit näistä polynomiapproksimaation
-mielessä tarkimpia. Niiden käyttäminen vaatii kuitenkin
+kannalta tarkimpia. Niiden käyttäminen vaatii kuitenkin
 painojen selvittämisen lisäksi myös tukipisteiden laskemisen, joka
 kuitenkin onnistuu ratkaisemalla tiettyjen ortogonaalisten
 polynomien nollakohtia.
@@ -1381,7 +1381,7 @@ on kuitenkin olemassa jokaiselle integraalille. Sen määrittäminen
 voi kuitenkin olla äärimmäisen vaikeaa, sillä se vaatii
 suuren epälineaarisen yhtälöryhmän ratkaisemista. Vaikeutta lisää myös 
 se, että yleisessä tapauksessa vaadittavien pisteiden vähimmäismäärää ei tiedetä
-ja jotta yhtölöryhmä voitaisiin edes muodostaa, täytyisi pistemäärälle
+ja jotta yhtälöryhmä voitaisiin edes muodostaa, täytyisi pistemäärälle
 saada jokin arvio. Tilannetta voidaan helpottaa hyödyntämällä approksimoitavan
 integraalin symmetriaa. Pakottamalla etsittävälle kubatuurisäännölle tietty
 symmetria voidaan yhtälöryhmää huomattavasti pienentää ja sen jälkeen
@@ -1408,7 +1408,7 @@ integraaleja käsitellään esimerkiksi lähteissä \cite{Cools2009,Cools2010}.
 \clearpage
 %\addcontentsline{toc}{section}{Liite A}
 
-\section[Liite]{MATLAB-funktio}
+\section[Liite]{MATLAB-funktio\label{appendixA}}
 
 
 \lstinputlisting[label=fun_trefethen2D]{/Users/dennari/Documents/MATLAB/gauss2D.m}
