@@ -1,0 +1,227 @@
+
+%% Käytä näitä, jos kirjoitat suomeksi
+%\usepackage{aaltothesis}
+%\usepackage[pdftex]{graphicx} 
+%\usepackage{topcapt} % taulukon otsikot toimivat myös taulukon päällä komennolla \topcaption
+%% Saat pdf-tiedoston viittaukset ja linkit kuntoon seuraavalla paketilla.
+%% Paketti toimii erityisen hyvin pdflatexin kanssa. 
+%\usepackage[pdfpagemode=UseNone, colorlinks=true, urlcolor=black,
+%linkcolor=black, citecolor=black, pdfstartview=FitH]{hyperref}
+
+%% Matematiikan fontteja, symboleja ja muotoiluja lisää, näitä tarvitaan usein 
+%\usepackage{amsmath,amsfonts,amssymb,amsbsy}  
+%% Viitteet suomeksi
+\usepackage{booktabs} % paremman näköiset taulukot
+%\usepackage[framed,numbered]{mcode}
+\usepackage[finnish]{babel}
+\usepackage[latin1]{inputenc}
+
+\usepackage{mathptmx}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+\usepackage{ifthen}
+\usepackage{calc}
+\usepackage{color}
+
+\input{aaltologo.tex}
+
+%\usepackage{aaltothesis}
+
+\mode<article>{
+	\usepackage{fullpage}
+	\usepackage{array}
+}
+\mode<presentation>{
+	%\usetheme{Amsterdam}
+	\usetheme{Frankfurt}
+	\usefonttheme[onlymath]{serif}
+	\setbeamercovered{transparent}
+}
+
+\title{Numeerinen integrointi: kvadratuureista kubatuureihin}
+
+%%%%%%%% OMAT KOMENNOT %%%%%%%%%%%%
+
+% infinitesimaalinen muutos
+\newcommand{\ds}{\mathrm{d}}
+\newcommand{\measure}[2]{\ds#1(#2)}
+\newcommand{\dd}{\;\ds}
+% määrätty integraali
+\newcommand{\defint}[4]{
+\displaystyle\int_{#1}^{#2}#3\dd#4
+}
+
+% reaaliluvut, kompleksiluvut..
+\newcommand{\field}[1]{\mathbb{#1}}
+\newcommand{\R}{\field{R}}
+\newcommand{\C}{\field{C}}
+\newcommand{\Deg}{\mathrm{Deg}}
+\newcommand{\iprod}[2]{\langle{}#1,#2\rangle}
+\renewcommand{\v}[1]{\boldsymbol{#1}} % vektorit ja matriisit
+
+
+% kuvat
+\newcommand{\scalefig}[3]{
+  \begin{figure}[ht!]
+    % Requires \usepackage{graphicx}
+    \centering
+    \includegraphics[width=#2\columnwidth]{#1}
+    %%% I think \captionwidth (see above) can go away as long as
+    %%% \centering is above
+    %\captionwidth{#2\columnwidth}%
+    \caption{#3}
+    \label{#1}
+  \end{figure}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\author{Ville Väänänen}
+
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+\institute[Aalto-yliopiston teknillinen korkeakoulu]
+{
+Elektroniikan, tietoliikenteen ja automaation tiedekunta\\
+\vskip15pt
+\scalebox{0.5}{\aaltologo[fin]{blue}{"}{tkk}}
+}
+
+\date{\today}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+%% Kaikki mikä paperille tulostuu, on tämän jälkeen
+\begin{document}
+	\maketitle
+	%\frame[plain]{\titlepage}
+	
+	\frame[plain]{\titlepage}
+	
+	\section{Kvadratuurit}
+	\subsection{Interpolatoriset kvadratuurit}
+	\begin{frame}<all>{Interpolatoriset kvadratuurit}
+		\begin{columns}[t] 
+			\column{.5\textwidth}
+				\begin{block}{Integrointisääntö}
+		  			$\defint{a}{b}{f(x)w(x)}{x} \approx \sum_{i=1}^Nw_if(x_i)$
+				\end{block}
+				\begin{block}{Puolisuunnikasmenetelmä}
+		  			$\defint{a}{b}{f(x)}{x} \approx \frac{b-a}{2}\left(f(b)+f(a)\right)$
+				\end{block}
+			\column{.5\textwidth}
+				\scalefig{fig_trapezoid}{1.0}{Puolisuunnikasmenetelmä}
+				
+				
+		\end{columns}		
+	\end{frame}
+	
+	Integraalia approksimoidaan funktioavaluaatioiden lineaarikombinaationa.
+	Yhdessä uolottuvuudessa numeerisia integrointimenetelmiä kutsutaan kvadratuureiksi,
+	useammassa kubatuureiksi. Puolisuunnikasmenetelmä on on esimerkki yksinkertaisesta
+	integrointisäännöstä: approksimoidaan integrandia suoralla jokaisella
+	tasavälisen jaon osavälillä. Menetelmiä, joissa käytetään tasavälistä
+	jakoa ja approksimoidaan $n$-asteisella polynomilla, kutsutaan
+	Newton--Cotes menetelmiksi.
+	
+	\subsection{Polynomiapproksimaatio}	
+	\begin{frame}<all>{Polynomiapproksimaatio}
+		
+		\begin{itemize}
+  \item Approksimoidaan polynomeilla
+  \begin{itemize}
+  			\item tunnettuus
+  			\item Weierstrassin teoreema
+  			\item helppo integroida
+		\end{itemize}
+\end{itemize}
+		\begin{block}{Tarkkuusaste}
+			Integrointisäännön tarkkuusaste on $d$, jos 
+			se integroi tarkasti kaikki polynomit, joiden asteluku
+			on korkeintaan $d$
+		\end{block}
+	\end{frame}
+	\subsection{Gaussin kvadratuuri}
+	\begin{frame}<all>{Gaussin kvadratuuri}
+		\begin{columns}[t] 
+			\column{.5\textwidth}
+				
+			
+				\begin{itemize}
+  					\item Pisteet: ortogonaalipolynomien 0-kohdat
+  					\item tarkkuusaste $2N-1$
+  					\item Newton-Cotes menetelmillä $N+1$ 
+				\end{itemize}
+			\column{.5\textwidth}
+				\scalefig{fig_gauss}{1.0}{Carl Friedrich Gauss}
+				
+		\end{columns}		
+	\end{frame}
+	
+	
+	\section{Kubatuurit}
+	\subsection{Tulosäännöt}
+	\begin{frame}<all>{Tulosäännöt}
+		\begin{columns} 
+			\column{.5\textwidth}
+				\begin{block}{Tulosääntö}
+	\begin{align*}
+	&\iint _{\Omega_r\times\Omega_s}w(\v{x}_r,\v{x}_s)f(\v{x}_r,\v{x}_s) \dd\v{x}_r\ds\v{x}_s\\
+	&\approx \sum_{\substack{i=1\\j=1}}^{\substack{N_r\\N_s}}w_{s,j}w_{r,i}f(\v{x}_{r,i},\v{x}_{s,j})
+	\end{align*}
+				\end{block}
+			\column{.5\textwidth}
+				\scalefig{fig_points_prodrule100}{1.0}{Erään tulosäännön 100 pistettä}
+		\end{columns}		
+	\end{frame}
+	\subsection{Interpolatoriset kubatuurit}
+	\begin{frame}<all>{Interpolatoriset kubatuurit}
+		\begin{columns} 
+			\column{.5\textwidth}
+				\begin{itemize}
+  					\item Epälineaarinen yhtälöryhmä
+  					\item $N(n+1)$ muuttujaa
+				\end{itemize}
+			\column{.5\textwidth}
+				\scalefig{fig_points_intrule68}{1.0}{68-pisteinen minimisääntö}
+		\end{columns}			
+	\end{frame}
+%	\section{Koeasetelma}
+	\subsection{Testi-integrandit}
+	\begin{frame}<all>{Testi-integrandit}
+		\scalefig{fig_3dfunc}{1.0}{$F_1$ ja $F_2$}
+	\end{frame}
+	\subsection{Tulokset}
+	\begin{frame}<all>{Tulokset}
+		\begin{table}[h!]
+			\centering
+%			\topcaption{Koeasetelman tulokset}
+			\input{matlab/results1.tex}
+			\label{table_results1}
+		\end{table}
+	\end{frame}
+	\section{Yhteenveto}
+	\begin{frame}<all>{Yhteenveto}
+		\begin{itemize}
+  			\item $n=1$
+  			\begin{itemize}
+  				\item helppoa 
+			\end{itemize}
+			\item $n\geq 1$
+			\begin{itemize}
+  				\item vaikeaa 
+			\end{itemize}  
+		\end{itemize}
+	\end{frame}
+
+	
+	
+% 	\begin{frame}<all>
+% 		\frametitle{Sisältö}
+% 		\tableofcontents
+% 	\end{frame}
+	
+
+\end{document}
+
+
+

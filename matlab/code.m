@@ -207,6 +207,7 @@ contenders = {
 };
 functions = {@(x,y)f2(x,y,c);f3};
 results = zeros(length(contenders),2*length(functions));
+points = cell(1,length(contenders));
 colLabels = {'Kubatuuri' '$Q[F_1]$' '$E[F_1]$' '$Q[F_2]$' '$E[F_2]$'};
 rowLabels = {'$Q_{3^2}$' '$Q_{7}$' '$Q_{68}$' '$Q_{10^2}$'};
 rowLabels2 = {'$Q_{3^2}$' '$Q_{7}$' '$Q_{68}$' '$Q_{10^2}$'};
@@ -229,6 +230,8 @@ for i = 1:length(contenders)
     %axes([-1.1 1]);
     set(gca,'XLim',1.1*get(gca,'XLim'),'YLim',1.1*get(gca,'YLim'),'Box','on');
     %set();
+    points{1,i} = {X,Y,w};
+    %disp(size(X));
     drawnow;
     if(length(X)==68)
         qp = [X Y];
@@ -238,24 +241,47 @@ for i = 1:length(contenders)
     %disp(size(X));
 end
 
-
-
-matrix2latex(results,'~/Documents/School/Kandi/matlab/results1.tex','rowLabels',rowLabels,...
-    'columnLabels',colLabels,'alignment','c','format',{'$%.5f$' '$%.1f\\%%$' '$%.5f$' '$%.1f\\%%$'});
-
-%exportfig(gcf,'~/Documents/School/Kandi/fig_points.pdf','Format','pdf');
+%% print test-result figures
 
 figLength = 6;
 xyRatio = 16/10;
 figHeight = (1/xyRatio)*figLength;
-%axis([-2 2 0 1.02]);
-%set(gca, 'Position', get(gca, 'OuterPosition') - ...
-%    get(gca, 'TightInset') * [-1 0 1 0; 0 -1 0 1; 0 0 1 0; 0 0 0 1]*1.7);
 set(gcf, 'PaperUnits', 'inches');
 set(gcf, 'PaperSize', [figLength figHeight]);
 set(gcf, 'PaperPositionMode', 'manual');
 set(gcf, 'PaperPosition', [0 0.01 figLength figHeight]);
-print(gcf, '-dpdf','~/Documents/School/Kandi/fig_points.pdf');
+%print(gcf, '-dpdf','~/Documents/School/Kandi/fig_points.pdf');
+
+%matrix2latex(results,'~/Documents/School/Kandi/matlab/results1.tex','rowLabels',rowLabels,...
+%    'columnLabels',colLabels,'alignment','c','format',{'$%.5f$' '$%.1f\\%%$' '$%.5f$' '$%.1f\\%%$'});
+
+%exportfig(gcf,'~/Documents/School/Kandi/fig_points.pdf','Format','pdf');
+p = points{1,3};
+disp(size(p));
+figure;
+scatter(p{1},p{2},14,p{3},'filled');
+colormap(0.7*gray);
+axis square;
+set(gca,'XLim',1.1*get(gca,'XLim'),'YLim',1.1*get(gca,'YLim'),'Box','on');
+
+set(gcf, 'PaperUnits', 'inches');
+set(gcf, 'PaperSize', [figLength figHeight]);
+set(gcf, 'PaperPositionMode', 'manual');
+set(gcf, 'PaperPosition', [0 0.01 figLength figHeight]);
+print(gcf, '-dpdf','~/Documents/School/Kandi/fig_points_prodrule100.pdf');
+
+p = points{1,4};
+figure;
+scatter(p{1},p{2},14,p{3},'filled');
+colormap(0.7*gray);
+axis square;
+set(gca,'XLim',1.1*get(gca,'XLim'),'YLim',1.1*get(gca,'YLim'),'Box','on');
+
+set(gcf, 'PaperUnits', 'inches');
+set(gcf, 'PaperSize', [figLength figHeight]);
+set(gcf, 'PaperPositionMode', 'manual');
+set(gcf, 'PaperPosition', [0 0.01 figLength figHeight]);
+print(gcf, '-dpdf','~/Documents/School/Kandi/fig_points_intrule68.pdf');
 
 
 
